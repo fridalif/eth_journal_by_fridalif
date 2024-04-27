@@ -57,7 +57,7 @@ class Lesson(models.Model):
 class LessonStudentInfo(models.Model):
     student = models.ForeignKey(Kid, verbose_name='Студент', on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, verbose_name='Урок', on_delete=models.CASCADE)
-    mark = models.PositiveSmallIntegerField(choices=[(2, '2'), (3, '3'), (4, '4'), (5, '5')], blank=True)
+    mark = models.CharField(max_length=2,choices=[('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),('УП','УП'),('Н','Н')], blank=True)
     commendation = models.TextField(verbose_name='Похвала', blank=True)
     chastisement = models.TextField(verbose_name='Замечание', blank=True)
 
