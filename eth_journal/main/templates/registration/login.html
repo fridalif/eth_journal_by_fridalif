@@ -6,6 +6,9 @@
 					Вход
 				</div>
 			</div>
+			{% if form.errors %}
+				<p class="enter_error_font">Your username and password didn't match. Please try again.</p>
+			{% endif %}
 			<form method="POST" action="{% url 'main:login' %}" id="login_form">
 			{% csrf_token %}
 			<div class="enter_login_block">
