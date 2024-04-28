@@ -1,5 +1,4 @@
 {% load static %}
-
 <html>
 <head>
 	<title> Электронный Дневник </title>
@@ -7,6 +6,7 @@
 </head>
 <body>
 	<div class="main">
+{% if user.is_authenticated %}
 		<div class="header_block">
 			<div class="banner_header_block">
 				<div class="banner_header_font">Электронный Дневник</div>
@@ -46,8 +46,26 @@
 				</div>
 			</div>
 		</div>
-	</div>
+{% else %}
+		<div class="header_block">
+			<div class="enter_header_button">
+				<div class="enter_header_font">
+					Вход
+				</div>
+			</div>
+			<div class="register_header_button">
+				<div class="register_header_font">
+					Регистрация
+				</div>
+			</div>
+			<div class="banner_header_block">
+				<div class="banner_header_font">Электронный Дневник</div>
+			</div>
+		</div>
+
+	{% endif %}
 	{% block body_main_block %}
 	{% endblock %}
+	</div>
 </body>
 </html>

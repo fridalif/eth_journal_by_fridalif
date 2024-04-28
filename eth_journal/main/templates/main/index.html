@@ -1,5 +1,9 @@
-{% extends "header_not_auth.html" %}
+{% extends "header_auth.html" %}
 
 {% block body_main_block %}
-<!-- its works -->
+    {% if user.is_authenticated %}
+        <!-- auth -->
+    {% else %}
+        <!-- not auth-->
+    {% endif %}
 {% endblock %}
