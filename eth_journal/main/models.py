@@ -48,7 +48,7 @@ class Lesson(models.Model):
     end_time = models.TimeField(verbose_name='Время окончания')
     homework = models.TextField(verbose_name='Домашнее задание', blank=True)
     room = models.CharField(max_length=10, verbose_name='Аудитория')
-
+    type = models.CharField(max_length=20, verbose_name='Тип занятия')
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
