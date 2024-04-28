@@ -7,9 +7,14 @@ from .models import *
 
 
 class StudentsAPIView(APIView):
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest)->Response:
         return Response(KidSerializer(Kid.objects.all(), many=True).data)
 
+class TestAuthAPIView(APIView):
+    def get(self,request: HttpRequest)->Response:
+        auth = request.user.is_authenticated
+        print(auth)
+        return Response({'res':auth})
 
 # Create your views here.
 def index(request: HttpRequest) -> HttpResponse:
