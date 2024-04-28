@@ -22,5 +22,5 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'main/index.html')
 
 
-def login(request: HttpRequest) -> HttpResponse:
-    return render(request, 'main/authentification.html')
+#def login(request: HttpRequest) -> HttpResponse:
+#    return render(request, 'main/login.html')

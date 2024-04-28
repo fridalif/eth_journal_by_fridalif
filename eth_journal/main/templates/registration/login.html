@@ -6,6 +6,8 @@
 					Вход
 				</div>
 			</div>
+			<form method="POST" action="{% url 'main:login' %}" id="login_form">
+			{% csrf_token %}
 			<div class="enter_login_block">
 				<div class="enter_login_text_block">
 					<div class="enter_login_text_font">
@@ -22,13 +24,14 @@
 				</div>
 				<input type="password" id="enter_input_password_block" name="password"></input>
 			</div>
-			<div class="enter_enter_block">
+			<div class="enter_enter_block" onclick="document.getElementById('login_form').submit();">
 				<div class="enter_enter_text_block">
 					<div class="enter_enter_text_font">
 						Войти
 					</div>
 				</div>
 			</div>
+			</form>
 			<div class="enter_register_block">
 				<div class="enter_register_text_block">
 					<div class="enter_register_text_font">
