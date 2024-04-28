@@ -40,11 +40,14 @@
 					Личный кабинет
 				</div>
 			</div>
-			<div class="exit_menu_header_block">
+			<form method="POST" action="{% url 'main:logout' %}" id="logout_form">
+			{% csrf_token %}
+			<div class="exit_menu_header_block" onclick="document.getElementById('logout_form').submit();">
 				<div class="exit_menu_header_font">
 					Выйти
 				</div>
 			</div>
+			</form>
 		</div>
 {% else %}
 		<div class="header_block">
