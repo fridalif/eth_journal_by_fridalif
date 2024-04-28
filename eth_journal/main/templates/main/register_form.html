@@ -1,12 +1,34 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
+	<script>
+		function send_register_request(){
+			reg_form = document.getElementById('register_form');
+			retype_password = document.getElementById('register_input_retype_password_block').value;
+			password = document.getElementById('register_input_password_block').value;
+			if(retype_password!=password){
+				alert('password and retype password must be equal');
+				return;
+			}
+			role = document.getElementById('register_input_role_block').value;
+			login = document.getElementById('register_input_login_block').value;
+			surname = document.getElementById('register_input_surname_block').value;
+			name = document.getElementById('register_input_name_block').value;
+			if (name == '' || surname == ''||login=='' || role==''||password==''){
+				alert('fill all fields');
+				return;
+			}
+			reg_form.submit();
+			return;
+		}
+	</script>
     <div class="register_block">
 			<div class="register_block_header_block">
 				<div class="register_block_header_font">
 					Регистрация
 				</div>
 			</div>
+			<form action="{% url 'main:register' %}" method="POST" id="register_form">
 			<div class="register_login_block">
 				<div class="register_login_text_block">
 					<div class="register_login_text_font">
@@ -63,13 +85,14 @@
 				</div>
 				<input type="text" placeholder="Студент 1 курса группы А-122" name="role" id="register_input_role_block"></input>
 			</div>
-			<div class="register_register_block">
+			<div class="register_register_block" onclick="send_register_request();">
 				<div class="register_register_text_block">
 					<div class="register_register_text_font">
 						Зарегистрироваться
 					</div>
 				</div>
 			</div>
+			</form>
 			<div class="register_enter_block">
 				<div class="register_enter_text_block">
 					<div class="register_enter_text_font">
