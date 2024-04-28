@@ -3,7 +3,6 @@ from django.http import HttpRequest, HttpResponse, Http404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import KidSerializer
-from django.contrib.auth import a
 from .models import *
 
 
