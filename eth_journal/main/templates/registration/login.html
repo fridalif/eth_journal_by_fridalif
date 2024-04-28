@@ -1,4 +1,4 @@
-{% extends "header_not_auth.html" %}
+{% extends "header_auth.html" %}
 {% block body_main_block %}
 		<div class="enter_auth_block">
 			<div class="enter_block_header_block">
@@ -38,7 +38,7 @@
 			<div class="enter_register_block">
 				<div class="enter_register_text_block">
 					<div class="enter_register_text_font">
-						Нет аккаунта? <a class="enter_register_href_font" href=".">Зарегистрироваться</a>
+						Нет аккаунта? <a class="enter_register_href_font" href="{% url 'main:register' %}">Зарегистрироваться</a>
 					</div>
 				</div>
 			</div>

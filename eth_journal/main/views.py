@@ -18,6 +18,11 @@ class TestAuthAPIView(APIView):
         return Response({'res': auth})
 
 
+def register(request: HttpRequest) -> HttpResponse:
+    if request.method == 'GET':
+        return render(request, 'main/register_form.html')
+
+
 def index(request: HttpRequest) -> HttpResponse:
-    context = {'user':request.user}
-    return render(request, 'main/index.html',context=context)
+    context = {'user': request.user}
+    return render(request, 'main/index.html', context=context)
