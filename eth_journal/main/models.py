@@ -64,3 +64,19 @@ class LessonStudentInfo(models.Model):
     class Meta:
         verbose_name = 'Результат урока для студента'
         verbose_name_plural = 'Результаты уроков для студентов'
+
+
+
+class RegisterRequests(models.Model):
+    login = models.TextField(verbose_name='Логин')
+    password = models.TextField(verbose_name='Пароль')
+    surname = models.TextField(verbose_name='Фамилия')
+    name = models.TextField(verbose_name='Имя')
+    father_name = models.TextField(verbose_name='Отчество',blank=True)
+    role = models.TextField(verbose_name='Должность')
+
+    class Meta:
+        verbose_name = 'Запрос на регистрацию'
+        verbose_name_plural = 'Запросы на регистрацию'
+
+
