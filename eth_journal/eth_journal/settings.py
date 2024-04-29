@@ -70,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'eth_journal.wsgi.application'
-
+KEY = b'O8YMsVBPgTXlBroK0JiocfTZaWZrUXbAloDNaSkyvZ0='
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
