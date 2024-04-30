@@ -17,7 +17,7 @@ class RegisterRequestsAPIView(APIView):
         data = request.data
         if not request.user.is_superuser:
             raise Http404
-        print('here')
+
         if not data['id']:
             raise Http404
 
@@ -27,8 +27,6 @@ class RegisterRequestsAPIView(APIView):
 
         cipher_suite = Fernet(KEY)
         password = cipher_suite.decrypt(current_request.password.encode()).decode()
-        print(password)
-        print(type(password))
         if data['role'] == 'Teacher':
             current_user = main_models.User(username=current_request.login,
                                             first_name=current_request.name, last_name=current_request.surname)
@@ -53,3 +51,21 @@ class RegisterRequestsAPIView(APIView):
             current_request.delete()
             return Response(KidSerializer(current_student).data)
         raise Http404
+
+    def delete(self, request):
+        data = request.data
+        if not request.user.is_superuser:
+            raise Http404
+
+        if not data['id']:
+            raise Http404
+
+        current_request = main_models.RegisterRequests.objects.get(id=int(data['id']))
+        if current_request is None:
+            raise Http404
+
+        current_request.delete()
+        return Response({"result": "deleted"})
+
+
+
