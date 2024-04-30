@@ -4,8 +4,9 @@ from django.http import HttpRequest, Http404
 from .serializers import RegisterRequestsSerializer
 import main.models as main_models
 
+
 class RegisterRequestsAPIView(APIView):
     def get(self, request: HttpRequest):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             raise Http404
-        return Response(RegisterRequestsSerializer(main_models.RegisterRequests,many=True))
+        return Response(RegisterRequestsSerializer(main_models.RegisterRequests.objects.all(), many=True).data)
