@@ -37,6 +37,8 @@ class GroupSerializer(ModelSerializer):
         model = Group
         fields = '__all__'
 
+
 class RegisterRequestsSerializer(ModelSerializer):
     class Meta:
         model = RegisterRequests
+        fields = ['login', 'role', 'surname', 'name', 'father_name']
