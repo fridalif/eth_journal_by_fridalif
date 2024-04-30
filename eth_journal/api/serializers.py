@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from main.models import Lesson, LessonStudentInfo, Subject, Kid, Teacher, Group
+from main.models import Lesson, LessonStudentInfo, Subject, Kid, Teacher, Group, RegisterRequests
 
 
 class LessonSerializer(ModelSerializer):
@@ -36,3 +36,7 @@ class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
+
+class RegisterRequestsSerializer(ModelSerializer):
+    class Meta:
+        model = RegisterRequests
