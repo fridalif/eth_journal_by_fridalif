@@ -1,8 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse, Http404
-#from rest_framework.response import Response
-#from rest_framework.views import APIView
-#from .serializers import KidSerializer
+from django.shortcuts import render
+from django.http import HttpRequest, HttpResponse
 from .models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -12,6 +9,7 @@ def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
     if request.method == 'GET':
         return render(request, 'main/register_form.html', context=context)
+
     login = request.POST['login'].strip()
     password = request.POST['password'].strip()
     retype_password = request.POST['retype_password'].strip()
