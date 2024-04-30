@@ -31,7 +31,7 @@ def register(request: HttpRequest) -> HttpResponse:
 
     # Шифрование пароля(чтобы не хранить в открытом виде в БД) и создание записи в БД
     cipher_suite = Fernet(KEY)
-    password = cipher_suite.encrypt(password.encode())
+    password = cipher_suite.encrypt(password.encode()).decode()
     register_request = RegisterRequests(login=login, password=password, surname=surname, name=name,
                                         father_name=father_name, role=role)
     register_request.save()
