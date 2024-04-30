@@ -71,13 +71,21 @@ class RegisterRequestsAPIView(APIView):
 
 class LessonAPIView(APIView):
     def get(self, request):
+        if not request.user.is_authenticated:
+            raise Http404
         if request.user.is_superuser:
             return Response(LessonSerializer(main_models.Lesson.objects.all(), many=True).data)
 
-        teacher = main_models.Teacher.objects.get(user=request.user)
-        student = main_models.Kid.objects.get(user=request.user)
-        if teacher is None and student is None:
+        teacher = main_models.Teacher.objects.filter(user=request.user)
+        student = main_models.Kid.objects.filter(user=request.user)
+        is_student = False
+        if len(teacher) == 0 and len(student) == 0:
             raise Http404
-        if teacher is not None:
-            return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher),many=True).data)
-        return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group),many=True).data)
+        if len(student) == 0:
+            teacher = teacher[0]
+        else:
+            student = student[0]
+            is_student = True
+        if not is_student:
+            return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher), many=True).data)
+        return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group), many=True).data)
