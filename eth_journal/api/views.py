@@ -150,3 +150,12 @@ class LessonAPIView(APIView):
             lesson.save()
             return Response(LessonSerializer(lesson).data)
         raise Http404
+
+    def delete(self, request, lesson_id):
+        if not request.user.is_superuser:
+            raise Http404
+        lesson = main_models.Lesson.objects.filter(id=lesson_id)
+        if len(lesson) == 0:
+            raise Http404
+        lesson[0].delete()
+        return Response({"result": "deleted"})
