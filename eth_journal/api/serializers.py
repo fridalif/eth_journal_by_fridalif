@@ -41,4 +41,4 @@ class GroupSerializer(ModelSerializer):
 class RegisterRequestsSerializer(ModelSerializer):
     class Meta:
         model = RegisterRequests
-        fields = ['login', 'role', 'surname', 'name', 'father_name']
+        fields = ['id', 'login', 'role', 'surname', 'name', 'father_name']
