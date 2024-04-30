@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpRequest, Http404
-from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer
+from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer, LessonSerializer, \
+    LessonStudentInfoSerializer
 import main.models as main_models
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -68,4 +69,12 @@ class RegisterRequestsAPIView(APIView):
         return Response({"result": "deleted"})
 
 
+class LessonAPIView(APIView):
+    def get(self, request):
+        if request.user.is_superuser:
+            return Response(LessonSerializer(main_models.Lesson.objects.all(),many=True).data)
 
+        teacher = main_models.Teacher.objects.get(user=request.user)
+        student = main_models.Kid.objects.get(user=request.user)
+        if teacher is None and student is None:
+            raise Http404
