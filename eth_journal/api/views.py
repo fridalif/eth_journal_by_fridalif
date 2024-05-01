@@ -303,6 +303,8 @@ class LessonStudentInfoAPIView(APIView):
 
 class SubjectAPIView(APIView):
     def get(self, request, subject_id=None):
+        if not request.user.is_authenticated:
+            return Response({"error": "not authenticated"})
         if subject_id is None:
             return Response(SubjectSerializer(main_models.Subject.objects.all(), many=True))
         return Response(SubjectSerializer(main_models.Subject.objects.filter(id=subject_id), many=True))
@@ -338,6 +340,8 @@ class SubjectAPIView(APIView):
 
 class GroupAPIView(APIView):
     def get(self, request, group_id=None):
+        if not request.user.is_authenticated:
+            return Response({"error":"not authenticated"})
         if group_id is None:
             return Response(GroupSerializer(main_models.Group.objects.all(), many=True))
         return Response(GroupSerializer(main_models.Group.objects.filter(id=group_id), many=True))
