@@ -201,3 +201,40 @@ class LessonStudentInfoAPIView(APIView):
             return Response(LessonStudentInfoSerializer(
                 main_models.LessonStudentInfo.objects.filter(lesson__id=lesson_id, abstract_studenet__id=student_id),
                 many=True).data)
+        current_user = request.user
+        is_student = False
+        current_teacher = main_models.Teacher.objects.filter(user=current_user)
+        current_student = main_models.Kid.objects.filter(user=current_user)
+        if len(current_teacher) == 0:
+            is_student = True
+            current_student = current_student[0]
+        else:
+            current_teacher = current_teacher[0]
+
+        if is_student:
+            if lesson_id is None:
+                return Response(
+                    LessonStudentInfoSerializer(main_models.LessonStudentInfo.objects.filter(student=current_student),
+                                                many=True))
+            return Response(
+                LessonStudentInfoSerializer(
+                    main_models.LessonStudentInfo.objects.filter(student=current_student, lesson__id=lesson_id),
+                    many=True))
+        if lesson_id is None:
+            return Response(LessonStudentInfoSerializer(
+                main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher), many=True))
+        if student_id is None:
+            return Response(LessonStudentInfoSerializer(
+                main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id),
+                many=True))
+        if not request.GET['abstract']:
+            return Response(
+                LessonStudentInfoSerializer(
+                    main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id,
+                                                                 student__id=student_id),
+                    many=True))
+        return Response(
+            LessonStudentInfoSerializer(
+                main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id,
+                                                             abstract_student__id=student_id),
+                many=True))
