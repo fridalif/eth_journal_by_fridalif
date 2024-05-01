@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpRequest, Http404
 from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer, LessonSerializer, \
-    LessonStudentInfoSerializer, SubjectSerializer
+    LessonStudentInfoSerializer, SubjectSerializer, GroupSerializer
 import main.models as main_models
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -307,16 +307,16 @@ class SubjectAPIView(APIView):
             return Response(SubjectSerializer(main_models.Subject.objects.all(), many=True))
         return Response(SubjectSerializer(main_models.Subject.objects.filter(id=subject_id), many=True))
 
-    def post(self,request):
+    def post(self, request):
         if not request.user.is_superuser:
             raise Http404
         subject = SubjectSerializer(data=request.data)
         if subject.is_valid():
             subject.save()
             return Response(subject.validated_data)
-        return Response({"error":"subject not valid"})
+        return Response({"error": "subject not valid"})
 
-    def put(self, request,subject_id):
+    def put(self, request, subject_id):
         if not request.user.is_superuser:
             raise Http404
         subject = main_models.Subject.objects.filter(id=subject_id)
@@ -326,11 +326,47 @@ class SubjectAPIView(APIView):
         subject[0].save()
         return Response(SubjectSerializer(subject[0]).data)
 
-    def delete(self,request,subject_id):
+    def delete(self, request, subject_id):
         if not request.user.is_superuser:
             raise Http404
         subject = main_models.Subject.objects.filter(id=subject_id)
         if len(subject) == 0:
             raise Http404
         subject[0].delete()
-        return Response({"result":"deleted"})
+        return Response({"result": "deleted"})
+
+
+class GroupAPIView(APIView):
+    def get(self, request, group_id=None):
+        if group_id is None:
+            return Response(GroupSerializer(main_models.Group.objects.all(), many=True))
+        return Response(GroupSerializer(main_models.Group.objects.filter(id=group_id), many=True))
+
+    def post(self, request):
+        if not request.user.is_superuser:
+            raise Http404
+        group = GroupSerializer(data=request.data)
+        if group.is_valid():
+            group.save()
+            return Response(group.validated_data)
+        return Response({"error": "group not valid"})
+
+    def put(self, request, group_id):
+        if not request.user.is_superuser:
+            raise Http404
+        group = main_models.Group.objects.filter(id=group_id)
+        if len(group) == 0:
+            raise Http404
+        group[0].year_of_study = request.data['year_of_study']
+        group[0].group_letter = request.data['group_letter']
+        group[0].save()
+        return Response(GroupSerializer(group[0]).data)
+
+    def delete(self, request, group_id):
+        if not request.user.is_superuser:
+            raise Http404
+        group = main_models.Group.objects.filter(id=group_id)
+        if len(group) == 0:
+            raise Http404
+        group[0].delete()
+        return Response({"result": "deleted"})
