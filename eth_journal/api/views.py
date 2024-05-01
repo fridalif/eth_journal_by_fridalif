@@ -238,3 +238,25 @@ class LessonStudentInfoAPIView(APIView):
                 main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id,
                                                              abstract_student__id=student_id),
                 many=True))
+
+    def post(self, request, lesson_id, student_id):
+        data = request.data
+        if not request.user.is_superuser and len(
+                main_models.Lesson.objects.filter(teacher__user=request.user, id=lesson_id)) == 0:
+            raise Http404
+        if data['abstract']:
+            student = main_models.AbstractKid.objects.filter(id=student_id)
+            if len(student) == 0:
+                raise Http404
+            student = student[0]
+            if len(main_models.LessonStudentInfo.objects.filter(student=student,lesson__id=lesson_id))!=0:
+                return Response({"error":"this student alredy has info in this lesson"})
+            lesson_student_info = main_models.LessonStudentInfo()
+            
+
+
+    def put(self, request, lesson_id=None, student_id=None):
+        pass
+
+    def delete(self, request, lesson_id=None, student_id=None):
+        pass
