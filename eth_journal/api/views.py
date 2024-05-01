@@ -179,3 +179,8 @@ class LessonAPIView(APIView):
             raise Http404
         lesson[0].delete()
         return Response({"result": "deleted"})
+
+
+
+class LessonStudentInfoAPIView(APIView):
+    pass
