@@ -181,6 +181,23 @@ class LessonAPIView(APIView):
         return Response({"result": "deleted"})
 
 
-
 class LessonStudentInfoAPIView(APIView):
-    pass
+    def get(self, request, lesson_id=None, student_id=None):
+        if not request.user.is_authenticated:
+            raise Http404
+        if request.user.is_superuser:
+            if lesson_id is None and student_id is None:
+                return Response(
+                    LessonStudentInfoSerializer(main_models.LessonStudentInfo.objects.all(), many=True).data)
+            if student_id is None:
+                return Response(
+                    LessonStudentInfoSerializer(main_models.LessonStudentInfo.objects.filter(lesson__id=lesson_id),
+                                                many=True).data)
+
+            if not request.GET['abstract']:
+                return Response(LessonStudentInfoSerializer(
+                    main_models.LessonStudentInfo.objects.filter(lesson__id=lesson_id, student__id=student_id),
+                    many=True).data)
+            return Response(LessonStudentInfoSerializer(
+                main_models.LessonStudentInfo.objects.filter(lesson__id=lesson_id, abstract_studenet__id=student_id),
+                many=True).data)
