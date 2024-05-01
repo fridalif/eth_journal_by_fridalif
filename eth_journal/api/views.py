@@ -36,6 +36,14 @@ class RegisterRequestsAPIView(APIView):
             current_user.save()
             current_teacher = main_models.Teacher(user=current_user, father_name=current_request.father_name)
             current_teacher.save()
+            abstract_teacher_id = int(data['abstract_id'])
+            abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher_id)
+            if len(abstract_teacher) != 0:
+                abstract_teacher = abstract_teacher[0]
+                abstract_teacher_lessons = main_models.Lesson.objects.filter(abstract_teacher=abstract_teacher)
+                for lesson in abstract_teacher_lessons:
+                    lesson.teacher = current_teacher
+                abstract_teacher.delete()
             current_request.delete()
             return Response(TeacherSerializer(current_teacher).data)
 
@@ -49,8 +57,20 @@ class RegisterRequestsAPIView(APIView):
                                             first_name=current_request.name, last_name=current_request.surname)
             current_user.set_password(password)
             current_user.save()
+
             current_student = main_models.Kid(user=current_user, group=current_group,
                                               father_name=current_request.father_name)
+
+            abstract_student_id = int(data['abstract_id'])
+            abstract_student = main_models.AbstractTeacher.objects.filter(id=abstract_student_id)
+            if len(abstract_student) != 0:
+                abstract_student = abstract_student[0]
+                abstract_student_lessons_info = main_models.LessonStudentInfo.objects.filter(
+                    abstract_student=abstract_student)
+                for lesson_info in abstract_student_lessons_info:
+                    lesson_info.student = current_student
+                abstract_student.delete()
+
             current_student.save()
             current_request.delete()
             return Response(KidSerializer(current_student).data)
