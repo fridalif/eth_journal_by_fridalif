@@ -418,3 +418,44 @@ class AbstractKidAPIView(APIView):
             raise Http404
         abstract_kid[0].delete()
         return Response({"result": "deleted"})
+
+
+class AbstractTeacherAPIView(APIView):
+    def get(self, request, teacher_id=None):
+        if not request.user.is_superuser:
+            raise Http404
+        if teacher_id is None:
+            return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.all(), many=True))
+        return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.filter(id=teacher_id), many=True))
+
+    def post(self, request):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_teacher = AbstractTeacherSerializer(data=request.data)
+        if abstract_teacher.is_valid():
+            abstract_teacher.save()
+            return Response(abstract_teacher.validated_data)
+        return Response({"error": "abstract teacher not valid"})
+
+    def put(self, request, teacher_id):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_teacher = main_models.AbstractTeacher.objects.filter(id=teacher_id)
+        if len(abstract_teacher) == 0:
+            raise Http404
+        abstract_teacher = abstract_teacher[0]
+        abstract_teacher['name'] = request.data['name']
+        abstract_teacher['surname'] = request.data['surname']
+        abstract_teacher['father_name'] = request.data['father_name']
+        abstract_teacher.save()
+        return Response(AbstractTeacherSerializer(abstract_teacher).data)
+
+    def delete(self, request, teacher_id):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_teacher = main_models.AbstractTeacher.objects.filter(id=teacher_id)
+        if len(abstract_teacher) == 0:
+            raise Http404
+        abstract_teacher[0].delete()
+        return Response({"result": "deleted"})
+ 
