@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpRequest, Http404
 from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer, LessonSerializer, \
-    LessonStudentInfoSerializer
+    LessonStudentInfoSerializer,SubjectSerializer
 import main.models as main_models
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -299,3 +299,11 @@ class LessonStudentInfoAPIView(APIView):
         lesson_student_info.chastisement = data['chastisement']
         lesson_student_info.save()
         return Response(LessonSerializer(lesson_student_info).data)
+
+
+
+class SubjectAPIView(APIView):
+    def get(self,request,subject_id=None):
+        if subject_id is None:
+            return Response(SubjectSerializer(main_models.Subject.objects.all(),many=True))
+        return Response(SubjectSerializer(main_models.Subject.objects.filter(id=subject_id), many=True))
