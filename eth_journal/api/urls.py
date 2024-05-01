@@ -1,5 +1,6 @@
 from django.urls import path, include
-from .views import RegisterRequestsAPIView, LessonAPIView, LessonStudentInfoAPIView,SubjectAPIView,GroupAPIView
+from .views import RegisterRequestsAPIView, LessonAPIView, LessonStudentInfoAPIView, SubjectAPIView, GroupAPIView, \
+    AbstractKidAPIView, AbstractTeacherAPIView
 
 app_name = 'api'
 urlpatterns = [
@@ -11,8 +12,12 @@ urlpatterns = [
          name='lesson_student_info_per_lesson'),
     path('lesson_student_info/<int:lesson_id>/<int:student_id>/', LessonStudentInfoAPIView.as_view(),
          name='lesson_student_info_per_student'),
-    path('subjects/',SubjectAPIView.as_view(),name="subjects"),
-    path('subjects/<int:subject_id>/',SubjectAPIView.as_view(),name="subject"),
-    path('groups/',GroupAPIView.as_view(),name="group"),
-    path('groups/<int:group_id>/',GroupAPIView.as_view(),name="group")
+    path('subjects/', SubjectAPIView.as_view(), name="subjects"),
+    path('subjects/<int:subject_id>/', SubjectAPIView.as_view(), name="subject"),
+    path('groups/', GroupAPIView.as_view(), name="groups"),
+    path('groups/<int:group_id>/', GroupAPIView.as_view(), name="group"),
+    path('abstract_kids/', AbstractKidAPIView.as_view(), name="abstract_kids"),
+    path('abstract_kids/<int:student_id>/', AbstractKidAPIView.as_view(), name="abstract_kid"),
+    path('abstract_teachers/', AbstractTeacherAPIView.as_view(), name="abstract_teachers"),
+    path('abstract_teachers/<int:teacher_id>/', AbstractTeacherAPIView.as_view(), name="abstract_teacher")
 ]
