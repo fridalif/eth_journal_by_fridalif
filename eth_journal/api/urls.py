@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import RegisterRequestsAPIView, LessonAPIView, LessonStudentInfoAPIView,SubjectAPIView
+from .views import RegisterRequestsAPIView, LessonAPIView, LessonStudentInfoAPIView,SubjectAPIView,GroupAPIView
 
 app_name = 'api'
 urlpatterns = [
@@ -12,5 +12,7 @@ urlpatterns = [
     path('lesson_student_info/<int:lesson_id>/<int:student_id>/', LessonStudentInfoAPIView.as_view(),
          name='lesson_student_info_per_student'),
     path('subjects/',SubjectAPIView.as_view(),name="subjects"),
-    path('subjects/<int:subject_id>/',SubjectAPIView.as_view(),name="subject")
+    path('subjects/<int:subject_id>/',SubjectAPIView.as_view(),name="subject"),
+    path('groups/',GroupAPIView.as_view(),name="group"),
+    path('groups/<int:group_id>/',GroupAPIView.as_view(),name="group")
 ]

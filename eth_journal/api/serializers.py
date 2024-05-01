@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-from main.models import Lesson, LessonStudentInfo, Subject, Kid, Teacher, Group, RegisterRequests
+from main.models import Lesson, LessonStudentInfo, Subject, Kid, Teacher, Group, RegisterRequests, AbstractKid, \
+    AbstractTeacher
 
 
 class LessonSerializer(ModelSerializer):
