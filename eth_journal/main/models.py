@@ -11,6 +11,27 @@ class Group(models.Model):
         verbose_name_plural = 'Группы'
 
 
+class AbstractKid(models.Model):
+    name = models.TextField(verbose_name='Имя')
+    surname = models.TextField(verbose_name='Фамилия')
+    father_name = models.TextField(verbose_name='Отчество')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
+
+    class Meta:
+        verbose_name = 'Незарегистрированный ученик'
+        verbose_name_plural = 'Незарегистрированные ученики'
+
+
+class AbstractTeacher(models.Model):
+    name = models.TextField(verbose_name='Имя')
+    surname = models.TextField(verbose_name='Фамилия')
+    father_name = models.TextField(verbose_name='Отчество')
+
+    class Meta:
+        verbose_name = 'Незарегистрированный учитель'
+        verbose_name_plural = 'Незарегистрированные учителя'
+
+
 class Kid(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь в системе')
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
@@ -42,7 +63,9 @@ class Teacher(models.Model):
 class Lesson(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Предмет')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='Преподаватель')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='Преподаватель', null=True)
+    abstract_teacher = models.ForeignKey(AbstractTeacher, on_delete=models.SET_NULL,
+                                         verbose_name='Незарегистрированный преподаватель', null=True)
     date = models.DateField(verbose_name='Дата')
     start_time = models.TimeField(verbose_name='Время начала')
     end_time = models.TimeField(verbose_name='Время окончания')
@@ -56,7 +79,9 @@ class Lesson(models.Model):
 
 
 class LessonStudentInfo(models.Model):
-    student = models.ForeignKey(Kid, verbose_name='Студент', on_delete=models.CASCADE)
+    student = models.ForeignKey(Kid, verbose_name='Студент', on_delete=models.CASCADE, null=True)
+    abstract_student = models.ForeignKey(AbstractKid, on_delete=models.SET_NULL,
+                                         verbose_name='Незарегистрированный ученик', null=True)
     lesson = models.ForeignKey(Lesson, verbose_name='Урок', on_delete=models.CASCADE)
     mark = models.CharField(max_length=2,
                             choices=[('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('УП', 'УП'), ('Н', 'Н')],
@@ -80,27 +105,3 @@ class RegisterRequests(models.Model):
     class Meta:
         verbose_name = 'Запрос на регистрацию'
         verbose_name_plural = 'Запросы на регистрацию'
-
-
-
-
-class AbstractKid(models.Model):
-    name = models.TextField(verbose_name='Имя')
-    surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество')
-    group = models.ForeignKey(Group,on_delete=models.CASCADE, verbose_name='Группа')
-
-    class Meta:
-        verbose_name = 'Незарегистрированный ученик'
-        verbose_name_plural = 'Незарегистрированные ученики'
-
-
-
-class AbstractTeacher(models.Model):
-    name = models.TextField(verbose_name='Имя')
-    surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество')
-
-    class Meta:
-        verbose_name = 'Незарегистрированный учитель'
-        verbose_name_plural = 'Незарегистрированные учителя'
