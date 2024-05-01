@@ -80,3 +80,27 @@ class RegisterRequests(models.Model):
     class Meta:
         verbose_name = 'Запрос на регистрацию'
         verbose_name_plural = 'Запросы на регистрацию'
+
+
+
+
+class AbstractKid(models.Model):
+    name = models.TextField(verbose_name='Имя')
+    surname = models.TextField(verbose_name='Фамилия')
+    father_name = models.TextField(verbose_name='Отчество')
+    group = models.ForeignKey(Group,on_delete=models.CASCADE, verbose_name='Группа')
+
+    class Meta:
+        verbose_name = 'Незарегистрированный ученик'
+        verbose_name_plural = 'Незарегистрированные ученики'
+
+
+
+class AbstractTeacher(models.Model):
+    name = models.TextField(verbose_name='Имя')
+    surname = models.TextField(verbose_name='Фамилия')
+    father_name = models.TextField(verbose_name='Отчество')
+
+    class Meta:
+        verbose_name = 'Незарегистрированный учитель'
+        verbose_name_plural = 'Незарегистрированные учителя'
