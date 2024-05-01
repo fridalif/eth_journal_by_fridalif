@@ -239,7 +239,6 @@ class LessonStudentInfoAPIView(APIView):
                                                              abstract_student__id=student_id),
                 many=True))
 
-
     def post(self, request, lesson_id, student_id):
         data = request.data
         if not request.user.is_superuser and len(
@@ -276,6 +275,27 @@ class LessonStudentInfoAPIView(APIView):
                 main_models.Lesson.objects.filter(teacher__user=request.user, id=lesson_id)) == 0:
             raise Http404
         lesson = main_models.Lesson.objects.filter(id=lesson_id)[0]
+        lesson_student_info = None
+        if data['abstract']:
+            student = main_models.AbstractKid.objects.filter(id=student_id)
+            if len(student) == 0:
+                raise Http404
+            student = student[0]
+            lesson_student_info = main_models.LessonStudentInfo.objects.filter(lesson=lesson, abstract_student=student)
+            if len(lesson_student_info) == 0:
+                return Response({"error": "Student hasnt info in this lesson"})
+        else:
+            student = main_models.Kid.objects.filter(id=student_id)
+            if len(student) == 0:
+                raise Http404
+            student = student[0]
+            lesson_student_info = main_models.LessonStudentInfo.objects.filter(lesson=lesson, student=student)
+            if len(lesson_student_info) == 0:
+                return Response({"error": "Student hasnt info in this lesson"})
 
-    def delete(self, request, lesson_id=None, student_id=None):
-        pass
+        lesson_student_info = lesson_student_info[0]
+        lesson_student_info.mark = data['mark']
+        lesson_student_info.commendation = data['commendation']
+        lesson_student_info.chastisement = data['chastisement']
+        lesson_student_info.save()
+        return Response(LessonSerializer(lesson_student_info).data)
