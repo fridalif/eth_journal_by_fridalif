@@ -458,3 +458,4 @@ class AbstractTeacherAPIView(APIView):
             raise Http404
         abstract_teacher[0].delete()
         return Response({"result": "deleted"})
+
