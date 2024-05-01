@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpRequest, Http404
 from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer, LessonSerializer, \
-    LessonStudentInfoSerializer, SubjectSerializer, GroupSerializer
+    LessonStudentInfoSerializer, SubjectSerializer, GroupSerializer, AbstractKidSerializer, AbstractTeacherSerializer
 import main.models as main_models
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -341,7 +341,7 @@ class SubjectAPIView(APIView):
 class GroupAPIView(APIView):
     def get(self, request, group_id=None):
         if not request.user.is_authenticated:
-            return Response({"error":"not authenticated"})
+            return Response({"error": "not authenticated"})
         if group_id is None:
             return Response(GroupSerializer(main_models.Group.objects.all(), many=True))
         return Response(GroupSerializer(main_models.Group.objects.filter(id=group_id), many=True))
@@ -373,4 +373,48 @@ class GroupAPIView(APIView):
         if len(group) == 0:
             raise Http404
         group[0].delete()
+        return Response({"result": "deleted"})
+
+
+class AbstractKidAPIView(APIView):
+    def get(self, request, student_id=None):
+        if not request.user.is_superuser:
+            raise Http404
+        if student_id is None:
+            return Response(AbstractKidSerializer(main_models.AbstractKid.objects.all(), many=True))
+        return Response(AbstractKidSerializer(main_models.AbstractKid.objects.filter(id=student_id), many=True))
+
+    def post(self, request):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_kid = AbstractKidSerializer(data=request.data)
+        if abstract_kid.is_valid():
+            abstract_kid.save()
+            return Response(abstract_kid.validated_data)
+        return Response({"error": "abstract kid not valid"})
+
+    def put(self, request, student_id):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_kid = main_models.AbstractKid.objects.filter(id=student_id)
+        if len(abstract_kid) == 0:
+            raise Http404
+        abstract_kid = abstract_kid[0]
+        abstract_kid['name'] = request.data['name']
+        abstract_kid['surname'] = request.data['surname']
+        abstract_kid['father_name'] = request.data['father_name']
+        group = main_models.Group.objects.filter(id=int(request.data['group_id']))
+        if len(group) == 0:
+            return Response({"error": "Group not found"})
+        abstract_kid.group = group[0]
+        abstract_kid.save()
+        return Response(AbstractKidSerializer(abstract_kid).data)
+
+    def delete(self, request, student_id):
+        if not request.user.is_superuser:
+            raise Http404
+        abstract_kid = main_models.AbstractKid.objects.filter(id=student_id)
+        if len(abstract_kid) == 0:
+            raise Http404
+        abstract_kid[0].delete()
         return Response({"result": "deleted"})

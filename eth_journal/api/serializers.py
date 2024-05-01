@@ -43,3 +43,15 @@ class RegisterRequestsSerializer(ModelSerializer):
     class Meta:
         model = RegisterRequests
         fields = ['id', 'login', 'role', 'surname', 'name', 'father_name']
+
+
+class AbstractKidSerializer(ModelSerializer):
+    class Meta:
+        model = AbstractKid
+        fields = '__all__'
+
+
+class AbstractTeacherSerializer(ModelSerializer):
+    class Meta:
+        model = AbstractTeacher
+        fields = '__all__'
