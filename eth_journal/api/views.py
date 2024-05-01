@@ -239,24 +239,43 @@ class LessonStudentInfoAPIView(APIView):
                                                              abstract_student__id=student_id),
                 many=True))
 
+
     def post(self, request, lesson_id, student_id):
         data = request.data
         if not request.user.is_superuser and len(
                 main_models.Lesson.objects.filter(teacher__user=request.user, id=lesson_id)) == 0:
             raise Http404
+        lesson = main_models.Lesson.objects.filter(id=lesson_id)[0]
         if data['abstract']:
             student = main_models.AbstractKid.objects.filter(id=student_id)
             if len(student) == 0:
                 raise Http404
             student = student[0]
-            if len(main_models.LessonStudentInfo.objects.filter(student=student,lesson__id=lesson_id))!=0:
-                return Response({"error":"this student alredy has info in this lesson"})
-            lesson_student_info = main_models.LessonStudentInfo()
-            
+            if len(main_models.LessonStudentInfo.objects.filter(abstract_student=student, lesson=lesson)) != 0:
+                return Response({"error": "this student alredy has info in this lesson"})
+            lesson_student_info = main_models.LessonStudentInfo(student=None, abstract_student=student, lesson=lesson,
+                                                                mark=data['mark'], commendation=data['commendation'],
+                                                                chastisement=data['chastisement'])
+            lesson_student_info.save()
+            return Response(LessonStudentInfoSerializer(lesson_student_info).data)
+        student = main_models.Kid.objects.filter(id=student_id)
+        if len(student) == 0:
+            raise Http404
+        student = student[0]
+        if len(main_models.LessonStudentInfo.objects.filter(student=student, lesson=lesson)) != 0:
+            return Response({"error": "this student alredy has info in this lesson"})
+        lesson_student_info = main_models.LessonStudentInfo(student=student, abstract_student=None, lesson=lesson,
+                                                            mark=data['mark'], commendation=data['commendation'],
+                                                            chastisement=data['chastisement'])
+        lesson_student_info.save()
+        return Response(LessonStudentInfoSerializer(lesson_student_info).data)
 
-
-    def put(self, request, lesson_id=None, student_id=None):
-        pass
+    def put(self, request, lesson_id, student_id):
+        data = request.data
+        if not request.user.is_superuser and len(
+                main_models.Lesson.objects.filter(teacher__user=request.user, id=lesson_id)) == 0:
+            raise Http404
+        lesson = main_models.Lesson.objects.filter(id=lesson_id)[0]
 
     def delete(self, request, lesson_id=None, student_id=None):
         pass
