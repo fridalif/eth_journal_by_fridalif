@@ -5,7 +5,7 @@ function get_lessons_from_date(date){
     xhr.send();
     xhr.onload = function(){
         result = xhr.response;
-        alert(result[0]);
+        console.log(result[0]['teacher_name']);
         return;
     }
     return;
