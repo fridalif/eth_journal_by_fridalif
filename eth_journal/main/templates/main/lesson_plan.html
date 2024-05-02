@@ -17,13 +17,13 @@
 			</div>
 
 			<div class="marks_side_bar_prev_block">
-				<div class="marks_side_bar_font"><</div>
+				<div class="marks_side_bar_font" onclick="get_previous_day_lesson(date);"><</div>
 			</div>
 			<div class="marks_side_bar_page_block">
-				<div class="marks_side_bar_font">{{day}}.{{month}}.{{year}}</div>
+				<div class="marks_side_bar_font" id="date_representation_block">{{day}}.{{month}}.{{year}}</div>
 			</div>
 			<div class="marks_side_bar_next_block">
-				<div class="marks_side_bar_font">></div>
+				<div class="marks_side_bar_font" onclick="get_next_day_lesson(date);">></div>
 			</div>
 		</div>
 		<div class="marks_content_block">
@@ -75,5 +75,7 @@
 		</div>
 	{% load static %}
 	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
-	<script>get_previous_day_lesson({{day}},{{month}},{{year}});</script>
+	<script>
+		date = new Date({{year}},{{month}}-1,{{day}});
+	</script>
 {% endblock %}

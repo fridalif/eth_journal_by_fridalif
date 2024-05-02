@@ -1,17 +1,28 @@
 function get_lessons_from_date(date){
     let xhr = new XMLHttpRequest();
-    xhr.open("GET","/api/lessons/?date="+date);
+    xhr.open("GET","/api/lessons/?date="+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate());
     xhr.responseType = 'json';
     xhr.send();
     xhr.onload = function(){
         result = xhr.response;
-        alert(result);
+        alert(result[0]);
         return;
     }
     return;
 }
 
-function get_previous_day_lesson(day,month,year){
-    current_date = new Date(year,month-1,day);
-    alert(current_date.toString());
+function get_previous_day_lesson(date){
+    var day = date.getDate() - 1;
+    date.setDate(day);
+    get_lessons_from_date(date);
+    date_representation_block = document.getElementById('date_representation_block');
+    date_representation_block.innerHTML = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
+}
+
+function get_next_day_lesson(date){
+    var day = date.getDate() + 1;
+    date.setDate(day);
+    get_lessons_from_date(date);
+    date_representation_block = document.getElementById('date_representation_block');
+    date_representation_block.innerHTML = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
 }
