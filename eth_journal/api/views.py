@@ -96,12 +96,15 @@ class LessonAPIView(APIView):
     def get(self, request, lesson_id=None):
         if not request.user.is_authenticated:
             raise Http404
+        date = request.GET.get('date', None)
         if request.user.is_superuser:
             if lesson_id is not None:
                 lesson = main_models.Lesson.objects.filter(id=lesson_id)
                 if len(lesson) == 0:
                     raise Http404
                 return Response(LessonSerializer(lesson[0]).data)
+            if date is not None:
+                return Response(LessonSerializer(main_models.Lesson.objects.filter(date=date), many=True).data)
             return Response(LessonSerializer(main_models.Lesson.objects.all(), many=True).data)
 
         teacher = main_models.Teacher.objects.filter(user=request.user)
@@ -120,12 +123,16 @@ class LessonAPIView(APIView):
                 if len(lesson):
                     raise Http404
                 return Response(LessonSerializer(lesson[0]).data)
+            if date is not None:
+                return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher,date=date), many=True).data)
             return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher), many=True).data)
         if lesson_id is not None:
             lesson = main_models.Lesson.objects.filter(group=student.group, id=lesson_id)
             if len(lesson) == 0:
                 raise Http404
             return Response(LessonSerializer(lesson[0]).data)
+        if date is not None:
+            return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group,date=date), many=True).data)
         return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group), many=True).data)
 
     def post(self, request):
@@ -458,4 +465,3 @@ class AbstractTeacherAPIView(APIView):
             raise Http404
         abstract_teacher[0].delete()
         return Response({"result": "deleted"})
-

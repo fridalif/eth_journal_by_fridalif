@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from .models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
+from datetime import date
 
 
 def register(request: HttpRequest) -> HttpResponse:
@@ -47,4 +48,5 @@ def index(request: HttpRequest) -> HttpResponse:
 def lessons_plan(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect('main:login')
-    return render(request,'main/lesson_plan.html')
+    context = {"user": request.user, "date": date.today().strftime("%d.%m.%Y")}
+    return render(request, 'main/lesson_plan.html',context=context)
