@@ -5,7 +5,12 @@ function get_lessons_from_date(date){
     xhr.send();
     xhr.onload = function(){
         result = xhr.response;
-        console.log(result[0]['teacher_name']);
+        side_bar_block = document.getElementById('marks_side_bar_content_block')
+        side_bar_block.innerHTML = ''
+        for (let i = 0; i < result.length; i++) {
+             result_info = result[i]['subject_name']
+             side_bar_block.innerHTML += '<div class="marks_side_bar_lesson_block"><div class="marks_side_bar_font">'+result_info+'</div></div>';
+        }
         return;
     }
     return;
