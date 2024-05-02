@@ -138,11 +138,47 @@ class LessonAPIView(APIView):
     def post(self, request):
         if not request.user.is_superuser:
             raise Http404
-        lesson = LessonSerializer(data=request.data)
-        if lesson.is_valid():
-            lesson.save()
-            return Response(lesson.validated_data)
-        return Response({'error': 'lesson is not valid'})
+        data = request.data
+        lesson = main_models.Lesson()
+        lesson.date = data['date']
+        lesson.start_time = data['start_time']
+        lesson.end_time = data['end_time']
+        lesson.type = data['type']
+        lesson.homework = data['homework']
+        lesson.room = data['room']
+        group = main_models.Group.objects.filter(id=data['group'])
+        subject = main_models.Subject.objects.filter(id=data['subject'])
+        if len(group) == 0 or len(subject) == 0:
+            return Response({"error":'group or subject dosnt exists'})
+        group = group[0]
+        subject = subject[0]
+        lesson.group = group
+        lesson.subject = subject
+        teacher = data.get('teacher',None)
+        abstract_teacher = data.get('abstract_teacher',None)
+        if abstract_teacher is None and teacher is None:
+            return Response({"error": 'teacher dosnt exists'})
+        if teacher is not None:
+            teacher = main_models.Teacher.objects.filter(id=teacher)
+            if len(teacher) == 0:
+                return Response({"error": 'group or subject dosnt exists'})
+            lesson.teacher = teacher[0]
+        else:
+            abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher)
+            if len(abstract_teacher) == 0:
+                return Response({"error": 'group or subject dosnt exists'})
+            lesson.abstract_teacher = abstract_teacher[0]
+        lesson.save()
+        group = lesson.group
+        students = main_models.Kid.objects.filter(group=group)
+        abstract_students = main_models.AbstractKid.objects.filter(group=group)
+        for student in students:
+            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson,student=student)
+            lesson_student_info.save()
+        for abstract_student in abstract_students:
+            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson,abstract_student=abstract_student)
+            lesson_student_info.save()
+        return Response(LessonSerializer(lesson).data)
 
     def put(self, request: HttpRequest, lesson_id=None):
         data = request.data

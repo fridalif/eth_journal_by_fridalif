@@ -20,7 +20,7 @@ function get_lessons_from_date(date){
             }
             group_info = ', Группа: '+result[i]['group_year_of_study']+result[i]['group_letter'];
             result_info+=teacher_info+group_info+')';
-             side_bar_block.innerHTML += '<div class="marks_side_bar_lesson_block"><div class="marks_side_bar_font">'+result_info+'</div></div>';
+            side_bar_block.innerHTML += '<div class="marks_side_bar_lesson_block" onclick="get_lesson_marks_from_id('+result[i]['id']+');">'+'<div class="marks_side_bar_font">'+result_info+'</div></div>';
         }
         return;
     }
@@ -41,4 +41,8 @@ function get_next_day_lesson(date){
     get_lessons_from_date(date);
     date_representation_block = document.getElementById('date_representation_block');
     date_representation_block.innerHTML = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
+}
+
+function get_lesson_marks_from_id(lesson_id){
+
 }

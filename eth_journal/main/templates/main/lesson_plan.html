@@ -17,7 +17,22 @@
 			</div>
 		</div>
 		<div class="marks_content_block">
-			<div class="marks_table_header_block">
+
+		</div>
+	{% load static %}
+	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
+	<script>
+		date = new Date({{year}},{{month}}-1,{{day}});
+		get_lessons_from_date(date);
+	</script>
+{% endblock %}
+
+
+
+
+
+
+<div class="marks_table_header_block">
 				<div class="marks_table_header_font">
 					Введите оценки:
 				</div>
@@ -62,11 +77,3 @@
 					<div class="marks_table_minuses_cell"></div>
 				</div>
 			</div>
-		</div>
-	{% load static %}
-	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
-	<script>
-		date = new Date({{year}},{{month}}-1,{{day}});
-		get_lessons_from_date(date);
-	</script>
-{% endblock %}
