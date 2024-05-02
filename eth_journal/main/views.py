@@ -48,5 +48,6 @@ def index(request: HttpRequest) -> HttpResponse:
 def lessons_plan(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect('main:login')
-    context = {"user": request.user, "date": date.today().strftime("%d.%m.%Y")}
-    return render(request, 'main/lesson_plan.html',context=context)
+    today = date.today()
+    context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year}
+    return render(request, 'main/lesson_plan.html', context=context)
