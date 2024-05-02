@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpRequest, HttpResponse
 from .models import *
 from eth_journal.settings import KEY
@@ -42,3 +42,9 @@ def register(request: HttpRequest) -> HttpResponse:
 def index(request: HttpRequest) -> HttpResponse:
     context = {'user': request.user}
     return render(request, 'main/index.html', context=context)
+
+
+def lessons_plan(request: HttpRequest) -> HttpResponse:
+    if not request.user.is_authenticated:
+        return redirect('main:login')
+    return render(request,'main/lesson_plan.html')
