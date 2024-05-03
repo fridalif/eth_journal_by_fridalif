@@ -57,6 +57,7 @@ function get_lesson_marks_from_id(lesson_id){
     xhr.open("GET","/api/lesson_student_info/"+String(lesson_id)+"/");
     xhr.responseType = 'json';
     xhr.send();
+    marks_array = ['','2','3','4','5','Н','УП'];
     xhr.onload = function(){
         result = xhr.response;
         table_block = document.getElementById('marks_content_block');
@@ -71,7 +72,16 @@ function get_lesson_marks_from_id(lesson_id){
             else{
                 row_data += '<div class="marks_table_name_cell">'+result[i]['abstract_student_surname']+' '+result[i]['abstract_student_name']+' '+result[i]['abstract_student_father_name']+'</div>';
             }
-            row_data += '<div class="marks_table_mark_cell">'+result[i]['mark']+'</div>';
+            row_data += '<div class="marks_table_mark_cell">'/*+result[i]['mark']*///+'</div>';
+            row_data +="<select id='choose_mark' name='mark'>";
+            for (let j=0; j<marks_array.length; j++){
+                row_data+='<option value="'+marks_array[j]+'"';
+                if (result[i]['mark'] == marks_array[j]){
+                    row_data+='selected';
+                }
+                row_data+='>'+marks_array[j]+'</option>';
+            }
+            row_data += "</select></div>";
             row_data += '<div class="marks_table_pluses_cell">'+result[i]['commendation']+'</div>';
             row_data += '<div class="marks_table_minuses_cell">'+result[i]['chastisement']+'</div>'
             row_data += '</div>';
