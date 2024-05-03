@@ -54,7 +54,7 @@ function get_lesson_marks_from_id(lesson_id){
     prev_chosen_id = lesson_id;
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET","/api/lessons/?date="+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate());
+    xhr.open("GET","/api/lesson_student_info/"+String(lesson_id)+"/");
     xhr.responseType = 'json';
     xhr.send();
     xhr.onload = function(){

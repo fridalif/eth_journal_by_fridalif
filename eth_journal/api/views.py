@@ -256,31 +256,33 @@ class LessonStudentInfoAPIView(APIView):
 
         if is_student:
             if lesson_id is None:
+
                 return Response(
                     LessonStudentInfoSerializer(main_models.LessonStudentInfo.objects.filter(student=current_student),
-                                                many=True))
+                                                many=True).data)
             return Response(
                 LessonStudentInfoSerializer(
                     main_models.LessonStudentInfo.objects.filter(student=current_student, lesson__id=lesson_id),
-                    many=True))
+                    many=True).data)
         if lesson_id is None:
+
             return Response(LessonStudentInfoSerializer(
-                main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher), many=True))
+                main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher), many=True).data)
         if student_id is None:
             return Response(LessonStudentInfoSerializer(
                 main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id),
-                many=True))
+                many=True).data)
         if not request.GET['abstract']:
             return Response(
                 LessonStudentInfoSerializer(
                     main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id,
                                                                  student__id=student_id),
-                    many=True))
+                    many=True).data)
         return Response(
             LessonStudentInfoSerializer(
                 main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher, lesson__id=lesson_id,
                                                              abstract_student__id=student_id),
-                many=True))
+                many=True).data)
 
     def post(self, request, lesson_id, student_id):
         data = request.data
