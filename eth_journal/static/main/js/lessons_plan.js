@@ -6,8 +6,8 @@ function get_lessons_from_date(date){
     xhr.send();
     xhr.onload = function(){
         result = xhr.response;
-        side_bar_block = document.getElementById('marks_side_bar_content_block')
-        side_bar_block.innerHTML = ''
+        side_bar_block = document.getElementById('marks_side_bar_content_block');
+        side_bar_block.innerHTML = '';
         for (let i = 0; i < result.length; i++) {
              result_info = result[i]['subject_name'];
              result_info += '(Кабинет: ' + result[i]['room']+', Тип: '+result[i]['type'];//+ 'Преподаватель:';
@@ -34,6 +34,7 @@ function get_previous_day_lesson(date){
     get_lessons_from_date(date);
     date_representation_block = document.getElementById('date_representation_block');
     date_representation_block.innerHTML = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
+    return;
 }
 
 function get_next_day_lesson(date){
@@ -42,6 +43,7 @@ function get_next_day_lesson(date){
     get_lessons_from_date(date);
     date_representation_block = document.getElementById('date_representation_block');
     date_representation_block.innerHTML = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear();
+    return;
 }
 
 function get_lesson_marks_from_id(lesson_id){
@@ -64,6 +66,7 @@ function get_lesson_marks_from_id(lesson_id){
         table_block.innerHTML = '';
         table_block.innerHTML = '<div class="marks_table_header_block"><div class="marks_table_header_font">Введите оценки:</div></div><div class="marks_table_row_header"><div class="marks_table_header_name_cell"><div class="marks_table_name_font">ФИО</div></div><div class="marks_table_header_mark_cell"><div class="marks_table_marks_font">Оценка</div></div><div class="marks_table_header_pluses_cell"><div class="marks_table_pluses_font">Особые заслуги</div></div><div class="marks_table_header_minuses_cell"><div class="marks_table_minuses_font">Замечание</div></div></div>';
         row_data = '<div class="marks_table_block" id="marks_table_block">'
+
         for (let i=0; i<result.length;i++){
             row_data += '<div class="marks_table_row">';
             if (result[i]['student_name']!=null){
@@ -72,18 +75,31 @@ function get_lesson_marks_from_id(lesson_id){
             else{
                 row_data += '<div class="marks_table_name_cell">'+result[i]['abstract_student_surname']+' '+result[i]['abstract_student_name']+' '+result[i]['abstract_student_father_name']+'</div>';
             }
-            row_data += '<div class="marks_table_mark_cell">'/*+result[i]['mark']*///+'</div>';
-            row_data +="<select id='choose_mark' name='mark'>";
-            for (let j=0; j<marks_array.length; j++){
-                row_data+='<option value="'+marks_array[j]+'"';
-                if (result[i]['mark'] == marks_array[j]){
-                    row_data+='selected';
-                }
-                row_data+='>'+marks_array[j]+'</option>';
+            row_data += '<div class="marks_table_mark_cell">'
+            if (!is_teacher){
+                row_data += "<div class='white_table_font'>"+result[i]['mark']+'</div></div>';
             }
-            row_data += "</select></div>";
-            row_data += '<div class="marks_table_pluses_cell">'+result[i]['commendation']+'</div>';
-            row_data += '<div class="marks_table_minuses_cell">'+result[i]['chastisement']+'</div>'
+            else{
+                row_data +="<select id='choose_mark' name='mark'>";
+                for (let j=0; j<marks_array.length; j++){
+                    row_data+='<option value="'+marks_array[j]+'"';
+                    if (result[i]['mark'] == marks_array[j]){
+                        row_data+='selected';
+                    }
+                    row_data+='>'+marks_array[j]+'</option>';
+                }
+                row_data += "</select></div>";
+            }
+            //row_data += //+result[i]['commendation']+'</div>';
+            if (!is_teacher){
+                row_data+='<div class="marks_table_pluses_cell"><div class="white_table_font">'+result[i]['commendation']+'</div></div>'
+                row_data += '<div class="marks_table_minuses_cell"><div class="white_table_font">'+result[i]['chastisement']+'</div></div>'
+            }
+            else{
+                row_data += '<div class="marks_table_pluses_cell"><input type="text" name="pluses_input" id="pluses_input" value="'+result[i]['chastisement']+'"></div>'
+                row_data += '<div class="marks_table_minuses_cell"><input type="text" name="minuses_input" id="minuses_input" value="'+result[i]['chastisement']+'"></div>'
+            }
+
             row_data += '</div>';
         }
         table_block.innerHTML +=row_data+'</div>'

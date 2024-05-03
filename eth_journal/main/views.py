@@ -48,7 +48,14 @@ def index(request: HttpRequest) -> HttpResponse:
 def lessons_plan(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect('main:login')
-    today = date.today()
-    context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year}
-    return render(request, 'main/lesson_plan.html', context=context)
+    is_teacher = False
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            is_teacher = True
+        if len(Teacher.objects.filter(user=request.user)) != 0:
+            is_teacher = True
 
+    today = date.today()
+    context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year,
+               "is_teacher": is_teacher}
+    return render(request, 'main/lesson_plan.html', context=context)

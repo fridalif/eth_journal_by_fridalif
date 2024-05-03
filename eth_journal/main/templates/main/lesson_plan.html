@@ -66,8 +66,13 @@
 	{% load static %}
 	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
 	<script>
+		is_teacher = false;
+		{% if is_teacher %}
+			is_teacher = true;
+		{% endif %}
 		date = new Date({{year}},{{month}}-1,{{day}});
 		get_lessons_from_date(date);
+
 	</script>
 {% endblock %}
 

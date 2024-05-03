@@ -964,7 +964,7 @@
 	overflow:scroll;
 	position: absolute;
 	width: 80%;
-	height: 70%;
+	height: 40%;
 	left: 10%;
 	right: 0;
 	top: 20%;
@@ -1227,6 +1227,23 @@
 	background: rgb(0,0,0);
 }
 #choose_mark{
+    width:100%;
+    height:100%;
+}
+.white_table_font{
+    color: white;
+    font-color:white;
+    font-size: 100%;
+    font-family: Inter;
+    text-align: center;
+}
+
+
+#pluses_input{
+    width:100%;
+    height:100%;
+}
+#minuses_input{
     width:100%;
     height:100%;
 }
