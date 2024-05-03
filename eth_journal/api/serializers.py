@@ -27,7 +27,7 @@ class LessonStudentInfoSerializer(ModelSerializer):
     abstract_student_name = serializers.CharField(source='abstract_student.name', allow_null=True)
     abstract_student_surname = serializers.CharField(source='abstract_student.surname', allow_null=True)
     abstract_student_father_name = serializers.CharField(source='abstract_student.father_name', allow_null=True)
-
+    homework = serializers.CharField(source='lesson.homework',allow_null=True)
     class Meta:
         model = LessonStudentInfo
         fields = '__all__'

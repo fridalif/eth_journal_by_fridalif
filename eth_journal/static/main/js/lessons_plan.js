@@ -102,6 +102,16 @@ function get_lesson_marks_from_id(lesson_id){
 
             row_data += '</div>';
         }
-        table_block.innerHTML +=row_data+'</div>'
+        submit_button = '';
+        if (is_teacher){
+            submit_button = '<input placeholder="Домашнее задание..." type="textarea" name="homework" id="homework_block"';
+            if (result.length!=0){
+                if (result[0]['homework']!=''){
+                    submit_button += ' value="'+result[0]['homework']+'"';
+                }
+                submit_button += '><div class="submit_button_table">Подтвердить изменения</div>';
+            }
+        }
+        table_block.innerHTML +=row_data+'</div>'+submit_button;
     }
 }
