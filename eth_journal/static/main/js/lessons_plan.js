@@ -1,4 +1,5 @@
 function get_lessons_from_date(date){
+    prev_chosen_id =0;
     let xhr = new XMLHttpRequest();
     xhr.open("GET","/api/lessons/?date="+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate());
     xhr.responseType = 'json';
@@ -20,7 +21,7 @@ function get_lessons_from_date(date){
             }
             group_info = ', Группа: '+result[i]['group_year_of_study']+result[i]['group_letter'];
             result_info+=teacher_info+group_info+')';
-            side_bar_block.innerHTML += '<div class="marks_side_bar_lesson_block" onclick="get_lesson_marks_from_id('+result[i]['id']+');">'+'<div class="marks_side_bar_font">'+result_info+'</div></div>';
+            side_bar_block.innerHTML += '<div id="marks_side_bar_lesson_block_'+String(result[i]['id'])+'" class="marks_side_bar_lesson_block" onclick="get_lesson_marks_from_id('+result[i]['id']+');">'+'<div class="marks_side_bar_font">'+result_info+'</div></div>';
         }
         return;
     }
@@ -44,5 +45,19 @@ function get_next_day_lesson(date){
 }
 
 function get_lesson_marks_from_id(lesson_id){
+    if (prev_chosen_id > 0){
+        prev_chosen_div = document.getElementById('marks_side_bar_lesson_block_'+String(prev_chosen_id));
+        prev_chosen_div.className = 'marks_side_bar_lesson_block';
+    }
+    lesson_div = document.getElementById('marks_side_bar_lesson_block_'+String(lesson_id));
+    lesson_div.className = 'marks_side_bar_lesson_block_choosen';
+    prev_chosen_id = lesson_id;
 
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET","/api/lessons/?date="+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate());
+    xhr.responseType = 'json';
+    xhr.send();
+    xhr.onload = function(){
+        result = xhr.response;
+    }
 }

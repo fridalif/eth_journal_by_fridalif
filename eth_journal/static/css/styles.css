@@ -1162,6 +1162,9 @@
 	background: rgb(0,0,0);
 }
 
+.marks_side_bar_lesson_block_choosen{
+    background: rgb(0,0,0);
+}
 .marks_side_bar_page_block{
 	position: absolute;
 	width: 34%;

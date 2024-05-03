@@ -51,3 +51,4 @@ def lessons_plan(request: HttpRequest) -> HttpResponse:
     today = date.today()
     context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year}
     return render(request, 'main/lesson_plan.html', context=context)
+
