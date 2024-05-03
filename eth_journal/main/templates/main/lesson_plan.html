@@ -16,23 +16,8 @@
 				<div class="marks_side_bar_font" onclick="get_next_day_lesson(date);">></div>
 			</div>
 		</div>
-		<div class="marks_content_block">
-
-		</div>
-	{% load static %}
-	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
-	<script>
-		date = new Date({{year}},{{month}}-1,{{day}});
-		get_lessons_from_date(date);
-	</script>
-{% endblock %}
-
-
-
-
-
-
-<div class="marks_table_header_block">
+		<div class="marks_content_block" id="marks_content_block">
+			<!--<div class="marks_table_header_block">
 				<div class="marks_table_header_font">
 					Введите оценки:
 				</div>
@@ -51,7 +36,7 @@
 					<div class="marks_table_minuses_font">Замечание</div>
 				</div>
 			</div>
-			<div class="marks_table_block">
+			<div class="marks_table_block" id="marks_table_block">
 				<div class="marks_table_row">
 					<div class="marks_table_name_cell"></div>
 					<div class="marks_table_mark_cell"></div>
@@ -76,4 +61,18 @@
 					<div class="marks_table_pluses_cell"></div>
 					<div class="marks_table_minuses_cell"></div>
 				</div>
-			</div>
+			</div>-->
+		</div>
+	{% load static %}
+	<script src="{% static 'main/js/lessons_plan.js' %}"></script>
+	<script>
+		date = new Date({{year}},{{month}}-1,{{day}});
+		get_lessons_from_date(date);
+	</script>
+{% endblock %}
+
+
+
+
+
+

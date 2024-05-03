@@ -59,5 +59,23 @@ function get_lesson_marks_from_id(lesson_id){
     xhr.send();
     xhr.onload = function(){
         result = xhr.response;
+        table_block = document.getElementById('marks_content_block');
+        table_block.innerHTML = '';
+        table_block.innerHTML = '<div class="marks_table_header_block"><div class="marks_table_header_font">Введите оценки:</div></div><div class="marks_table_row_header"><div class="marks_table_header_name_cell"><div class="marks_table_name_font">ФИО</div></div><div class="marks_table_header_mark_cell"><div class="marks_table_marks_font">Оценка</div></div><div class="marks_table_header_pluses_cell"><div class="marks_table_pluses_font">Особые заслуги</div></div><div class="marks_table_header_minuses_cell"><div class="marks_table_minuses_font">Замечание</div></div></div>';
+        row_data = '<div class="marks_table_block" id="marks_table_block">'
+        for (let i=0; i<result.length;i++){
+            row_data += '<div class="marks_table_row">';
+            if (result[i]['student_name']!=null){
+                row_data += '<div class="marks_table_name_cell">'+result[i]['student_surname']+' '+result[i]['student_name']+' '+result[i]['student_father_name']+'</div>';
+            }
+            else{
+                row_data += '<div class="marks_table_name_cell">'+result[i]['abstract_student_surname']+' '+result[i]['abstract_student_name']+' '+result[i]['abstract_student_father_name']+'</div>';
+            }
+            row_data += '<div class="marks_table_mark_cell">'+result[i]['mark']+'</div>';
+            row_data += '<div class="marks_table_pluses_cell">'+result[i]['commendation']+'</div>';
+            row_data += '<div class="marks_table_minuses_cell">'+result[i]['chastisement']+'</div>'
+            row_data += '</div>';
+        }
+        table_block.innerHTML +=row_data+'</div>'
     }
 }
