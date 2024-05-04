@@ -332,6 +332,7 @@ class LessonStudentInfoAPIView(APIView):
         lesson_student_info.save()
         return Response(LessonStudentInfoSerializer(lesson_student_info).data)
 
+
 class SubjectAPIView(APIView):
     def get(self, request, subject_id=None):
         if not request.user.is_authenticated:
@@ -489,3 +490,37 @@ class AbstractTeacherAPIView(APIView):
             raise Http404
         abstract_teacher[0].delete()
         return Response({"result": "deleted"})
+
+
+class ProfileRaitingAPIView(APIView):
+    def post(self, request, profile_slug):
+        data = request.data
+        if not request.user.is_authenticated:
+            raise Http404
+        profile = main_models.Profile.objects.filter(slug=profile_slug)
+        if len(profile) == 0:
+            raise Http404
+        profile = profile[0]
+        profile_raiting_from_this_user = main_models.ProfileRaiting.objects.filter(from_user=request.user,profile=profile)
+        if len(profile_raiting_from_this_user)!=0:
+            profile_raiting_from_this_user=profile_raiting_from_this_user[0]
+            if data['send_type'] == 'like':
+                profile_raiting_from_this_user.like = True
+                profile_raiting_from_this_user.dislike = False
+            else:
+                profile_raiting_from_this_user.like = False
+                profile_raiting_from_this_user.dislike = True
+            profile_raiting_from_this_user.save()
+            return Response({"response": "Успешно!"})
+        new_vote = main_models.ProfileRaiting()
+        new_vote.profile = profile
+        new_vote.from_user = request.user
+        if data['send_type'] == 'like':
+            new_vote.like = True
+            new_vote.dislike = False
+            new_vote.save()
+            return Response({"response":"Успешно!"})
+        new_vote.like = False
+        new_vote.dislike = True
+        new_vote.save()
+        return Response({"response": "Успешно!"})
