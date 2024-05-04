@@ -68,7 +68,7 @@ function get_lesson_marks_from_id(lesson_id){
         row_data = '<div class="marks_table_block" id="marks_table_block">'
 
         for (let i=0; i<result.length;i++){
-            row_data += '<div class="marks_table_row">';
+            row_data += '<div class="marks_table_row" id="'+result[i]['id']+'">';
             if (result[i]['student_name']!=null){
                 row_data += '<div class="marks_table_name_cell">'+result[i]['student_surname']+' '+result[i]['student_name']+' '+result[i]['student_father_name']+'</div>';
             }
@@ -90,7 +90,6 @@ function get_lesson_marks_from_id(lesson_id){
                 }
                 row_data += "</select></div>";
             }
-            //row_data += //+result[i]['commendation']+'</div>';
             if (!is_teacher){
                 row_data+='<div class="marks_table_pluses_cell"><div class="white_table_font">'+result[i]['commendation']+'</div></div>'
                 row_data += '<div class="marks_table_minuses_cell"><div class="white_table_font">'+result[i]['chastisement']+'</div></div>'
@@ -109,7 +108,7 @@ function get_lesson_marks_from_id(lesson_id){
                 if (result[0]['homework']!=''){
                     submit_button += ' value="'+result[0]['homework']+'"';
                 }
-                submit_button += '><div class="submit_button_table">Подтвердить изменения</div>';
+                submit_button += '><div class="submit_button_table" onclick="send_changes('+lesson_id+');">Подтвердить изменения</div>';
             }
         }
         table_block.innerHTML +=row_data+'</div>'+submit_button;

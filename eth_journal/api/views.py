@@ -124,7 +124,8 @@ class LessonAPIView(APIView):
                     raise Http404
                 return Response(LessonSerializer(lesson[0]).data)
             if date is not None:
-                return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher,date=date), many=True).data)
+                return Response(
+                    LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher, date=date), many=True).data)
             return Response(LessonSerializer(main_models.Lesson.objects.filter(teacher=teacher), many=True).data)
         if lesson_id is not None:
             lesson = main_models.Lesson.objects.filter(group=student.group, id=lesson_id)
@@ -132,7 +133,8 @@ class LessonAPIView(APIView):
                 raise Http404
             return Response(LessonSerializer(lesson[0]).data)
         if date is not None:
-            return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group,date=date), many=True).data)
+            return Response(
+                LessonSerializer(main_models.Lesson.objects.filter(group=student.group, date=date), many=True).data)
         return Response(LessonSerializer(main_models.Lesson.objects.filter(group=student.group), many=True).data)
 
     def post(self, request):
@@ -149,38 +151,38 @@ class LessonAPIView(APIView):
         group = main_models.Group.objects.filter(id=data['group'])
         subject = main_models.Subject.objects.filter(id=data['subject'])
         if len(group) == 0 or len(subject) == 0:
-            return Response({"error":'group or subject dosnt exists'})
+            return Response({"error": 'group or subject dosnt exists'})
         group = group[0]
         subject = subject[0]
         lesson.group = group
         lesson.subject = subject
-        teacher = data.get('teacher',None)
-        abstract_teacher = data.get('abstract_teacher',None)
+        teacher = data.get('teacher', None)
+        abstract_teacher = data.get('abstract_teacher', None)
         if abstract_teacher is None and teacher is None:
             return Response({"error": 'teacher dosnt exists'})
         if teacher is not None:
             teacher = main_models.Teacher.objects.filter(id=teacher)
             if len(teacher) == 0:
-                return Response({"error": 'group or subject dosnt exists'})
+                return Response({"error": 'teacher dosnt exists'})
             lesson.teacher = teacher[0]
         else:
             abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher)
             if len(abstract_teacher) == 0:
-                return Response({"error": 'group or subject dosnt exists'})
+                return Response({"error": 'abstract_teacher dosnt exists'})
             lesson.abstract_teacher = abstract_teacher[0]
         lesson.save()
         group = lesson.group
         students = main_models.Kid.objects.filter(group=group)
         abstract_students = main_models.AbstractKid.objects.filter(group=group)
         for student in students:
-            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson,student=student)
+            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson, student=student)
             lesson_student_info.save()
         for abstract_student in abstract_students:
-            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson,abstract_student=abstract_student)
+            lesson_student_info = main_models.LessonStudentInfo(lesson=lesson, abstract_student=abstract_student)
             lesson_student_info.save()
         return Response(LessonSerializer(lesson).data)
 
-    def put(self, request: HttpRequest, lesson_id=None):
+    def put(self, request: HttpRequest, lesson_id):
         data = request.data
         lesson = main_models.Lesson.objects.filter(id=lesson_id)
         if len(lesson) == 0:
@@ -209,7 +211,6 @@ class LessonAPIView(APIView):
             return Response(LessonSerializer(lesson).data)
         if lesson.teacher.user == request.user:
             lesson.homework = data['homework']
-            lesson.room = data['room']
             lesson.save()
             return Response(LessonSerializer(lesson).data)
         raise Http404
@@ -256,7 +257,6 @@ class LessonStudentInfoAPIView(APIView):
 
         if is_student:
             if lesson_id is None:
-
                 return Response(
                     LessonStudentInfoSerializer(main_models.LessonStudentInfo.objects.filter(student=current_student),
                                                 many=True).data)
@@ -265,7 +265,6 @@ class LessonStudentInfoAPIView(APIView):
                     main_models.LessonStudentInfo.objects.filter(student=current_student, lesson__id=lesson_id),
                     many=True).data)
         if lesson_id is None:
-
             return Response(LessonStudentInfoSerializer(
                 main_models.LessonStudentInfo.objects.filter(lesson__teacher=current_teacher), many=True).data)
         if student_id is None:
@@ -314,30 +313,18 @@ class LessonStudentInfoAPIView(APIView):
         lesson_student_info.save()
         return Response(LessonStudentInfoSerializer(lesson_student_info).data)
 
-    def put(self, request, lesson_id, student_id):
+    def put(self, request, lesson_id):
         data = request.data
         if not request.user.is_superuser and len(
                 main_models.Lesson.objects.filter(teacher__user=request.user, id=lesson_id)) == 0:
             raise Http404
-        lesson = main_models.Lesson.objects.filter(id=lesson_id)[0]
-        lesson_student_info = None
-        if data['abstract']:
-            student = main_models.AbstractKid.objects.filter(id=student_id)
-            if len(student) == 0:
-                raise Http404
-            student = student[0]
-            lesson_student_info = main_models.LessonStudentInfo.objects.filter(lesson=lesson, abstract_student=student)
-            if len(lesson_student_info) == 0:
-                return Response({"error": "Student hasnt info in this lesson"})
-        else:
-            student = main_models.Kid.objects.filter(id=student_id)
-            if len(student) == 0:
-                raise Http404
-            student = student[0]
-            lesson_student_info = main_models.LessonStudentInfo.objects.filter(lesson=lesson, student=student)
-            if len(lesson_student_info) == 0:
-                return Response({"error": "Student hasnt info in this lesson"})
-
+        lesson = main_models.Lesson.objects.filter(id=lesson_id)
+        if len(lesson) == 0:
+            raise Http404
+        lesson = lesson[0]
+        lesson_student_info = main_models.LessonStudentInfo.objects.filter(id=int(data['id']), lesson=lesson)
+        if len(lesson_student_info) == 0:
+            raise Http404
         lesson_student_info = lesson_student_info[0]
         lesson_student_info.mark = data['mark']
         lesson_student_info.commendation = data['commendation']
