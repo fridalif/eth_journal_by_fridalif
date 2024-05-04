@@ -1327,7 +1327,38 @@
     position:absolute;
     font-size: 136%;
     background-color:red;
+    border: 1px solid rgb(0, 0, 0);
 }
 .profile_carma_percentage_green{
     background-color:green;
+}
+.profile_like_button{
+    width:10%;
+    height:10%;
+    top:75%;
+    left:0%;
+    position:absolute;
+    font-size: 136%;
+    background-color:green;
+    color: white;
+    text-align:center;
+    border: 1px solid rgb(0, 0, 0);
+}
+.profile_dislike_button{
+    border: 1px solid rgb(0, 0, 0);
+    width:10%;
+    height:10%;
+    top:75%;
+    left:50%;
+    color:white;
+    position:absolute;
+    font-size: 136%;
+    background-color:red;
+    text-align:center;
+}
+.profile_dislike_button:hover{
+    background-color:darkred;
+}
+.profile_like_button:hover{
+    background-color:darkgreen;
 }
