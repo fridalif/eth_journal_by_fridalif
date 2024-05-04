@@ -330,8 +330,7 @@ class LessonStudentInfoAPIView(APIView):
         lesson_student_info.commendation = data['commendation']
         lesson_student_info.chastisement = data['chastisement']
         lesson_student_info.save()
-        return Response(LessonSerializer(lesson_student_info).data)
-
+        return Response(LessonStudentInfoSerializer(lesson_student_info).data)
 
 class SubjectAPIView(APIView):
     def get(self, request, subject_id=None):

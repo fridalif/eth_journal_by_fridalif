@@ -80,7 +80,7 @@ function get_lesson_marks_from_id(lesson_id){
                 row_data += "<div class='white_table_font'>"+result[i]['mark']+'</div></div>';
             }
             else{
-                row_data +="<select id='choose_mark' name='mark'>";
+                row_data +="<select id='choose_mark' name='mark' class='choose_mark'>";
                 for (let j=0; j<marks_array.length; j++){
                     row_data+='<option value="'+marks_array[j]+'"';
                     if (result[i]['mark'] == marks_array[j]){
@@ -95,8 +95,8 @@ function get_lesson_marks_from_id(lesson_id){
                 row_data += '<div class="marks_table_minuses_cell"><div class="white_table_font">'+result[i]['chastisement']+'</div></div>'
             }
             else{
-                row_data += '<div class="marks_table_pluses_cell"><input type="text" name="pluses_input" id="pluses_input" value="'+result[i]['chastisement']+'"></div>'
-                row_data += '<div class="marks_table_minuses_cell"><input type="text" name="minuses_input" id="minuses_input" value="'+result[i]['chastisement']+'"></div>'
+                row_data += '<div class="marks_table_pluses_cell"><input type="text" class="pluses_input" name="pluses_input" id="pluses_input" value="'+result[i]['commendation']+'"></div>'
+                row_data += '<div class="marks_table_minuses_cell"><input type="text" class="minuses_input" name="minuses_input" id="minuses_input" value="'+result[i]['chastisement']+'"></div>'
             }
 
             row_data += '</div>';
@@ -112,5 +112,50 @@ function get_lesson_marks_from_id(lesson_id){
             }
         }
         table_block.innerHTML +=row_data+'</div>'+submit_button;
+        return;
     }
+    return;
+}
+
+
+function send_changes(lesson_id){
+    table_rows = document.getElementsByClassName('marks_table_row');
+    for (let row_iter=0;row_iter<table_rows.length;row_iter++){
+        lesson_info_id = table_rows[row_iter].id;
+        mark = table_rows[row_iter].getElementsByClassName('choose_mark')[0].value;
+        commendation = table_rows[row_iter].getElementsByClassName('pluses_input')[0].value;
+        chastisement = table_rows[row_iter].getElementsByClassName('minuses_input')[0].value;
+        let xhr = new XMLHttpRequest();
+        let request_data = JSON.stringify({"id": lesson_info_id,"mark":mark,"commendation":commendation,"chastisement":chastisement });
+        xhr.open("PUT","/api/lesson_student_info/"+String(lesson_id)+"/");
+        xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+        xhr.setRequestHeader('Content-Type','application/json');
+        xhr.responseType = 'json';
+        xhr.send(request_data);
+        console.log(row_iter);
+        xhr.onload = function(){
+            result = xhr.response;
+            if (result['error']){
+                alert(result['error']);
+            }
+            return;
+        }
+    }
+    homework = document.getElementById('homework_block').value;
+    let xhr = new XMLHttpRequest();
+    let request_data = JSON.stringify({"homework": homework });
+    xhr.open("PUT","/api/lessons/"+String(lesson_id)+"/");
+    xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.responseType = 'json';
+    xhr.send(request_data);
+    xhr.onload = function(){
+        result = xhr.response;
+        if (result['error']){
+            alert(result['error']);
+        }
+        return;
+    }
+    alert('Успешно!');
+    return;
 }
