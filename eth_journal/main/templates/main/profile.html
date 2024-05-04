@@ -1,5 +1,26 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
-    <img src="{{ profile.avatar.url }}" width="100px" height="100px">
+<div class="marks_content_block" id="marks_content_block">
+    <div class="profile_image_block">
+        <img src="{{ profile.avatar.url }}" width="100%" height="100%">
+    </div>
+    <div class="profile_username_block">
+        Username: {{ profile.user.username }}
+    </div>
+    <div class="profile_surname_block">
+        Имя: {{profile.user.first_name}} {{ profile.user.last_name }}
+    </div>
+    <div class="profile_avg_mark_block">
+        Средняя оценка: {{avg_mark}}
+    </div>
+    <div class="profile_carma_count_block">
+        Голосов: {{carma_count}}
+    </div>
+    <div class="profile_carma_percentage_block">
+        <div class="profile_carma_percentage_green" width="{{carma_percentage}}">
+
+        </div>
+    </div>
+</div>
 {% endblock %}

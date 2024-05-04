@@ -164,6 +164,7 @@
 
 .avatar_header_block{
 	position: absolute;
+	border-radius: 50%;
 	width: 80px;
 	height: 80px;
 	left: 83%;
@@ -1270,4 +1271,63 @@
 
 .submit_button_table:hover{
     background-color:rgb(0, 0, 0);
+}
+
+
+.profile_image_block{
+    width:20%;
+    height:20%;
+    top:10%;
+    left:10%;
+    position:absolute;
+}
+.profile_username_block{
+    width:40%;
+    height:10%;
+    top:35%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+}
+.image_round{
+     border-radius: 50%;
+}
+
+.profile_surname_block{
+    width:40%;
+    height:10%;
+    top:45%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+}
+
+.profile_avg_mark_block{
+    width:40%;
+    height:10%;
+    top:55%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+}
+
+.profile_carma_count_block{
+    width:40%;
+    height:10%;
+    top:65%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+}
+.profile_carma_percentage_block{
+    width:40%;
+    height:10%;
+    top:75%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+    background-color:red;
+}
+.profile_carma_percentage_green{
+    background-color:green;
 }

@@ -81,5 +81,24 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         raise Http404
     my_profile = my_profile[0]
     profile = profile[0]
-    context = {"user": request.user, "my_profile": my_profile, "profile": profile}
+    student = Kid.objects.filter(user=profile.user)
+    avg_mark = 'Не студент'
+    if len(student) != 0:
+        student = student[0]
+        lessons_info = LessonStudentInfo.objects.filter(student=student)
+        marks = [lesson_info.mark for lesson_info in lessons_info]
+        if '' in marks:
+            marks.remove('')
+        if 'УП' in marks:
+            marks.remove('УП')
+        if 'Н' in marks:
+            marks.remove('Н')
+        marks_int = [int(mark) for mark in marks]
+        avg_mark = str(sum(marks_int) / len(marks_int))
+    carma = ProfileRaiting.objects.filter(profile=profile)
+    carma_percentage = '100%'
+    if len(carma) != 0:
+        carma_percentage = str((len(Profile.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
+    context = {"user": request.user, "my_profile": my_profile, "profile": profile, "avg_mark": avg_mark,
+               "carma_count": len(carma), "carma_percentage": carma_percentage}
     return render(request, 'main/profile.html', context=context)
