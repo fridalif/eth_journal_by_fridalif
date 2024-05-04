@@ -14,15 +14,17 @@
     <div class="profile_avg_mark_block">
         Средняя оценка: {{avg_mark}}
     </div>
-    <div class="profile_carma_count_block">
+    <div class="profile_carma_count_block" id="carma_counter">
         Голосов: {{carma_count}}
     </div>
-    <div class="profile_like_button" onclick="send_like({{profile.slug}});">↑</div>
-    <div class="profile_dislike_button" onclick="send_dislike({{profile.slug}});">↓</div>
+    <div class="profile_like_button" onclick="send_vote('{{profile.slug}}','like');">↑</div>
+    <div class="profile_dislike_button" onclick="send_vote('{{profile.slug}}','dislike');">↓</div>
     <div class="profile_carma_percentage_block">
-        <div style="width:{{carma_percentage}};background-color:green;height:100%;">
+        <div id="green_raiting_scale" style="width:{{carma_percentage}};background-color:green;height:100%;">
 
         </div>
     </div>
 </div>
+    {% load static %}
+	<script src="{% static 'main/js/profile.js' %}"></script>
 {% endblock %}

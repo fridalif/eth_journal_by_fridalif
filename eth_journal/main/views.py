@@ -98,7 +98,7 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
     carma = ProfileRaiting.objects.filter(profile=profile)
     carma_percentage = '100%'
     if len(carma) != 0:
-        carma_percentage = str((len(Profile.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
+        carma_percentage = str((len(ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
     context = {"user": request.user, "my_profile": my_profile, "profile": profile, "avg_mark": avg_mark,
                "carma_count": len(carma), "carma_percentage": carma_percentage}
     return render(request, 'main/profile.html', context=context)

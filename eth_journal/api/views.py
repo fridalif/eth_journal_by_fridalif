@@ -501,9 +501,10 @@ class ProfileRaitingAPIView(APIView):
         if len(profile) == 0:
             raise Http404
         profile = profile[0]
-        profile_raiting_from_this_user = main_models.ProfileRaiting.objects.filter(from_user=request.user,profile=profile)
-        if len(profile_raiting_from_this_user)!=0:
-            profile_raiting_from_this_user=profile_raiting_from_this_user[0]
+        profile_raiting_from_this_user = main_models.ProfileRaiting.objects.filter(from_user=request.user,
+                                                                                   profile=profile)
+        if len(profile_raiting_from_this_user) != 0:
+            profile_raiting_from_this_user = profile_raiting_from_this_user[0]
             if data['send_type'] == 'like':
                 profile_raiting_from_this_user.like = True
                 profile_raiting_from_this_user.dislike = False
@@ -511,7 +512,13 @@ class ProfileRaitingAPIView(APIView):
                 profile_raiting_from_this_user.like = False
                 profile_raiting_from_this_user.dislike = True
             profile_raiting_from_this_user.save()
-            return Response({"response": "Успешно!"})
+            carma = main_models.ProfileRaiting.objects.filter(profile=profile)
+            carma_percentage = '100%'
+            if len(carma) != 0:
+                carma_percentage = str(
+                    (len(main_models.ProfileRaiting.objects.filter(profile=profile, like=True)) / len(
+                        carma)) * 100) + '%'
+            return Response({"response": "Успешно!", "carma_count": len(carma), "carma_percentage": carma_percentage})
         new_vote = main_models.ProfileRaiting()
         new_vote.profile = profile
         new_vote.from_user = request.user
@@ -519,8 +526,19 @@ class ProfileRaitingAPIView(APIView):
             new_vote.like = True
             new_vote.dislike = False
             new_vote.save()
-            return Response({"response":"Успешно!"})
+            carma = main_models.ProfileRaiting.objects.filter(profile=profile)
+            carma_percentage = '100%'
+            if len(carma) != 0:
+                carma_percentage = str(
+                    (len(main_models.ProfileRaiting.objects.filter(profile=profile, like=True)) / len(
+                        carma)) * 100) + '%'
+            return Response({"response": "Успешно!", "carma_count": len(carma), "carma_percentage": carma_percentage})
         new_vote.like = False
         new_vote.dislike = True
         new_vote.save()
-        return Response({"response": "Успешно!"})
+        carma = main_models.ProfileRaiting.objects.filter(profile=profile)
+        carma_percentage = '100%'
+        if len(carma) != 0:
+            carma_percentage = str(
+                (len(main_models.ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
+        return Response({"response": "Успешно!","carma_count":len(carma),"carma_percentage":carma_percentage})
