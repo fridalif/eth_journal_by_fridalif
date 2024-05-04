@@ -111,6 +111,15 @@ function get_lesson_marks_from_id(lesson_id){
                 submit_button += '><div class="submit_button_table" onclick="send_changes('+lesson_id+');">Подтвердить изменения</div>';
             }
         }
+        else{
+            submit_button = '<input placeholder="Домашнее задание..." type="textarea" name="homework" id="homework_block"';
+            if (result.length!=0){
+                if (result[0]['homework']!=''){
+                    submit_button += ' value="'+result[0]['homework']+'"';
+                }
+                submit_button += ' readonly>';
+            }
+        }
         table_block.innerHTML +=row_data+'</div>'+submit_button;
         return;
     }
