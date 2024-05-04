@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from slugify import slugify
 
 
 class Group(models.Model):
@@ -63,9 +64,9 @@ class Teacher(models.Model):
 class Lesson(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Предмет')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='Преподаватель', null=True,blank=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='Преподаватель', null=True, blank=True)
     abstract_teacher = models.ForeignKey(AbstractTeacher, on_delete=models.SET_NULL,
-                                         verbose_name='Незарегистрированный преподаватель', null=True,blank=True)
+                                         verbose_name='Незарегистрированный преподаватель', null=True, blank=True)
     date = models.DateField(verbose_name='Дата')
     start_time = models.TimeField(verbose_name='Время начала')
     end_time = models.TimeField(verbose_name='Время окончания')
@@ -79,9 +80,9 @@ class Lesson(models.Model):
 
 
 class LessonStudentInfo(models.Model):
-    student = models.ForeignKey(Kid, verbose_name='Студент', on_delete=models.CASCADE, null=True,blank=True)
+    student = models.ForeignKey(Kid, verbose_name='Студент', on_delete=models.CASCADE, null=True, blank=True)
     abstract_student = models.ForeignKey(AbstractKid, on_delete=models.SET_NULL,
-                                         verbose_name='Незарегистрированный ученик', null=True,blank=True)
+                                         verbose_name='Незарегистрированный ученик', null=True, blank=True)
     lesson = models.ForeignKey(Lesson, verbose_name='Урок', on_delete=models.CASCADE)
     mark = models.CharField(max_length=2,
                             choices=[('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('УП', 'УП'), ('Н', 'Н')],
@@ -105,3 +106,29 @@ class RegisterRequests(models.Model):
     class Meta:
         verbose_name = 'Запрос на регистрацию'
         verbose_name_plural = 'Запросы на регистрацию'
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    slug = models.SlugField(verbose_name='Ссылка на профиль')
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='uploads/avatars/',blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.user.username)
+        self.avatar.name = self.user.username+"_"+self.avatar.name
+        return super(Profile, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+
+class ProfileRaiting(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Оцениваемый профиль')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Кто оценивает")
+    like = models.BooleanField(verbose_name='Положительная оценка')
+    dislike = models.BooleanField(verbose_name='Отрицательная оценка')
+
+    class Meta:
+        verbose_name = 'Оценка профиля'
+        verbose_name_plural = 'Оценки профилей'

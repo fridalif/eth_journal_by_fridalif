@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from .models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -10,7 +10,8 @@ def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
     if request.method == 'GET':
         return render(request, 'main/register_form.html', context=context)
-
+    if request.user.is_authenticated:
+        redirect('main:index')
     login = request.POST['login'].strip()
     password = request.POST['password'].strip()
     retype_password = request.POST['retype_password'].strip()
@@ -41,7 +42,14 @@ def register(request: HttpRequest) -> HttpResponse:
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    context = {'user': request.user}
+    if request.user.is_authenticated:
+        my_profile = Profile.objects.filter(user=request.user)
+        if len(my_profile) == 0:
+            raise Http404
+        my_profile = my_profile[0]
+    else:
+        my_profile = None
+    context = {'user': request.user, 'my_profile': my_profile}
     return render(request, 'main/index.html', context=context)
 
 
@@ -54,8 +62,43 @@ def lessons_plan(request: HttpRequest) -> HttpResponse:
             is_teacher = True
         if len(Teacher.objects.filter(user=request.user)) != 0:
             is_teacher = True
-
+    my_profile = Profile.objects.filter(user=request.user)
+    if len(my_profile) == 0:
+        raise Http404
+    my_profile = my_profile[0]
     today = date.today()
     context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year,
-               "is_teacher": is_teacher}
+               "is_teacher": is_teacher, "my_profile": my_profile}
     return render(request, 'main/lesson_plan.html', context=context)
+
+
+def profile(request: HttpRequest, profile_slug) -> HttpResponse:
+    if not request.user.is_authenticated:
+        return redirect('main:login')
+    my_profile = Profile.objects.filter(user=request.user)
+    profile = Profile.objects.filter(slug=profile_slug)
+    if len(my_profile) == 0 or len(profile) == 0:
+        raise Http404
+    my_profile = my_profile[0]
+    profile = profile[0]
+    student = Kid.objects.filter(user=profile.user)
+    avg_mark = 'Не студент'
+    if len(student) != 0:
+        student = student[0]
+        lessons_info = LessonStudentInfo.objects.filter(student=student)
+        marks = [lesson_info.mark for lesson_info in lessons_info]
+        if '' in marks:
+            marks.remove('')
+        if 'УП' in marks:
+            marks.remove('УП')
+        if 'Н' in marks:
+            marks.remove('Н')
+        marks_int = [int(mark) for mark in marks]
+        avg_mark = str(sum(marks_int) / len(marks_int))
+    carma = ProfileRaiting.objects.filter(profile=profile)
+    carma_percentage = '100%'
+    if len(carma) != 0:
+        carma_percentage = str((len(ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
+    context = {"user": request.user, "my_profile": my_profile, "profile": profile, "avg_mark": avg_mark,
+               "carma_count": len(carma), "carma_percentage": carma_percentage}
+    return render(request, 'main/profile.html', context=context)

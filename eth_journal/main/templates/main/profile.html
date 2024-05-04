@@ -1,0 +1,30 @@
+{% extends "header_auth.html" %}
+
+{% block body_main_block %}
+<div class="marks_content_block" id="marks_content_block">
+    <div class="profile_image_block">
+        <img src="{{ profile.avatar.url }}" width="100%" height="100%">
+    </div>
+    <div class="profile_username_block">
+        Username: {{ profile.user.username }}
+    </div>
+    <div class="profile_surname_block">
+        Имя: {{profile.user.first_name}} {{ profile.user.last_name }}
+    </div>
+    <div class="profile_avg_mark_block">
+        Средняя оценка: {{avg_mark}}
+    </div>
+    <div class="profile_carma_count_block" id="carma_counter">
+        Голосов: {{carma_count}}
+    </div>
+    <div class="profile_like_button" onclick="send_vote('{{profile.slug}}','like');">↑</div>
+    <div class="profile_dislike_button" onclick="send_vote('{{profile.slug}}','dislike');">↓</div>
+    <div class="profile_carma_percentage_block">
+        <div id="green_raiting_scale" style="width:{{carma_percentage}};background-color:green;height:100%;">
+
+        </div>
+    </div>
+</div>
+    {% load static %}
+	<script src="{% static 'main/js/profile.js' %}"></script>
+{% endblock %}
