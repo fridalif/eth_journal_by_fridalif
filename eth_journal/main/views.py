@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from .models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -42,7 +42,11 @@ def register(request: HttpRequest) -> HttpResponse:
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    context = {'user': request.user}
+    my_profile = Profile.objects.filter(user=request.user)
+    if len(my_profile) == 0 and request.user.is_authenticated:
+        raise Http404
+    my_profile = my_profile[0]
+    context = {'user': request.user,'my_profile':my_profile}
     return render(request, 'main/index.html', context=context)
 
 
@@ -55,15 +59,24 @@ def lessons_plan(request: HttpRequest) -> HttpResponse:
             is_teacher = True
         if len(Teacher.objects.filter(user=request.user)) != 0:
             is_teacher = True
-
+    my_profile = Profile.objects.filter(user=request.user)
+    if len(my_profile) == 0:
+        raise Http404
+    my_profile = my_profile[0]
     today = date.today()
     context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year,
-               "is_teacher": is_teacher}
+               "is_teacher": is_teacher, "my_profile": my_profile}
     return render(request, 'main/lesson_plan.html', context=context)
 
 
 def profile(request: HttpRequest, profile_slug) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect('main:login')
-    context = {"user": request.user}
+    my_profile = Profile.objects.filter(user=request.user)
+    profile = Profile.objects.filter(slug=profile_slug)
+    if len(my_profile) == 0 or len(profile) == 0:
+        raise Http404
+    my_profile = my_profile[0]
+    profile = profile[0]
+    context = {"user": request.user, "my_profile": my_profile, "profile":profile}
     return render(request, 'main/profile.html', context=context)

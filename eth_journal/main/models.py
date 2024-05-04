@@ -111,7 +111,7 @@ class RegisterRequests(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     slug = models.SlugField(verbose_name='Ссылка на профиль')
-    avatar = models.ImageField(verbose_name='Аватар', upload_to='uploads/avatars/')
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='uploads/avatars/',blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
