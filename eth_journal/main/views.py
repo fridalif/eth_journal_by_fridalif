@@ -42,11 +42,14 @@ def register(request: HttpRequest) -> HttpResponse:
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    my_profile = Profile.objects.filter(user=request.user)
-    if len(my_profile) == 0 and request.user.is_authenticated:
-        raise Http404
-    my_profile = my_profile[0]
-    context = {'user': request.user,'my_profile':my_profile}
+    if request.user.is_authenticated:
+        my_profile = Profile.objects.filter(user=request.user)
+        if len(my_profile) == 0:
+            raise Http404
+        my_profile = my_profile[0]
+    else:
+        my_profile = None
+    context = {'user': request.user, 'my_profile': my_profile}
     return render(request, 'main/index.html', context=context)
 
 
@@ -78,5 +81,5 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         raise Http404
     my_profile = my_profile[0]
     profile = profile[0]
-    context = {"user": request.user, "my_profile": my_profile, "profile":profile}
+    context = {"user": request.user, "my_profile": my_profile, "profile": profile}
     return render(request, 'main/profile.html', context=context)
