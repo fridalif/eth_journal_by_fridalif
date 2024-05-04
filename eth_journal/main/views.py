@@ -10,7 +10,8 @@ def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
     if request.method == 'GET':
         return render(request, 'main/register_form.html', context=context)
-
+    if request.user.is_authenticated:
+        redirect('main:index')
     login = request.POST['login'].strip()
     password = request.POST['password'].strip()
     retype_password = request.POST['retype_password'].strip()
@@ -59,3 +60,10 @@ def lessons_plan(request: HttpRequest) -> HttpResponse:
     context = {"user": request.user, "day": today.day, "month": today.month, "year": today.year,
                "is_teacher": is_teacher}
     return render(request, 'main/lesson_plan.html', context=context)
+
+
+def profile(request: HttpRequest, profile_slug) -> HttpResponse:
+    if not request.user.is_authenticated:
+        return redirect('main:login')
+    context = {"user": request.user}
+    return render(request, 'main/profile.html', context=context)
