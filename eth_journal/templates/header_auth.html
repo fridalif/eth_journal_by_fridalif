@@ -47,6 +47,13 @@
 				</div>
 			</div>
 			</a>
+			<a href="{% url 'main:settings' %}">
+			<div class="settings_menu_header_block" onclick="document.getElementById('logout_form').submit();">
+				<div class="exit_menu_header_font">
+					Настройки
+				</div>
+			</div>
+			</a>
 			<form method="POST" action="{% url 'main:logout' %}" id="logout_form">
 			{% csrf_token %}
 			<div class="exit_menu_header_block" onclick="document.getElementById('logout_form').submit();">
