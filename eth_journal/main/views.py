@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, Http404
-from .models import *
+from main.models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
 from datetime import date
-
+from main.forms import ImageForm
 
 def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
@@ -112,6 +112,14 @@ def settings(request):
     if len(profile) == 0:
         raise Http404
     profile = profile[0]
-    context = {"user": request.user, "profile": profile, "my_profile": profile}
+    loaded = False
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile.avatar.delete(save=False)
+            profile.avatar = form.avatar
+            profile.save()
+            loaded = True
+    form = ImageForm()
+    context = {"user": request.user, "profile": profile, "my_profile": profile,'image_form':form,'loaded':loaded}
     return render(request, 'main/settings.html', context=context)
-
