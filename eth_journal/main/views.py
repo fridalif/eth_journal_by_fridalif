@@ -120,7 +120,11 @@ def settings(request):
         if form.is_valid():
             form.save()
             if prev_avatar is not None:
-                os.remove('media/'+prev_avatar)
+                try:
+                    os.remove('media/'+prev_avatar)
+                except Exception as e:
+                    with open('error.log','a') as file:
+                        file.write(str(e))
             loaded = True
     form = ImageForm()
     context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded}
