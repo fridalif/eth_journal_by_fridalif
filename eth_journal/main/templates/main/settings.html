@@ -12,7 +12,7 @@
     <div class="change_username_block">
         <div class="in_block_header">Смена логина:</div>
         <input id="change_username" name="new_username" type="text">
-        <div class="image_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить логин</div>
+        <div class="image_submit_button" onclick="change_username();">Изменить логин</div>
     </div>
     <div class="change_password_block">
         <div class="in_block_header">Смена пароля:</div>
@@ -24,5 +24,6 @@
         <input type="password" name="new_retype_password" id="new_retype_password_input">
         <div class="password_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить пароль</div>
     </div>
-
+{% load static %}
+	<script src="{% static 'main/js/settings.js' %}"></script>
 {% endblock %}

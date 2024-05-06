@@ -620,10 +620,15 @@ class ChangePasswordAPIView(APIView):
 class ChangeUsernameAPIView(APIView):
     def post(self, request):
         data = request.data
-        new_username = data['new_username']
+        new_username = data.get('new_username',None)
+        if new_username is None:
+            return Response({'error': 'Логин не может быть пустым'})
+        new_username = new_username.strip()
         if new_username.strip() == '':
-            return Response({'error': 'username cant be empty'})
+            return Response({'error': 'Логин не может быть пустым'})
+        if len(main_models.User.objects.filter(username=new_username))!=0:
+            return Response({'error': 'Логин занят'})
         user = request.user
         user.username = new_username
         user.save()
-        return Response({'result': 'username changed'})
+        return Response({'result': 'Логин успешно изменён!'})

@@ -141,7 +141,6 @@ function send_changes(lesson_id){
         xhr.setRequestHeader('Content-Type','application/json');
         xhr.responseType = 'json';
         xhr.send(request_data);
-        console.log(row_iter);
         xhr.onload = function(){
             result = xhr.response;
             if (result['error']){
