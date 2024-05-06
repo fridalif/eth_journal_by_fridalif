@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import RegisterRequestsAPIView, LessonAPIView, LessonStudentInfoAPIView, SubjectAPIView, GroupAPIView, \
-    AbstractKidAPIView, AbstractTeacherAPIView, ProfileRaitingAPIView, ChangePasswordAPIView
+    AbstractKidAPIView, AbstractTeacherAPIView, ProfileRaitingAPIView, ChangePasswordAPIView, ChangeUsernameAPIView
 
 app_name = 'api'
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     path('abstract_teachers/', AbstractTeacherAPIView.as_view(), name="abstract_teachers"),
     path('abstract_teachers/<int:teacher_id>/', AbstractTeacherAPIView.as_view(), name="abstract_teacher"),
     path('profile_raiting/<slug:profile_slug>/', ProfileRaitingAPIView.as_view(), name='profile_raiting'),
-    path('change_password/<int:request_id>/',ChangePasswordAPIView.as_view(),name='change_password_request'),
-    path('change_password/',ChangePasswordAPIView.as_view(),name='change_password_requests')
+    path('change_password/<int:request_id>/', ChangePasswordAPIView.as_view(), name='change_password_request'),
+    path('change_password/', ChangePasswordAPIView.as_view(), name='change_password_requests'),
+    path('change_username/', ChangeUsernameAPIView.as_view(), name='change_usernames')
 ]

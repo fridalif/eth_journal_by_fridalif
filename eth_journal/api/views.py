@@ -615,3 +615,15 @@ class ChangePasswordAPIView(APIView):
         current_request = current_request[0]
         current_request.delete()
         return Response({'result': 'deleted'})
+
+
+class ChangeUsernameAPIView(APIView):
+    def post(self, request):
+        data = request.data
+        new_username = data['new_username']
+        if new_username.strip() == '':
+            return Response({'error': 'username cant be empty'})
+        user = request.user
+        user.username = new_username
+        user.save()
+        return Response({'result': 'username changed'})
