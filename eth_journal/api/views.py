@@ -605,3 +605,13 @@ class ChangePasswordAPIView(APIView):
         user.set_password(new_password)
         current_request.delete()
         return Response({'result': 'password changed'})
+
+    def delete(self, request, request_id):
+        if not request.user.is_superuser:
+            raise Http404
+        current_request = main_models.ChangePasswordRequests.objects.filter(id=request_id)
+        if len(current_request) == 0:
+            raise Http404
+        current_request = current_request[0]
+        current_request.delete()
+        return Response({'result': 'deleted'})
