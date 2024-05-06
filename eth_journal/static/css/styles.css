@@ -1377,18 +1377,25 @@
 }
 #image_form{
     position:absolute;
-    left:30%;
-    height:10%;
-    top:25%;
+    left:10%;
+    height:20%;
+    top:30%;
 }
-
+.in_block_header{
+    position:absolute;
+    height:20%;
+    top:5%;
+    font-size:136%;
+    color:black;
+    left:10%;
+}
 .image_submit_button{
     position:absolute;
-    width:10%;
+    width:40%;
     background-color:rgb(89, 137, 152);
-    left:30%;
-    height:5%;
-    top:30%;
+    left:10%;
+    height:30%;
+    top:70%;
     color:white;
     font-size:100%;
     font:Inter;
@@ -1397,4 +1404,111 @@
 
 .image_submit_button:hover{
     background-color:rgb(0, 0, 0);
+}
+.change_avatar_block{
+    position:absolute;
+    width:30%;
+    left:10%;
+    height:20%;
+    top:30%;
+    color:white;
+    font-size:136%;
+    font:Inter;
+    text-align:center;
+}
+
+
+.change_username_block{
+    position:absolute;
+    width:30%;
+    left:10%;
+    height:20%;
+    top:50%;
+    color:white;
+    font-size:136%;
+    font:Inter;
+    text-align:center;
+}
+#change_username{
+    position:absolute;
+    left:10%;
+    height: 15%;
+    top:30%;
+}
+
+.change_password_block{
+    position:absolute;
+    width:30%;
+    left:40%;
+    height:40%;
+    top:30%;
+    color:white;
+    font-size:136%;
+    font:Inter;
+    text-align:center;
+}
+.password_submit_button{
+    position:absolute;
+    width:40%;
+    background-color:rgb(89, 137, 152);
+    left:10%;
+    height:15%;
+    top:80%;
+    color:white;
+    font-size:100%;
+    font:Inter;
+    text-align:center;
+}
+.password_submit_button:hover{
+    background-color:rgb(0, 0, 0);
+}
+#prev_password_input{
+    position:absolute;
+    top:30%;
+    height:15%;
+    left:30%;
+    width:70%;
+}
+#new_password_input{
+    position:absolute;
+    top:47%;
+    height:15%;
+    left:30%;
+    width:70%;
+}
+#new_retype_password_input{
+    position:absolute;
+    top:64%;
+    height:15%;
+    left:30%;
+    width:70%;
+}
+.retype_change_pass_label{
+    position:absolute;
+    top:62%;
+    height:17%;
+    left:0%;
+    width:30%;
+    font-size:100%;
+    color:black;
+}
+
+.new_change_pass_label{
+    position:absolute;
+    top:49%;
+    height:15%;
+    left:0%;
+    width:30%;
+    font-size:100%;
+    color:black;
+}
+
+.prev_change_pass_label{
+    position:absolute;
+    top:30%;
+    height:15%;
+    left:0%;
+    width:30%;
+    font-size:100%;
+    color:black;
 }

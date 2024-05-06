@@ -1,9 +1,28 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
-    <form action="{% url 'main:settings' %}" method="POST" id="form_avatar" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{image_form}}
-        <div class="image_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить аватар</div>
-    </form>
+    <div class="change_avatar_block">
+        <div class="in_block_header">Смена аватара:</div>
+        <form action="{% url 'main:settings' %}" method="POST" id="form_avatar" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{image_form}}
+            <div class="image_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить аватар</div>
+        </form>
+    </div>
+    <div class="change_username_block">
+        <div class="in_block_header">Смена логина:</div>
+        <input id="change_username" name="new_username" type="text">
+        <div class="image_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить логин</div>
+    </div>
+    <div class="change_password_block">
+        <div class="in_block_header">Смена пароля:</div>
+        <div class="prev_change_pass_label">Текущий пароль:</div>
+        <input type="password" name="prev_password" id="prev_password_input">
+        <div class="new_change_pass_label">Новый пароль:</div>
+        <input type="password" name="new_password" id="new_password_input">
+        <div class="retype_change_pass_label">Повторите пароль:</div>
+        <input type="password" name="new_retype_password" id="new_retype_password_input">
+        <div class="password_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить пароль</div>
+    </div>
+
 {% endblock %}
