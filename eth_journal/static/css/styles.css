@@ -1375,3 +1375,6 @@
 .profile_like_button:hover{
     background-color:darkgreen;
 }
+#image_form{
+    left:20%;
+}

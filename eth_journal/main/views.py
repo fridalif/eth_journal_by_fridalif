@@ -5,6 +5,7 @@ from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
 from datetime import date
 from main.forms import ImageForm
+import os
 
 def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
@@ -114,12 +115,12 @@ def settings(request):
     profile = profile[0]
     loaded = False
     if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
+        prev_avatar = profile.avatar.name
+        form = ImageForm(request.POST, request.FILES,instance=profile)
         if form.is_valid():
-            profile.avatar.delete(save=False)
-            profile.avatar = form.avatar
-            profile.save()
+            form.save()
+            os.remove('media/'+prev_avatar)
             loaded = True
     form = ImageForm()
-    context = {"user": request.user, "profile": profile, "my_profile": profile,'image_form':form,'loaded':loaded}
+    context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded}
     return render(request, 'main/settings.html', context=context)
