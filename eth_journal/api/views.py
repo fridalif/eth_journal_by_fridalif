@@ -2,7 +2,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import HttpRequest, Http404
 from .serializers import RegisterRequestsSerializer, TeacherSerializer, KidSerializer, LessonSerializer, \
-    LessonStudentInfoSerializer, SubjectSerializer, GroupSerializer, AbstractKidSerializer, AbstractTeacherSerializer
+    LessonStudentInfoSerializer, SubjectSerializer, GroupSerializer, AbstractKidSerializer, AbstractTeacherSerializer, \
+    ChangePasswordRequestsSerializer
 import main.models as main_models
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -36,6 +37,8 @@ class RegisterRequestsAPIView(APIView):
             current_user.save()
             current_teacher = main_models.Teacher(user=current_user, father_name=current_request.father_name)
             current_teacher.save()
+            user_profile = main_models.Profile(user=current_user, slugify='not important')
+            user_profile.save()
             abstract_teacher_id = int(data['abstract_id'])
             abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher_id)
             if len(abstract_teacher) != 0:
@@ -57,7 +60,8 @@ class RegisterRequestsAPIView(APIView):
                                             first_name=current_request.name, last_name=current_request.surname)
             current_user.set_password(password)
             current_user.save()
-
+            user_profile = main_models.Profile(user=current_user, slugify='not important')
+            user_profile.save()
             current_student = main_models.Kid(user=current_user, group=current_group,
                                               father_name=current_request.father_name)
 
@@ -541,4 +545,49 @@ class ProfileRaitingAPIView(APIView):
         if len(carma) != 0:
             carma_percentage = str(
                 (len(main_models.ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
-        return Response({"response": "Успешно!","carma_count":len(carma),"carma_percentage":carma_percentage})
+        return Response({"response": "Успешно!", "carma_count": len(carma), "carma_percentage": carma_percentage})
+
+
+class ChangePasswordAPIView(APIView):
+    def get(self, request, request_id=None):
+        if not request.user.is_superuser:
+            raise Http404
+        if request_id is None:
+            return Response(
+                ChangePasswordRequestsSerializer(main_models.ChangePasswordRequests.objects.all(), many=True).data)
+        return Response(
+            ChangePasswordRequestsSerializer(main_models.ChangePasswordRequests.objects.filter(id=request_id),
+                                             many=True).data)
+
+    def post(self, request):
+        data = request.data
+        prev_password = data.get('prev_password', None)
+        new_password = data.get('new_password', None)
+        other_data = data.get('other_data', None)
+        user_id = data.get('user', None)
+        user_to_change_password = main_models.User.objects.filter(id=user_id)
+        if len(user_to_change_password) == 0:
+            raise Http404
+        user_to_change_password = user_to_change_password[0]
+        if request.user.is_authenticated and request.user != user_to_change_password:
+            raise Http404
+        if user_to_change_password.get_password() != prev_password:
+            return Response({'error': 'Пароли не совпадают'})
+        if new_password.strip() == '' or new_password is None:
+            return Response({'error': 'Пароль не может быть пустым'})
+        new_request = main_models.ChangePasswordRequests()
+        
+
+    def put(self, request, request_id):
+        if not request.user.is_superuser:
+            raise Http404
+        current_request = main_models.ChangePasswordRequests.objects.filter(id=request_id)
+        if len(current_request) == 0:
+            raise Http404
+        current_request = current_request[0]
+        user = current_request.user
+        cipher_suite = Fernet(KEY)
+        new_password = cipher_suite.decrypt(current_request.new_password.encode()).decode()
+        user.set_password(new_password)
+        current_request.delete()
+        return Response({'result': 'password changed'})

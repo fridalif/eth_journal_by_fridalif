@@ -1,7 +1,7 @@
 import rest_framework.serializers as serializers
 from rest_framework.serializers import ModelSerializer
 from main.models import Lesson, LessonStudentInfo, Subject, Kid, Teacher, Group, RegisterRequests, AbstractKid, \
-    AbstractTeacher
+    AbstractTeacher, ChangePasswordRequests
 
 
 class LessonSerializer(ModelSerializer):
@@ -27,7 +27,8 @@ class LessonStudentInfoSerializer(ModelSerializer):
     abstract_student_name = serializers.CharField(source='abstract_student.name', allow_null=True)
     abstract_student_surname = serializers.CharField(source='abstract_student.surname', allow_null=True)
     abstract_student_father_name = serializers.CharField(source='abstract_student.father_name', allow_null=True)
-    homework = serializers.CharField(source='lesson.homework',allow_null=True)
+    homework = serializers.CharField(source='lesson.homework', allow_null=True)
+
     class Meta:
         model = LessonStudentInfo
         fields = '__all__'
@@ -73,3 +74,9 @@ class AbstractTeacherSerializer(ModelSerializer):
     class Meta:
         model = AbstractTeacher
         fields = '__all__'
+
+
+class ChangePasswordRequestsSerializer(ModelSerializer):
+    class Meta:
+        model = ChangePasswordRequests
+        fields = ('id', 'user', 'know_previous_password', 'other_info')
