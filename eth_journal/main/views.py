@@ -119,7 +119,8 @@ def settings(request):
         form = ImageForm(request.POST, request.FILES,instance=profile)
         if form.is_valid():
             form.save()
-            os.remove('media/'+prev_avatar)
+            if prev_avatar is not None:
+                os.remove('media/'+prev_avatar)
             loaded = True
     form = ImageForm()
     context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded}

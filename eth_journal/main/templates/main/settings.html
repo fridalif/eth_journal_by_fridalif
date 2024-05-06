@@ -22,7 +22,7 @@
         <input type="password" name="new_password" id="new_password_input">
         <div class="retype_change_pass_label">Повторите пароль:</div>
         <input type="password" name="new_retype_password" id="new_retype_password_input">
-        <div class="password_submit_button" onclick="document.getElementById('form_avatar').submit();">Изменить пароль</div>
+        <div class="password_submit_button" onclick="change_password({{user.id}});">Изменить пароль</div>
     </div>
 {% load static %}
 	<script src="{% static 'main/js/settings.js' %}"></script>

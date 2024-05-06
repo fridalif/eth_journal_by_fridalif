@@ -571,15 +571,16 @@ class ChangePasswordAPIView(APIView):
         user_to_change_password = user_to_change_password[0]
         if request.user.is_authenticated and request.user != user_to_change_password:
             raise Http404
-        if user_to_change_password.get_password() != prev_password and prev_password is not None:
-            return Response({'error': 'Пароли не совпадают'})
+        if not user_to_change_password.check_password(prev_password) and prev_password is not None:
+            print(prev_password)
+            return Response({'error': 'Прошлый пароль введён неверно'})
         if new_password.strip() == '' or new_password is None:
             return Response({'error': 'Пароль не может быть пустым'})
         new_request = main_models.ChangePasswordRequests()
         new_request.user = user_to_change_password
         cipher_suite = Fernet(KEY)
         new_request.new_password = cipher_suite.encrypt(new_password.encode()).decode()
-        if prev_password == user_to_change_password.get_password():
+        if user_to_change_password.check_password(prev_password):
             new_request.know_previous_password = True
         else:
             new_request.know_previous_password = False
@@ -590,7 +591,7 @@ class ChangePasswordAPIView(APIView):
             new_request.other_info = 'Вход в аккаунт был совершён: Нет.'
         new_request.other_info += str(other_data)
         new_request.save()
-        return Response(ChangePasswordRequestsSerializer(new_request).data)
+        return Response({'result':'Запрос на смену пароля отправлен администратору!'})
 
     def put(self, request, request_id):
         if not request.user.is_superuser:
