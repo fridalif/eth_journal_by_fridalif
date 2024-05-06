@@ -132,3 +132,14 @@ class ProfileRaiting(models.Model):
     class Meta:
         verbose_name = 'Оценка профиля'
         verbose_name_plural = 'Оценки профилей'
+
+
+class ChangePasswordRequests(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='Пользователь')
+    new_password = models.TextField(verbose_name='Новый пароль')
+    know_previous_password = models.BooleanField(verbose_name='Пользователю известен предыдущий пароль?')
+    other_info = models.TextField(verbose_name="Другая информация предоставленная пользователем")
+
+    class Meta:
+        verbose_name = 'Запрос на изменение пароля'
+        verbose_name_plural ='Запросы на изменение пароля'
