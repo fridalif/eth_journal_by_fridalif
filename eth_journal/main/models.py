@@ -115,7 +115,10 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
-        self.avatar.name = self.user.username+"_"+self.avatar.name
+        if self.avatar.name!='':
+            self.avatar.name = self.user.username+"_"+self.avatar.name
+        else:
+            self.avatar.name = 'Empty'
         return super(Profile, self).save(*args, **kwargs)
 
     class Meta:
