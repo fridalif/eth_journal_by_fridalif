@@ -1763,3 +1763,44 @@
     height:100%;
     width:100%;
 }
+
+
+.admin_table_change_password_name_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:0;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.admin_table_change_password_know_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:15%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.admin_table_change_password_other_cell{
+    position:absolute;
+    width:60%;
+    height:100%;
+    left:30%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}

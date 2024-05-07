@@ -603,7 +603,8 @@ class ChangePasswordAPIView(APIView):
             new_request.other_info = 'Вход в аккаунт был совершён: Да.'
         else:
             new_request.other_info = 'Вход в аккаунт был совершён: Нет.'
-        new_request.other_info += str(other_data)
+        if other_data is not None:
+            new_request.other_info += str(other_data)
         new_request.save()
         return Response({'result': 'Запрос на смену пароля отправлен администратору!'})
 

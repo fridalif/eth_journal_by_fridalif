@@ -104,8 +104,27 @@ function get_change_password_requests(){
     document.getElementById('table_header_register_chosen_button').id= 'table_header_register_button';
     table = document.getElementById('admin_table_block');
     table.innerHTML = '';
-    table.innerHTML += '<div class="admin_table_row_header">';
-
+    table.innerHTML += '<div class="admin_table_row_header"><div class="admin_table_change_password_name_cell">Логин</div><div class="admin_table_change_password_know_cell">Пользователь знает пароль</div><div class="admin_table_change_password_other_cell">Остальная информация</div>';
     table.innerHTML += '</div>';
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET","/api/change_password/");
+    xhr.responseType = 'json';
+    xhr.send();
+    xhr.onload = function(){
+        result = xhr.response;
+        for (let result_iter = 0; result_iter<result.length; result_iter++){
+            row_div  = '<div class="admin_table_row">';
+            row_div += '<div class="admin_table_change_password_name_cell">'+result[result_iter]['username']+'</div>';
+            row_div += '<div class="admin_table_change_password_know_cell">'+result[result_iter]['know_previous_password']+'</div>';
+            row_div += '<div class="admin_table_change_password_other_cell">'+result[result_iter]['other_info']+'</div>';
+            row_div +='<div class="admin_table_choose_accept" id="'+result[result_iter]['id']+'" onclick="accept_register('+"'row_"+String(result_iter)+"'"+');">✓'+'</div>';
+            row_div +='<div class="admin_table_choose_deny" id="'+result[result_iter]['id']+'" onclick="deny_register('+"'row_"+String(result_iter)+"'"+');">X'+'</div>';
+            row_div +='</div>';
+            table.innerHTML+=row_div;
+        }
+    }
+
+
 
 }

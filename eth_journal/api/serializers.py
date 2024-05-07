@@ -77,6 +77,7 @@ class AbstractTeacherSerializer(ModelSerializer):
 
 
 class ChangePasswordRequestsSerializer(ModelSerializer):
+    username = serializers.CharField(source='user.username')
     class Meta:
         model = ChangePasswordRequests
-        fields = ('id', 'user', 'know_previous_password', 'other_info')
+        fields = ('id', 'user', 'know_previous_password', 'other_info','username')
