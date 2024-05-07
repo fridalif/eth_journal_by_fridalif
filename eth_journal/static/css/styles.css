@@ -1541,7 +1541,7 @@
     width:100%;
     height:87%;
 }
-.table_header_register_button{
+#table_header_register_button{
     position:absolute;
     height:5%;
     top:20%;
@@ -1555,7 +1555,7 @@
     font-family:Inter;
     text-align:center;
 }
-.table_header_change_pass_button{
+#table_header_change_pass_button{
     position:absolute;
     height:5%;
     top:20%;
@@ -1570,13 +1570,13 @@
     text-align:center;
 }
 
-.table_header_change_pass_button:hover{
+#table_header_change_pass_button:hover{
     background:rgb(89, 137, 152);
 }
-.table_header_register_button:hover{
+#table_header_register_button:hover{
     background:rgb(89, 137, 152);
 }
-.table_header_register_chosen_button{
+#table_header_register_chosen_button{
     position:absolute;
     height:5%;
     top:20%;
@@ -1590,7 +1590,7 @@
     font-family:Inter;
     text-align:center;
 }
-.table_header_change_pass_chosen_button{
+#table_header_change_pass_chosen_button{
     position:absolute;
     height:5%;
     top:20%;

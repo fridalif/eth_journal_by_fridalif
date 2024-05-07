@@ -97,3 +97,15 @@ function deny_register(row){
     }
     return;
 }
+
+function get_change_password_requests(){
+    button = document.getElementById('table_header_change_pass_button')
+    button.id='table_header_change_pass_chosen_button';
+    document.getElementById('table_header_register_chosen_button').id= 'table_header_register_button';
+    table = document.getElementById('admin_table_block');
+    table.innerHTML = '';
+    table.innerHTML += '<div class="admin_table_row_header">';
+
+    table.innerHTML += '</div>';
+
+}
