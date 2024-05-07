@@ -35,9 +35,23 @@
     {% load static %}
 	<script src="{% static 'main/js/admin_requests.js' %}"></script>
     <script>
-        get_all_abstract_teachers();
-        get_all_abstract_kids();
-        get_all_groups();
+        counter = 0;
+        abstract_kids = []
+        {% for abstract_student in abstract_students %}
+            abstract_kids[counter] = {'name':'{{abstract_student.name}}','surname':'{{abstract_student.surname}}','father_name':'{{abstract_student.father_name}}','id':{{abstract_student.id}}};
+            counter+=1;
+        {% endfor %}
+        counter = 0;
+        abstract_teachers = [];
+        {% for abstract_teacher in abstract_teachers %}
+            abstract_teachers[counter] = {'name':'{{abstract_teacher.name}}','surname':'{{abstract_teacher.surname}}','father_name':'{{abstract_teacher.father_name}}','id':{{abstract_teacher.id}}};
+            counter+=1;
+        {% endfor %}
+        counter = 0
+        groups = [];
+        {% for group in groups %}
+            groups[counter] = {'year_of_study': "{{group.year_of_study}}",'group_letter':"{{group.group_letter}}",'id':{{group.id}}};
+        {% endfor %}
         get_register_requests();
     </script>
 {% endblock %}

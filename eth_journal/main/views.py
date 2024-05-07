@@ -139,5 +139,9 @@ def admin_requests_view(request: HttpRequest):
     if len(profile) == 0:
         raise Http404
     profile = profile[0]
-    context = {'user': request.user, 'my_profile': profile}
+    groups = Group.objects.all()
+    abstract_teachers = AbstractTeacher.objects.all()
+    abstract_students = AbstractKid.objects.all()
+    context = {'user': request.user, 'my_profile': profile, 'groups': groups, 'abstract_teachers': abstract_teachers,
+               'abstract_students': abstract_students}
     return render(request, 'main/admin_requests.html', context=context)
