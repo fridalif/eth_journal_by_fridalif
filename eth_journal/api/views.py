@@ -39,8 +39,13 @@ class RegisterRequestsAPIView(APIView):
             current_teacher.save()
             user_profile = main_models.Profile(user=current_user, slugify='not important')
             user_profile.save()
-            abstract_teacher_id = int(data['abstract_id'])
-            abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher_id)
+            abstract_teacher_id = data.get('abstract_id', None)
+            if abstract_teacher_id is not None:
+                abstract_teacher_id = int(abstract_teacher_id)
+            if abstract_teacher_id is not None:
+                abstract_teacher = main_models.AbstractTeacher.objects.filter(id=abstract_teacher_id)
+            else:
+                abstract_teacher = []
             if len(abstract_teacher) != 0:
                 abstract_teacher = abstract_teacher[0]
                 abstract_teacher_lessons = main_models.Lesson.objects.filter(abstract_teacher=abstract_teacher)
@@ -65,8 +70,13 @@ class RegisterRequestsAPIView(APIView):
             current_student = main_models.Kid(user=current_user, group=current_group,
                                               father_name=current_request.father_name)
 
-            abstract_student_id = int(data['abstract_id'])
-            abstract_student = main_models.AbstractTeacher.objects.filter(id=abstract_student_id)
+            abstract_student_id = data.get('abstract_id', None)
+            if abstract_student_id is not None:
+                abstract_student_id = int(abstract_student_id)
+            if abstract_student_id is not None:
+                abstract_student = main_models.AbstractKid.objects.filter(id=abstract_student_id)
+            else:
+                abstract_student = []
             if len(abstract_student) != 0:
                 abstract_student = abstract_student[0]
                 abstract_student_lessons_info = main_models.LessonStudentInfo.objects.filter(
@@ -591,7 +601,7 @@ class ChangePasswordAPIView(APIView):
             new_request.other_info = 'Вход в аккаунт был совершён: Нет.'
         new_request.other_info += str(other_data)
         new_request.save()
-        return Response({'result':'Запрос на смену пароля отправлен администратору!'})
+        return Response({'result': 'Запрос на смену пароля отправлен администратору!'})
 
     def put(self, request, request_id):
         if not request.user.is_superuser:
@@ -621,13 +631,13 @@ class ChangePasswordAPIView(APIView):
 class ChangeUsernameAPIView(APIView):
     def post(self, request):
         data = request.data
-        new_username = data.get('new_username',None)
+        new_username = data.get('new_username', None)
         if new_username is None:
             return Response({'error': 'Логин не может быть пустым'})
         new_username = new_username.strip()
         if new_username.strip() == '':
             return Response({'error': 'Логин не может быть пустым'})
-        if len(main_models.User.objects.filter(username=new_username))!=0:
+        if len(main_models.User.objects.filter(username=new_username)) != 0:
             return Response({'error': 'Логин занят'})
         user = request.user
         user.username = new_username
