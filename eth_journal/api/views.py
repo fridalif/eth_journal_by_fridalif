@@ -37,9 +37,11 @@ class RegisterRequestsAPIView(APIView):
             current_user.save()
             current_teacher = main_models.Teacher(user=current_user, father_name=current_request.father_name)
             current_teacher.save()
-            user_profile = main_models.Profile(user=current_user, slugify='not important')
+            user_profile = main_models.Profile(user=current_user, slug='not important')
             user_profile.save()
             abstract_teacher_id = data.get('abstract_id', None)
+            if abstract_teacher_id == 'no_abstract':
+                abstract_teacher_id = None
             if abstract_teacher_id is not None:
                 abstract_teacher_id = int(abstract_teacher_id)
             if abstract_teacher_id is not None:
@@ -53,11 +55,11 @@ class RegisterRequestsAPIView(APIView):
                     lesson.teacher = current_teacher
                 abstract_teacher.delete()
             current_request.delete()
-            return Response(TeacherSerializer(current_teacher).data)
+            return Response({'result':'Успешно!'})
 
         if data['role'] == 'Student':
             current_group = main_models.Group.objects.filter(id=int(data['group']))
-            if len(current_request) == 0:
+            if len(current_group) == 0:
                 raise Http404
             current_group = current_group[0]
 
@@ -65,12 +67,14 @@ class RegisterRequestsAPIView(APIView):
                                             first_name=current_request.name, last_name=current_request.surname)
             current_user.set_password(password)
             current_user.save()
-            user_profile = main_models.Profile(user=current_user, slugify='not important')
+            user_profile = main_models.Profile(user=current_user, slug='not important')
             user_profile.save()
             current_student = main_models.Kid(user=current_user, group=current_group,
                                               father_name=current_request.father_name)
 
             abstract_student_id = data.get('abstract_id', None)
+            if abstract_student_id == 'no_abstract':
+                abstract_student_id = None
             if abstract_student_id is not None:
                 abstract_student_id = int(abstract_student_id)
             if abstract_student_id is not None:
@@ -87,7 +91,7 @@ class RegisterRequestsAPIView(APIView):
 
             current_student.save()
             current_request.delete()
-            return Response(KidSerializer(current_student).data)
+            return Response({'result':'Успешно!'})
         raise Http404
 
     def delete(self, request):

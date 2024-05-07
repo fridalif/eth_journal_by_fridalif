@@ -14,13 +14,13 @@ def register(request: HttpRequest) -> HttpResponse:
         return render(request, 'main/register_form.html', context=context)
     if request.user.is_authenticated:
         redirect('main:index')
-    login = request.POST['login'].strip()
+    login = request.POST['login'].strip().replace('<','').replace('>','')
     password = request.POST['password'].strip()
     retype_password = request.POST['retype_password'].strip()
-    surname = request.POST['surname'].strip()
-    name = request.POST['name'].strip()
-    father_name = request.POST['fathname'].strip()
-    role = request.POST['role'].strip()
+    surname = request.POST['surname'].strip().replace('<','').replace('>','')
+    name = request.POST['name'].strip().replace('<','').replace('>','')
+    father_name = request.POST['fathname'].strip().replace('<','').replace('>','')
+    role = request.POST['role'].strip().replace('<','').replace('>','')
 
     # Валидация
     if login == '' or password == '' or retype_password == '' or surname == '' or name == '' or role == '':
@@ -96,7 +96,10 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         if 'Н' in marks:
             marks.remove('Н')
         marks_int = [int(mark) for mark in marks]
-        avg_mark = str(sum(marks_int) / len(marks_int))
+        if len(marks_int)!=0:
+            avg_mark = str(sum(marks_int) / len(marks_int))
+        else:
+            avg_mark = str(0)
     carma = ProfileRaiting.objects.filter(profile=profile)
     carma_percentage = '100%'
     if len(carma) != 0:
