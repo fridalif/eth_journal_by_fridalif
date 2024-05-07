@@ -15,7 +15,7 @@ class Group(models.Model):
 class AbstractKid(models.Model):
     name = models.TextField(verbose_name='Имя')
     surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество')
+    father_name = models.TextField(verbose_name='Отчество',blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
 
     class Meta:
@@ -26,7 +26,7 @@ class AbstractKid(models.Model):
 class AbstractTeacher(models.Model):
     name = models.TextField(verbose_name='Имя')
     surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество')
+    father_name = models.TextField(verbose_name='Отчество',blank=True)
 
     class Meta:
         verbose_name = 'Незарегистрированный учитель'
