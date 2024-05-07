@@ -114,17 +114,57 @@ function get_change_password_requests(){
     xhr.onload = function(){
         result = xhr.response;
         for (let result_iter = 0; result_iter<result.length; result_iter++){
-            row_div  = '<div class="admin_table_row">';
+            row_div  = '<div class="admin_table_row" id="'+'row_'+String(result_iter)+'">';
             row_div += '<div class="admin_table_change_password_name_cell">'+result[result_iter]['username']+'</div>';
             row_div += '<div class="admin_table_change_password_know_cell">'+result[result_iter]['know_previous_password']+'</div>';
             row_div += '<div class="admin_table_change_password_other_cell">'+result[result_iter]['other_info']+'</div>';
-            row_div +='<div class="admin_table_choose_accept" id="'+result[result_iter]['id']+'" onclick="accept_register('+"'row_"+String(result_iter)+"'"+');">✓'+'</div>';
-            row_div +='<div class="admin_table_choose_deny" id="'+result[result_iter]['id']+'" onclick="deny_register('+"'row_"+String(result_iter)+"'"+');">X'+'</div>';
+            row_div +='<div class="admin_table_choose_accept" id="'+result[result_iter]['id']+'" onclick="accept_change_pass('+"'row_"+String(result_iter)+"'"+');">✓'+'</div>';
+            row_div +='<div class="admin_table_choose_deny" id="'+result[result_iter]['id']+'" onclick="deny_change_pass('+"'row_"+String(result_iter)+"'"+');">X'+'</div>';
             row_div +='</div>';
             table.innerHTML+=row_div;
         }
+        return;
     }
+    return;
+}
+
+function accept_change_pass(row){
+    row_div = document.getElementById(String(row));
+    request_id = row_div.getElementsByClassName('admin_table_choose_accept')[0].id
+    let xhr = new XMLHttpRequest();
+    let request_data = JSON.stringify({"id": request_id});
+    xhr.open("PUT","/api/change_password/");
+    xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.responseType = 'json';
+    xhr.send(request_data);
+    xhr.onload = function(){
+        result = xhr.response;
+        if (result['result']){
+            row_div.remove();
+            return;
+        }
+        alert("Что-то пошло не так!");
+    }
+}
 
 
-
+function deny_change_pass(row){
+    row_div = document.getElementById(String(row));
+    request_id = row_div.getElementsByClassName('admin_table_choose_accept')[0].id
+    let xhr = new XMLHttpRequest();
+    let request_data = JSON.stringify({"id": request_id});
+    xhr.open("DELETE","/api/change_password/");
+    xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.responseType = 'json';
+    xhr.send(request_data);
+    xhr.onload = function(){
+        result = xhr.response;
+        if (result['result']){
+            row_div.remove();
+            return;
+        }
+        alert("Что-то пошло не так!");
+    }
 }
