@@ -1535,3 +1535,145 @@
     font-size:100%;
     color:black;
 }
+.body_main_block{
+    position:absolute;
+    top:13%;
+    width:100%;
+    height:87%;
+}
+.table_header_register_button{
+    position:absolute;
+    height:5%;
+    top:20%;
+    width:20%;
+    left:5%;
+    background: rgb(138, 211, 234);
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+    color:white;
+    font-size:125%;
+    font-family:Inter;
+    text-align:center;
+}
+.table_header_change_pass_button{
+    position:absolute;
+    height:5%;
+    top:20%;
+    width:20%;
+    left:25%;
+    background: rgb(138, 211, 234);
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+    color:white;
+    font-size:125%;
+    font-family:Inter;
+    text-align:center;
+}
+
+.table_header_change_pass_button:hover{
+    background:rgb(89, 137, 152);
+}
+.table_header_register_button:hover{
+    background:rgb(89, 137, 152);
+}
+.table_header_register_chosen_button{
+    position:absolute;
+    height:5%;
+    top:20%;
+    width:20%;
+    left:5%;
+    background:rgb(89, 137, 152);
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+    color:white;
+    font-size:125%;
+    font-family:Inter;
+    text-align:center;
+}
+.table_header_change_pass_chosen_button{
+    position:absolute;
+    height:5%;
+    top:20%;
+    width:20%;
+    left:25%;
+    background:rgb(89, 137, 152);
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+    color:white;
+    font-size:125%;
+    font-family:Inter;
+    text-align:center;
+}
+
+.admin_table_block{
+	overflow:scroll;
+	position: absolute;
+	width: 90%;
+	height: 65%;
+	left: 5%;
+	right: 0;
+	top: 25%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.admin_table_row_header{
+    position: relative;
+	width: 100%;
+	height: 10%;
+	left: 0;
+	box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	background: rgb(89, 137, 152);
+}
+
+.admin_table_row{
+    position: relative;
+	width: 100%;
+	height: 10%;
+	left: 0;
+	box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	background: rgb(138, 211, 234);
+}
+
+.admin_table_register_username_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:0;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:125%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+
+.admin_table_register_name_cell{
+    position:absolute;
+    width:20%;
+    height:100%;
+    left:15%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:125%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+
+.admin_table_register_role_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:35%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:125%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
