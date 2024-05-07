@@ -34,5 +34,10 @@
     </div>
     {% load static %}
 	<script src="{% static 'main/js/admin_requests.js' %}"></script>
-    <script>get_register_requests();</script>
+    <script>
+        get_all_abstract_teachers();
+        get_all_abstract_kids();
+        get_all_groups();
+        get_register_requests();
+    </script>
 {% endblock %}

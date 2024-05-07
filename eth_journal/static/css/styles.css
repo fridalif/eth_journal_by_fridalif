@@ -1750,3 +1750,16 @@
 .admin_table_choose_accept:hover{
     background-color:darkgreen;
 }
+#choose_group_admin{
+    height:100%;
+    width:100%;
+}
+
+#choose_role_admin{
+    height:100%;
+    width:100%;
+}
+#choose_abstract_admin{
+    height:100%;
+    width:100%;
+}

@@ -389,8 +389,8 @@ class GroupAPIView(APIView):
         if not request.user.is_authenticated:
             return Response({"error": "not authenticated"})
         if group_id is None:
-            return Response(GroupSerializer(main_models.Group.objects.all(), many=True))
-        return Response(GroupSerializer(main_models.Group.objects.filter(id=group_id), many=True))
+            return Response(GroupSerializer(main_models.Group.objects.all(), many=True).data)
+        return Response(GroupSerializer(main_models.Group.objects.filter(id=group_id), many=True).data)
 
     def post(self, request):
         if not request.user.is_superuser:
@@ -427,8 +427,8 @@ class AbstractKidAPIView(APIView):
         if not request.user.is_superuser:
             raise Http404
         if student_id is None:
-            return Response(AbstractKidSerializer(main_models.AbstractKid.objects.all(), many=True))
-        return Response(AbstractKidSerializer(main_models.AbstractKid.objects.filter(id=student_id), many=True))
+            return Response(AbstractKidSerializer(main_models.AbstractKid.objects.all(), many=True).data)
+        return Response(AbstractKidSerializer(main_models.AbstractKid.objects.filter(id=student_id), many=True).data)
 
     def post(self, request):
         if not request.user.is_superuser:
@@ -471,8 +471,8 @@ class AbstractTeacherAPIView(APIView):
         if not request.user.is_superuser:
             raise Http404
         if teacher_id is None:
-            return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.all(), many=True))
-        return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.filter(id=teacher_id), many=True))
+            return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.all(), many=True).data)
+        return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.filter(id=teacher_id), many=True).data)
 
     def post(self, request):
         if not request.user.is_superuser:
