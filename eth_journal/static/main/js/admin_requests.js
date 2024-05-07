@@ -132,12 +132,11 @@ function accept_change_pass(row){
     row_div = document.getElementById(String(row));
     request_id = row_div.getElementsByClassName('admin_table_choose_accept')[0].id
     let xhr = new XMLHttpRequest();
-    let request_data = JSON.stringify({"id": request_id});
-    xhr.open("PUT","/api/change_password/");
+    xhr.open("PUT","/api/change_password/"+request_id+"/");
     xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
     xhr.setRequestHeader('Content-Type','application/json');
     xhr.responseType = 'json';
-    xhr.send(request_data);
+    xhr.send();
     xhr.onload = function(){
         result = xhr.response;
         if (result['result']){
@@ -153,12 +152,11 @@ function deny_change_pass(row){
     row_div = document.getElementById(String(row));
     request_id = row_div.getElementsByClassName('admin_table_choose_accept')[0].id
     let xhr = new XMLHttpRequest();
-    let request_data = JSON.stringify({"id": request_id});
-    xhr.open("DELETE","/api/change_password/");
+    xhr.open("DELETE","/api/change_password/"+request_id+"/");
     xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
     xhr.setRequestHeader('Content-Type','application/json');
     xhr.responseType = 'json';
-    xhr.send(request_data);
+    xhr.send();
     xhr.onload = function(){
         result = xhr.response;
         if (result['result']){

@@ -618,7 +618,9 @@ class ChangePasswordAPIView(APIView):
         user = current_request.user
         cipher_suite = Fernet(KEY)
         new_password = cipher_suite.decrypt(current_request.new_password.encode()).decode()
+        print(new_password)
         user.set_password(new_password)
+        user.save()
         current_request.delete()
         return Response({'result': 'password changed'})
 
