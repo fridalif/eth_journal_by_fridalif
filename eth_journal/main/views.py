@@ -7,6 +7,7 @@ from datetime import date
 from main.forms import ImageForm
 import os
 
+
 def register(request: HttpRequest) -> HttpResponse:
     context = {'error': False}
     if request.method == 'GET':
@@ -116,16 +117,27 @@ def settings(request):
     loaded = False
     if request.method == 'POST':
         prev_avatar = profile.avatar.name
-        form = ImageForm(request.POST, request.FILES,instance=profile)
+        form = ImageForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            if prev_avatar!='Empty':
+            if prev_avatar != 'Empty':
                 try:
-                    os.remove('media/'+prev_avatar)
+                    os.remove('media/' + prev_avatar)
                 except Exception as e:
-                    with open('error.log','a') as file:
-                        file.write(str(e)+'\n')
+                    with open('error.log', 'a') as file:
+                        file.write(str(e) + '\n')
             loaded = True
     form = ImageForm()
     context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded}
     return render(request, 'main/settings.html', context=context)
+
+
+def admin_requests_view(request: HttpRequest):
+    if not request.user.is_superuser:
+        raise Http404
+    profile = Profile.objects.filter(user=request.user)
+    if len(profile) == 0:
+        raise Http404
+    profile = profile[0]
+    context = {'user': request.user, 'my_profile': profile}
+    return render(request, 'main/admin_requests.html', context=context)

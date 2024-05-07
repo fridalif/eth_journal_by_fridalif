@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import index, register, lessons_plan, profile, settings
+from .views import index, register, lessons_plan, profile, settings,admin_requests_view
 from django.contrib.auth import views
 
 app_name = 'main'
@@ -10,5 +10,6 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('lessons_plan/', lessons_plan, name='lessons_plan'),
     path('profile/<slug:profile_slug>/', profile, name='profile'),
-    path('settings/', settings, name='settings')
+    path('settings/', settings, name='settings'),
+    path('admin_requests/',admin_requests_view, name='admin_requests')
 ]

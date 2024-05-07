@@ -11,6 +11,15 @@
 			<div class="banner_header_block">
 				<div class="banner_header_font">Электронный Дневник</div>
 			</div>
+			{% if user.is_superuser %}
+			<a href="{% url 'main:admin_requests' %}">
+			<div class="admin_requests_header">
+				<div class="admin_header_font">
+					Запросы администратору
+				</div>
+			</div>
+			</a>
+			{% endif %}
 			<div class="marks_header_button">
 				<div class="marks_header_font">
 					Оценки
