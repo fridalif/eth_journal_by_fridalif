@@ -101,7 +101,9 @@ function deny_register(row){
 function get_change_password_requests(){
     button = document.getElementById('table_header_change_pass_button')
     button.id='table_header_change_pass_chosen_button';
-    document.getElementById('table_header_register_chosen_button').id= 'table_header_register_button';
+    button_register_requests = document.getElementById('table_header_register_chosen_button');
+    button_register_requests.id = "table_header_register_button";
+
     table = document.getElementById('admin_table_block');
     table.innerHTML = '';
     table.innerHTML += '<div class="admin_table_row_header"><div class="admin_table_change_password_name_cell">Логин</div><div class="admin_table_change_password_know_cell">Пользователь знает пароль</div><div class="admin_table_change_password_other_cell">Остальная информация</div>';
@@ -165,4 +167,16 @@ function deny_change_pass(row){
         }
         alert("Что-то пошло не так!");
     }
+}
+
+function get_register_requests_with_table(){
+    button = document.getElementById('table_header_change_pass_chosen_button')
+    button.id='table_header_change_pass_button';
+    button_register_requests = document.getElementById('table_header_register_button');
+    button_register_requests.id= 'table_header_register_chosen_button';
+    table = document.getElementById('admin_table_block');
+    table.innerHTML = '';
+    table.innerHTML += '<div class="admin_table_row_header"><div class="admin_table_row_header"><div class="admin_table_register_username_cell">Логин</div><div class="admin_table_register_name_cell">ФИО</div><div class="admin_table_register_role_cell">Роль</div><div class="admin_table_choose_role">Выберите Роль</div><div class="admin_table_choose_group">Выберите Группу</div><div class="admin_table_choose_abstract">Выберите пользователя</div></div>';
+    table.innerHTML += '</div>';
+    get_register_requests();
 }
