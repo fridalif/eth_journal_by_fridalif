@@ -9,7 +9,7 @@
             Запросы на смену пароля
         </div>
 
-        <div class="admin_table_block">
+        <div class="admin_table_block" id="admin_table_block">
             <div class="admin_table_row_header">
                 <div class="admin_table_register_username_cell">
                     Логин
@@ -30,12 +30,9 @@
                     Выберите пользователя
                 </div>
             </div>
-            <div class="admin_table_row">
-
-            </div>
-            <div class="admin_table_row">
-
-            </div>
         </div>
     </div>
+    {% load static %}
+	<script src="{% static 'main/js/admin_requests.js' %}"></script>
+    <script>get_register_requests();</script>
 {% endblock %}
