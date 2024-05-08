@@ -1605,7 +1605,46 @@
     font-family:Inter;
     text-align:center;
 }
-
+.filter_hours_plan_block{
+    position: absolute;
+	width: 50%;
+	height: 10%;
+	left: 5%;
+	right: 0;
+	top: 15%;
+	bottom: 0;
+	background: rgb(155, 255, 255);
+}
+.input_subject_name{
+    position: absolute;
+	width: 20%;
+	height: 80%;
+	left: 5%;
+	right: 0;
+	top: 10%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.input_group_year_of_study{
+    position: absolute;
+	width: 20%;
+	height: 80%;
+	left: 27%;
+	right: 0;
+	top: 10%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.input_group_letter{
+    position: absolute;
+	width: 20%;
+	height: 80%;
+	left: 49%;
+	right: 0;
+	top: 10%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
 .admin_table_block{
 	overflow:scroll;
 	position: absolute;

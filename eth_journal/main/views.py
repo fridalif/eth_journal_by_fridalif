@@ -181,10 +181,17 @@ def hours_plan_view(request: HttpRequest):
         remainder_hours = hour_plan.hours - len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
-                             'remainder': remainder_hours,'planned':hour_plan.hours})
+                             'remainder': remainder_hours, 'planned': hour_plan.hours})
     profile = Profile.objects.filter(user=request.user)
     if len(profile) == 0:
         raise Http404
     profile = profile[0]
-    context = {'result_array': result_array,'my_profile':profile}
+    all_groups = Group.objects.all()
+    all_subjects = Subject.objects.all()
+    all_groups_years = [group.year_of_study for group in all_groups]
+    all_groups_letters = [group.group_letter for group in all_groups]
+    all_subjects_names = [subject.subject_name for subject in all_subjects]
+    context = {'result_array': result_array, 'my_profile': profile,
+               'all_subjects_names': all_subjects_names, 'all_groups_letter': all_groups_letters,
+               'all_groups_years': all_groups_years}
     return render(request, 'main/hours_plan.html', context=context)
