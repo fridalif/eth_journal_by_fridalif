@@ -87,6 +87,7 @@ class RegisterRequestsAPIView(APIView):
                     abstract_student=abstract_student)
                 for lesson_info in abstract_student_lessons_info:
                     lesson_info.student = current_student
+                    lesson_info.abstract_student = None
                 abstract_student.delete()
 
             current_student.save()
