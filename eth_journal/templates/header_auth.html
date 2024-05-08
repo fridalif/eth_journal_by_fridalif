@@ -22,11 +22,15 @@
 			</div>
 			</a>
 			{% endif %}
+			{% if user.is_superuser %}
+			<a href="{% url 'main:hours_plan' %}">
 			<div class="marks_header_button">
 				<div class="marks_header_font">
-					Оценки
+					Вычет часов
 				</div>
 			</div>
+			</a>
+			{% endif %}
 			<a href="{% url 'main:lessons_plan' %}">
 			<div class="scheduler_header_button">
 				<div class="scheduler_header_font">

@@ -116,6 +116,7 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	text-align:center;
 }
 .marks_header_button:hover{
 	background:rgb(89, 137, 152);
@@ -129,7 +130,7 @@
 	line-height: 22px;
 	letter-spacing: 0px;
 	text-align: center;
-	padding-left:30%;
+    padding-left:15%;
 }
 
 .scheduler_header_button{
