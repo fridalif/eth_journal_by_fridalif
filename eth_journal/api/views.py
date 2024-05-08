@@ -266,6 +266,22 @@ class LessonStudentInfoAPIView(APIView):
     def get(self, request, lesson_id=None, student_id=None):
         if not request.user.is_authenticated:
             raise Http404
+        if lesson_id is not None:
+            lesson = main_models.Lesson.objects.filter(id=lesson_id)
+            if len(lesson) == 0:
+                raise Http404
+            lesson = lesson[0]
+            students = main_models.Kid.objects.filter(group=lesson.group)
+            abstract_students = main_models.AbstractKid.objects.filter(group=lesson.group)
+            for student in students:
+                if len(main_models.LessonStudentInfo.objects.filter(student=student,lesson=lesson)) == 0:
+                    lesson_student_info = main_models.LessonStudentInfo(student=student, lesson=lesson)
+                    lesson_student_info.save()
+            for abstract_student in abstract_students:
+                if len(main_models.LessonStudentInfo.objects.filter(abstract_student=abstract_student, lesson=lesson)) == 0:
+                    lesson_student_info = main_models.LessonStudentInfo(abstract_student=abstract_student, lesson=lesson)
+                    lesson_student_info.save()
+
         if request.user.is_superuser:
             if lesson_id is None and student_id is None:
                 return Response(

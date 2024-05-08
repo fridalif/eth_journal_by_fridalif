@@ -71,6 +71,9 @@ class Teacher(models.Model):
     father_name = models.TextField(verbose_name='Отчество', blank=True)
     room = models.CharField(max_length=10, verbose_name='Рабочий кабинет', blank=True)
 
+    def __str__(self):
+        return f'{self.user.last_name} {self.user.first_name} {self.father_name}'
+
     class Meta:
         verbose_name = 'Преподаватель'
         verbose_name_plural = 'Преподаватели'
