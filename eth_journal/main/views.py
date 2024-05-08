@@ -160,6 +160,12 @@ def hours_plan_view(request: HttpRequest):
     subject_name = request.GET.get('subject', None)
     group_year_of_study = request.GET.get('group_year_of_study', None)
     group_letter = request.GET.get('group_letter', None)
+    if subject_name == "Предмет":
+        subject_name = None
+    if group_letter == "Буквенный индекс группы":
+        group_letter = None
+    if group_year_of_study == "Год набора группы":
+        group_year_of_study = None
     group = None
     subject = None
     if subject_name is not None:
@@ -192,6 +198,6 @@ def hours_plan_view(request: HttpRequest):
     all_groups_letters = [group.group_letter for group in all_groups]
     all_subjects_names = [subject.subject_name for subject in all_subjects]
     context = {'result_array': result_array, 'my_profile': profile,
-               'all_subjects_names': all_subjects_names, 'all_groups_letter': all_groups_letters,
+               'all_subjects_names': all_subjects_names, 'all_groups_letters': all_groups_letters,
                'all_groups_years': all_groups_years}
     return render(request, 'main/hours_plan.html', context=context)

@@ -1,50 +1,66 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
-        <div class="body_main_block">
-        <div class="filter_hours_plan_block">
-            <div class="input_subject_name">
-
+<div class="body_main_block">
+    <div class="filter_hours_plan_block">
+        <form method="GET" action="{% url 'main:hours_plan' %}" id="filter_hours_form">
+            <select class="input_subject_name" name="subject">
+                <option value="Предмет" selected>Предмет</option>
+                {% for subject_name in all_subjects_names %}
+                <option value="{{subject_name}}">{{subject_name}}</option>
+                {% endfor %}
+            </select>
+            <select class="input_group_year_of_study" name="group_year_of_study">
+                <option value="Год набора группы" selected>Год набора группы</option>
+                <option value=""></option>
+                {% for year in all_groups_years %}
+                <option value="{{year}}">{{year}}</option>
+                {% endfor %}
+            </select>
+            <select name="group_letter" class="input_group_letter">
+                <option value="Буквенный индекс группы" selected>Буквенный индекс группы</option>
+                <option value=""></option>
+                {% for letter in all_groups_letters %}
+                <option value="{{letter}}">{{letter}}</option>
+                {% endfor %}
+            </select>
+            <div class="filters_accept_hours_plan" onclick="document.getElementById('filter_hours_form').submit();">
+                Применить фильтры
             </div>
-            <div class="input_group_year_of_study">
-
+        </form>
+    </div>
+    <div class="admin_table_block" id="admin_table_block">
+        <div class="admin_table_row_header">
+            <div class="hour_table_subject_cell">
+                Предмет
             </div>
-            <div class="input_group_letter">
-
+            <div class="hour_table_group_cell">
+                Группа
+            </div>
+            <div class="hour_table_hours_planned_cell">
+                Запланированно часов
+            </div>
+            <div class="hour_table_remain_cell">
+                Осталось часов
             </div>
         </div>
-        <div class="admin_table_block" id="admin_table_block">
-            <div class="admin_table_row_header">
-                <div class="hour_table_subject_cell">
-                    Предмет
-                </div>
-                <div class="hour_table_group_cell">
-                    Группа
-                </div>
-                <div class="hour_table_hours_planned_cell">
-                    Запланированно часов
-                </div>
-                <div class="hour_table_remain_cell">
-                    Осталось часов
-                </div>
+        {% for result in result_array %}
+        <div class="admin_table_row">
+            <div class="hour_table_subject_cell">
+                {{result.subject}}
             </div>
-            {% for result in result_array %}
-                <div class="admin_table_row">
-                    <div class="hour_table_subject_cell">
-                        {{result.subject}}
-                    </div>
-                    <div class="hour_table_group_cell">
-                        {{result.group}}
-                    </div>
-                    <div class="hour_table_hours_planned_cell">
-                        {{result.planned}}
-                    </div>
-                    <div class="hour_table_remain_cell">
-                        {{result.remainder}}
-                    </div>
-                </div>
-            {% endfor %}
+            <div class="hour_table_group_cell">
+                {{result.group}}
+            </div>
+            <div class="hour_table_hours_planned_cell">
+                {{result.planned}}
+            </div>
+            <div class="hour_table_remain_cell">
+                {{result.remainder}}
+            </div>
         </div>
-        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}
