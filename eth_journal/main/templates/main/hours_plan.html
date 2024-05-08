@@ -1,0 +1,40 @@
+{% extends "header_auth.html" %}
+
+{% block body_main_block %}
+        <div class="body_main_block">
+
+        <div class="admin_table_block" id="admin_table_block">
+            <div class="admin_table_row_header">
+                <div class="hour_table_subject_cell">
+                    Предмет
+                </div>
+                <div class="hour_table_group_cell">
+                    Группа
+                </div>
+                <div class="hour_table_hours_planned_cell">
+                    Запланированно часов
+                </div>
+                <div class="hour_table_remain_cell">
+                    Осталось часов
+                </div>
+            </div>
+            {% for result in result_array %}
+                <div class="admin_table_row">
+                    <div class="hour_table_subject_cell">
+                        {{result.subject}}
+                    </div>
+                    <div class="hour_table_group_cell">
+                        {{result.group}}
+                    </div>
+                    <div class="hour_table_hours_planned_cell">
+                        {{result.planned}}
+                    </div>
+                    <div class="hour_table_remain_cell">
+                        {{result.remainder}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+
+{% endblock %}

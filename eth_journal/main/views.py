@@ -158,7 +158,6 @@ def hours_plan_view(request: HttpRequest):
     if not request.user.is_superuser:
         raise Http404
     subject_name = request.GET.get('subject', None)
-    print(subject_name)
     group_year_of_study = request.GET.get('group_year_of_study', None)
     group_letter = request.GET.get('group_letter', None)
     group = None
@@ -182,5 +181,10 @@ def hours_plan_view(request: HttpRequest):
         remainder_hours = hour_plan.hours - len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
-                             'remainder': remainder_hours})
-    return HttpResponse(str(result_array))
+                             'remainder': remainder_hours,'planned':hour_plan.hours})
+    profile = Profile.objects.filter(user=request.user)
+    if len(profile) == 0:
+        raise Http404
+    profile = profile[0]
+    context = {'result_array': result_array,'my_profile':profile}
+    return render(request, 'main/hours_plan.html', context=context)

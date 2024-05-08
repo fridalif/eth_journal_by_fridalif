@@ -1804,3 +1804,56 @@
     text-align:center;
     color:white;
 }
+
+.hour_table_subject_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:0;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.hour_table_group_cell{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:15%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.hour_table_hours_planned_cell{
+    position:absolute;
+    width:35%;
+    height:100%;
+    left:30%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.hour_table_remain_cell{
+    position:absolute;
+    width:35%;
+    height:100%;
+    left:65%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
