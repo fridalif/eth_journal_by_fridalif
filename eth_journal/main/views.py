@@ -89,12 +89,15 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         student = student[0]
         lessons_info = LessonStudentInfo.objects.filter(student=student)
         marks = [lesson_info.mark for lesson_info in lessons_info]
-        if '' in marks:
+        while '' in marks:
             marks.remove('')
-        if 'УП' in marks:
+        while 'УП' in marks:
             marks.remove('УП')
-        if 'Н' in marks:
+        while 'Н' in marks:
             marks.remove('Н')
+        for mark in marks:
+            print(mark)
+            print(type(mark))
         marks_int = [int(mark) for mark in marks]
         if len(marks_int)!=0:
             avg_mark = str(sum(marks_int) / len(marks_int))

@@ -176,7 +176,6 @@ function get_register_requests_with_table(){
     button_register_requests.id= 'table_header_register_chosen_button';
     table = document.getElementById('admin_table_block');
     table.innerHTML = '';
-    table.innerHTML += '<div class="admin_table_row_header"><div class="admin_table_row_header"><div class="admin_table_register_username_cell">Логин</div><div class="admin_table_register_name_cell">ФИО</div><div class="admin_table_register_role_cell">Роль</div><div class="admin_table_choose_role">Выберите Роль</div><div class="admin_table_choose_group">Выберите Группу</div><div class="admin_table_choose_abstract">Выберите пользователя</div></div>';
-    table.innerHTML += '</div>';
+    table.innerHTML += '<div class="admin_table_row_header"><div class="admin_table_register_username_cell">Логин</div><div class="admin_table_register_name_cell">ФИО</div><div class="admin_table_register_role_cell">Роль</div><div class="admin_table_choose_role">Выберите Роль</div><div class="admin_table_choose_group">Выберите Группу</div><div class="admin_table_choose_abstract">Выберите пользователя</div></div>';
     get_register_requests();
 }

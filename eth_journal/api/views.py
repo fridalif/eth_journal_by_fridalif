@@ -208,23 +208,38 @@ class LessonAPIView(APIView):
         lesson = lesson[0]
 
         if request.user.is_superuser:
-            group = main_models.Group.objects.filter(id=int(data['group']))
-            teacher = main_models.Teacher.objects.filter(id=int(data['teacher']))
-            subject = main_models.Subject.objects.filter(id=int(data['subject']))
+            if data.get('group',None) is not None:
+                group = main_models.Group.objects.filter(id=int(data['group']))
+            if data.get('teacher', None) is not None:
+                teacher = main_models.Teacher.objects.filter(id=int(data['teacher']))
+            if data.get('subject', None) is not None:
+                subject = main_models.Subject.objects.filter(id=int(data['subject']))
             if len(group) == 0 or len(teacher) == 0 or len(subject) == 0:
                 return Response({'error': 'lesson is not valid'})
-            group = group[0]
-            teacher = teacher[0]
-            subject = subject[0]
-            lesson.group = group
-            lesson.subject = subject
-            lesson.teacher = teacher
-            lesson.date = data['date']
-            lesson.start_time = data['start_time']
-            lesson.end_time = data['end_time']
-            lesson.homework = data['homework']
-            lesson.room = data['room']
-            lesson.type = data['type']
+            if data.get('group', None) is not None:
+                group = group[0]
+            if data.get('teacher', None) is not None:
+                teacher = teacher[0]
+            if data.get('subject', None) is not None:
+                subject = subject[0]
+            if data.get('group', None) is not None:
+                lesson.group = group
+            if data.get('subject', None) is not None:
+                lesson.subject = subject
+            if data.get('teacher', None) is not None:
+                lesson.teacher = teacher
+            if data.get('date', None) is not None:
+                lesson.date = data['date']
+            if data.get('start_time', None) is not None:
+                lesson.start_time = data['start_time']
+            if data.get('end_time', None) is not None:
+                lesson.end_time = data['end_time']
+            if data.get('homework', None) is not None:
+                lesson.homework = data['homework']
+            if data.get('room', None) is not None:
+                lesson.room = data['room']
+            if data.get('type', None) is not None:
+                lesson.type = data['type']
             lesson.save()
             return Response(LessonSerializer(lesson).data)
         if lesson.teacher.user == request.user:
@@ -313,7 +328,7 @@ class LessonStudentInfoAPIView(APIView):
                 raise Http404
             student = student[0]
             if len(main_models.LessonStudentInfo.objects.filter(abstract_student=student, lesson=lesson)) != 0:
-                return Response({"error": "this student alredy has info in this lesson"})
+                return Response({"error": "this student already has info in this lesson"})
             lesson_student_info = main_models.LessonStudentInfo(student=None, abstract_student=student, lesson=lesson,
                                                                 mark=data['mark'], commendation=data['commendation'],
                                                                 chastisement=data['chastisement'])
