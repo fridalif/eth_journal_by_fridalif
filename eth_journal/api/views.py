@@ -53,6 +53,7 @@ class RegisterRequestsAPIView(APIView):
                 abstract_teacher_lessons = main_models.Lesson.objects.filter(abstract_teacher=abstract_teacher)
                 for lesson in abstract_teacher_lessons:
                     lesson.teacher = current_teacher
+                    lesson.save()
                 abstract_teacher.delete()
             current_request.delete()
             return Response({'result':'Успешно!'})
@@ -62,17 +63,18 @@ class RegisterRequestsAPIView(APIView):
             if len(current_group) == 0:
                 raise Http404
             current_group = current_group[0]
-
             current_user = main_models.User(username=current_request.login,
                                             first_name=current_request.name, last_name=current_request.surname)
             current_user.set_password(password)
             current_user.save()
+
             user_profile = main_models.Profile(user=current_user, slug='not important')
             user_profile.save()
             current_student = main_models.Kid(user=current_user, group=current_group,
                                               father_name=current_request.father_name)
 
             abstract_student_id = data.get('abstract_id', None)
+            current_student.save()
             if abstract_student_id == 'no_abstract':
                 abstract_student_id = None
             if abstract_student_id is not None:
@@ -88,9 +90,10 @@ class RegisterRequestsAPIView(APIView):
                 for lesson_info in abstract_student_lessons_info:
                     lesson_info.student = current_student
                     lesson_info.abstract_student = None
+                    lesson_info.save()
                 abstract_student.delete()
 
-            current_student.save()
+
             current_request.delete()
             return Response({'result':'Успешно!'})
         raise Http404
@@ -602,7 +605,6 @@ class ChangePasswordAPIView(APIView):
         if request.user.is_authenticated and request.user != user_to_change_password:
             raise Http404
         if not user_to_change_password.check_password(prev_password) and prev_password is not None:
-            print(prev_password)
             return Response({'error': 'Прошлый пароль введён неверно'})
         if new_password.strip() == '' or new_password is None:
             return Response({'error': 'Пароль не может быть пустым'})
@@ -634,7 +636,6 @@ class ChangePasswordAPIView(APIView):
         user = current_request.user
         cipher_suite = Fernet(KEY)
         new_password = cipher_suite.decrypt(current_request.new_password.encode()).decode()
-        print(new_password)
         user.set_password(new_password)
         user.save()
         current_request.delete()
