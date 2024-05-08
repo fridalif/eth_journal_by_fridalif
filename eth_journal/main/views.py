@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, Http404
+from rest_framework.response import Response
 from main.models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -175,4 +176,9 @@ def hours_plan_view(request: HttpRequest):
         hours_plans = hours_plans.objects.filter(group=group)
     if subject is not None:
         hours_plans = hours_plans.objects.filter(subject=subject)
-    
+    result_array = []
+    for hour_plan in hours_plans:
+        lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, date__lt=date.today())
+        remainder_hours = hour_plan.hours - len(lessons_count)
+        result_array.append({'subject': hour_plan.subject, 'group': hour_plan.group, 'remainder': remainder_hours})
+    return Response(result_array)
