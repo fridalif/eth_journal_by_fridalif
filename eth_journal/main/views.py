@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, Http404
-from rest_framework.response import Response
 from main.models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -159,12 +158,13 @@ def hours_plan_view(request: HttpRequest):
     if not request.user.is_superuser:
         raise Http404
     subject_name = request.GET.get('subject', None)
+    print(subject_name)
     group_year_of_study = request.GET.get('group_year_of_study', None)
     group_letter = request.GET.get('group_letter', None)
     group = None
     subject = None
     if subject_name is not None:
-        subjects = Subject.objects.filter(subject_name)
+        subjects = Subject.objects.filter(subject_name=subject_name)
         if len(subjects) != 0:
             subject = subjects[0]
     if group_letter is not None and group_year_of_study is not None:
@@ -173,12 +173,14 @@ def hours_plan_view(request: HttpRequest):
             group = groups[0]
     hours_plans = HoursPlan.objects.all()
     if group is not None:
-        hours_plans = hours_plans.objects.filter(group=group)
+        hours_plans = hours_plans.filter(group=group)
     if subject is not None:
-        hours_plans = hours_plans.objects.filter(subject=subject)
+        hours_plans = hours_plans.filter(subject=subject)
     result_array = []
     for hour_plan in hours_plans:
         lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, date__lt=date.today())
         remainder_hours = hour_plan.hours - len(lessons_count)
-        result_array.append({'subject': hour_plan.subject, 'group': hour_plan.group, 'remainder': remainder_hours})
-    return Response(result_array)
+        result_array.append({'subject': hour_plan.subject.subject_name,
+                             'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
+                             'remainder': remainder_hours})
+    return HttpResponse(str(result_array))
