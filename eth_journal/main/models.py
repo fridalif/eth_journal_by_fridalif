@@ -7,6 +7,9 @@ class Group(models.Model):
     year_of_study = models.IntegerField(verbose_name='Год набора')
     group_letter = models.CharField(max_length=2, verbose_name='Буквенный индекс группы')
 
+    def __str__(self):
+        return f'{self.year_of_study}{self.group_letter}'
+
     class Meta:
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
@@ -15,8 +18,11 @@ class Group(models.Model):
 class AbstractKid(models.Model):
     name = models.TextField(verbose_name='Имя')
     surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество',blank=True)
+    father_name = models.TextField(verbose_name='Отчество', blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
+
+    def __str__(self):
+        return f'{self.group}:{self.surname} {self.name} {self.father_name}'
 
     class Meta:
         verbose_name = 'Незарегистрированный ученик'
@@ -26,7 +32,10 @@ class AbstractKid(models.Model):
 class AbstractTeacher(models.Model):
     name = models.TextField(verbose_name='Имя')
     surname = models.TextField(verbose_name='Фамилия')
-    father_name = models.TextField(verbose_name='Отчество',blank=True)
+    father_name = models.TextField(verbose_name='Отчество', blank=True)
+
+    def __str__(self):
+        return f'{self.surname} {self.name} {self.father_name}'
 
     class Meta:
         verbose_name = 'Незарегистрированный учитель'
@@ -38,6 +47,9 @@ class Kid(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
     father_name = models.TextField(verbose_name='Отчество', blank=True)
 
+    def __str__(self):
+        return f'{self.group}: {self.user.last_name} {self.user.first_name} {self.father_name}'
+
     class Meta:
         verbose_name = 'Студент'
         verbose_name_plural = 'Студенты'
@@ -45,6 +57,9 @@ class Kid(models.Model):
 
 class Subject(models.Model):
     subject_name = models.TextField(verbose_name='Название предмета')
+
+    def __str__(self):
+        return f'{self.subject_name}'
 
     class Meta:
         verbose_name = 'Предмет'
@@ -111,12 +126,12 @@ class RegisterRequests(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     slug = models.SlugField(verbose_name='Ссылка на профиль')
-    avatar = models.ImageField(verbose_name='Аватар', upload_to='uploads/avatars/',blank=True)
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='uploads/avatars/', blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
-        if self.avatar.name!='':
-            self.avatar.name = self.user.username+"_"+self.avatar.name
+        if self.avatar.name != '':
+            self.avatar.name = self.user.username + "_" + self.avatar.name
         else:
             self.avatar.name = 'Empty'
         return super(Profile, self).save(*args, **kwargs)
@@ -138,11 +153,21 @@ class ProfileRaiting(models.Model):
 
 
 class ChangePasswordRequests(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     new_password = models.TextField(verbose_name='Новый пароль')
     know_previous_password = models.BooleanField(verbose_name='Пользователю известен предыдущий пароль?')
-    other_info = models.TextField(verbose_name="Другая информация предоставленная пользователем",blank=True)
+    other_info = models.TextField(verbose_name="Другая информация предоставленная пользователем", blank=True)
 
     class Meta:
         verbose_name = 'Запрос на изменение пароля'
-        verbose_name_plural ='Запросы на изменение пароля'
+        verbose_name_plural = 'Запросы на изменение пароля'
+
+
+class HoursPlan(models.Model):
+    hours = models.IntegerField(verbose_name='Количество часов')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Предмет')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name='Группа')
+
+    class Meta:
+        verbose_name = 'Количество часов на предмет и группу'
+        verbose_name_plural = 'Количества часов на предмет и группу'
