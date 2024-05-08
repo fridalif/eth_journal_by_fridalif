@@ -56,7 +56,7 @@ class RegisterRequestsAPIView(APIView):
                     lesson.save()
                 abstract_teacher.delete()
             current_request.delete()
-            return Response({'result':'Успешно!'})
+            return Response({'result': 'Успешно!'})
 
         if data['role'] == 'Student':
             current_group = main_models.Group.objects.filter(id=int(data['group']))
@@ -93,9 +93,8 @@ class RegisterRequestsAPIView(APIView):
                     lesson_info.save()
                 abstract_student.delete()
 
-
             current_request.delete()
-            return Response({'result':'Успешно!'})
+            return Response({'result': 'Успешно!'})
         raise Http404
 
     def delete(self, request):
@@ -212,7 +211,7 @@ class LessonAPIView(APIView):
         lesson = lesson[0]
 
         if request.user.is_superuser:
-            if data.get('group',None) is not None:
+            if data.get('group', None) is not None:
                 group = main_models.Group.objects.filter(id=int(data['group']))
             if data.get('teacher', None) is not None:
                 teacher = main_models.Teacher.objects.filter(id=int(data['teacher']))
@@ -274,12 +273,14 @@ class LessonStudentInfoAPIView(APIView):
             students = main_models.Kid.objects.filter(group=lesson.group)
             abstract_students = main_models.AbstractKid.objects.filter(group=lesson.group)
             for student in students:
-                if len(main_models.LessonStudentInfo.objects.filter(student=student,lesson=lesson)) == 0:
+                if len(main_models.LessonStudentInfo.objects.filter(student=student, lesson=lesson)) == 0:
                     lesson_student_info = main_models.LessonStudentInfo(student=student, lesson=lesson)
                     lesson_student_info.save()
             for abstract_student in abstract_students:
-                if len(main_models.LessonStudentInfo.objects.filter(abstract_student=abstract_student, lesson=lesson)) == 0:
-                    lesson_student_info = main_models.LessonStudentInfo(abstract_student=abstract_student, lesson=lesson)
+                if len(main_models.LessonStudentInfo.objects.filter(abstract_student=abstract_student,
+                                                                    lesson=lesson)) == 0:
+                    lesson_student_info = main_models.LessonStudentInfo(abstract_student=abstract_student,
+                                                                        lesson=lesson)
                     lesson_student_info.save()
 
         if request.user.is_superuser:
@@ -511,7 +512,8 @@ class AbstractTeacherAPIView(APIView):
             raise Http404
         if teacher_id is None:
             return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.all(), many=True).data)
-        return Response(AbstractTeacherSerializer(main_models.AbstractTeacher.objects.filter(id=teacher_id), many=True).data)
+        return Response(
+            AbstractTeacherSerializer(main_models.AbstractTeacher.objects.filter(id=teacher_id), many=True).data)
 
     def post(self, request):
         if not request.user.is_superuser:
@@ -683,3 +685,5 @@ class ChangeUsernameAPIView(APIView):
         user.username = new_username
         user.save()
         return Response({'result': 'Логин успешно изменён!'})
+
+

@@ -14,13 +14,13 @@ def register(request: HttpRequest) -> HttpResponse:
         return render(request, 'main/register_form.html', context=context)
     if request.user.is_authenticated:
         redirect('main:index')
-    login = request.POST['login'].strip().replace('<','').replace('>','')
+    login = request.POST['login'].strip().replace('<', '').replace('>', '')
     password = request.POST['password'].strip()
     retype_password = request.POST['retype_password'].strip()
-    surname = request.POST['surname'].strip().replace('<','').replace('>','')
-    name = request.POST['name'].strip().replace('<','').replace('>','')
-    father_name = request.POST['fathname'].strip().replace('<','').replace('>','')
-    role = request.POST['role'].strip().replace('<','').replace('>','')
+    surname = request.POST['surname'].strip().replace('<', '').replace('>', '')
+    name = request.POST['name'].strip().replace('<', '').replace('>', '')
+    father_name = request.POST['fathname'].strip().replace('<', '').replace('>', '')
+    role = request.POST['role'].strip().replace('<', '').replace('>', '')
 
     # Валидация
     if login == '' or password == '' or retype_password == '' or surname == '' or name == '' or role == '':
@@ -99,7 +99,7 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
             print(mark)
             print(type(mark))
         marks_int = [int(mark) for mark in marks]
-        if len(marks_int)!=0:
+        if len(marks_int) != 0:
             avg_mark = str(sum(marks_int) / len(marks_int))
         else:
             avg_mark = str(0)
@@ -152,3 +152,27 @@ def admin_requests_view(request: HttpRequest):
     context = {'user': request.user, 'my_profile': profile, 'groups': groups, 'abstract_teachers': abstract_teachers,
                'abstract_students': abstract_students}
     return render(request, 'main/admin_requests.html', context=context)
+
+
+def hours_plan_view(request: HttpRequest):
+    if not request.user.is_superuser:
+        raise Http404
+    subject_name = request.GET.get('subject', None)
+    group_year_of_study = request.GET.get('group_year_of_study', None)
+    group_letter = request.GET.get('group_letter', None)
+    group = None
+    subject = None
+    if subject_name is not None:
+        subjects = Subject.objects.filter(subject_name)
+        if len(subjects) != 0:
+            subject = subjects[0]
+    if group_letter is not None and group_year_of_study is not None:
+        groups = Group.objects.filter(year_of_study=int(group_year_of_study), group_letter=group_letter)
+        if len(groups) != 0:
+            group = groups[0]
+    hours_plans = HoursPlan.objects.all()
+    if group is not None:
+        hours_plans = hours_plans.objects.filter(group=group)
+    if subject is not None:
+        hours_plans = hours_plans.objects.filter(subject=subject)
+    
