@@ -182,7 +182,7 @@ def admin_requests_view(request: HttpRequest):
 def hours_plan_view(request: HttpRequest):
     if not request.user.is_superuser:
         raise Http404
-    if request.GET.get('get_current_table',None) is not None:
+    if request.GET.get('get_current_table', None) is not None:
         with open("Hours_Plan.xlsx", "rb") as excel:
             data = excel.read()
             response = HttpResponse(data, content_type='application/ms-excel')
@@ -254,3 +254,8 @@ def hours_plan_view(request: HttpRequest):
                'all_subjects_names': all_subjects_names, 'all_groups_letters': all_groups_letters,
                'all_groups_years': all_groups_years}
     return render(request, 'main/hours_plan.html', context=context)
+
+
+def raiting(request: HttpRequest) -> HttpResponse:
+    context = {}
+    return render(request, 'main/raiting.html', context=context)
