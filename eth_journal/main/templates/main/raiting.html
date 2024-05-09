@@ -2,38 +2,45 @@
 
 {% block body_main_block %}
     <div class="body_main_block">
-        <div class="table_header_register_chosen_button" id="table_header_register_chosen_button" onclick="get_register_requests_with_table();">
-            Общая статистика
+        <div class="table_header_register_button" id="table_header_register_chosen_button" onclick="get_all_votes_stat();">
+            Общий рейтинг по голосам
         </div>
-        <div class="table_header_change_pass_button" id="table_header_change_pass_button" onclick="get_change_password_requests();">
-            Статистика по группе
+        <div class="table_header_change_pass_button" id="table_header_change_pass_button" onclick="get_all_marks_stat();">
+            Общий рейтинг по оценкам
         </div>
-
+        {% if is_student %}
+        <div class='table_header_group_stat_button' id="table_header_group_stat_button" onclick="get_group_marks_stat({{group_id}});">
+            Рейтинг по оценкам в группе
+        </div>
+        {% endif %}
         <div class="admin_table_block" id="admin_table_block">
-            <div class="admin_table_row_header">
-                <div class="stat_table_number">
-                    №
-                </div>
-                <div class="stat_table_register_username_cell">
-                    Логин
-                </div>
-                <div class="stat_table_register_name_cell">
-                    ФИО
-                </div>
-                <div class="stat_table_register_role_cell">
-                    Ссылка на профиль
-                </div>
-                <div class="stat_table_choose_role">
-                    Голосов
-                </div>
-                <div class="stat_table_choose_group">
-                    % положительных голосов
-                </div>
-            </div>
+
         </div>
     </div>
 {% load static %}
 	<script src="{% static 'main/js/raiting.js' %}"></script>
 	<script>
+        profiles_raiting = [];
+        all_marks_raiting = [];
+        counter = 0;
+        {% for profile_raiting in profiles_raiting %}
+            profiles_raiting[counter]={'username':'{{profile_raiting.username}}',
+                                       'full_name':'{{profile_raiting.full_name}}',
+                                       'profile_link':'{% url "main:profile" profile_raiting.slug %}',
+                                       'votes':{{profile_raiting.votes}},
+                                       'percent':{{profile_raiting.percent}}
+                                       };
+            counter++;
+        {% endfor %}
+        counter = 0;
+        {% for marks_raiting in all_marks_raiting %}
+            all_marks_raiting[counter] = {'username':'{{marks_raiting.username}}',
+                                          'full_name':'{{marks_raiting.full_name}}',
+                                          'group_id':{{marks_raiting.group_id}},
+                                          'avg_mark':{{marks_raiting.avg_mark}}
+                                          };
+            counter++;
+        {% endfor %}
+        get_all_votes_stat();
 	</script>
 {% endblock %}
