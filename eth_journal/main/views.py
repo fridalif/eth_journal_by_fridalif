@@ -257,11 +257,75 @@ def hours_plan_view(request: HttpRequest):
 
 
 def raiting(request: HttpRequest) -> HttpResponse:
-    if not request.user.is_superuser:
+    if not request.user.is_authenticated:
         raise Http404
     profile = Profile.objects.filter(user=request.user)
     if len(profile) == 0:
         raise Http404
     profile = profile[0]
-    context = {'my_profile':profile}
+    profiles_raiting = []
+    all_profiles = Profile.objects.all()
+    for all_profile in all_profiles:
+        profiles_raiting_unit = {}
+        profiles_raiting_unit['username'] = all_profile.user.username
+        profiles_raiting_unit['full_name'] = all_profile.user.last_name + ' ' + all_profile.user.first_name
+        if len(Kid.objects.filter(user=all_profile.user)) != 0:
+            profiles_raiting_unit['full_name'] += ' ' + Kid.objects.get(user=all_profile.user).father_name
+        elif len(Teacher.objects.filter(user=all_profile.user)) != 0:
+            profiles_raiting_unit['full_name'] += ' ' + Teacher.objects.get(user=all_profile.user).father_name
+        profiles_raiting_unit['slug'] = all_profile.slug
+        profiles_raiting_unit['votes'] = len(ProfileRaiting.objects.filter(profile=all_profile))
+        if profiles_raiting_unit['votes'] == 0:
+            profiles_raiting_unit['percent'] = '100%'
+        else:
+            likes = len(ProfileRaiting.objects.filter(profile=all_profile, like=True))
+            profiles_raiting_unit['percent'] = str(int(likes / profiles_raiting_unit['votes'] * 100)) + '%'
+        profiles_raiting.append(profiles_raiting_unit)
+    all_marks_raiting = []
+    all_students = Kid.objects.all()
+    all_abstract_students = AbstractKid.objects.all()
+    for student in all_students:
+        student_marks = [lesson_student_info.mark for lesson_student_info in
+                         LessonStudentInfo.objects.filter(student=student)]
+        while 'Н' in student_marks:
+            student_marks.remove('Н')
+        while 'УП' in student_marks:
+            student_marks.remove('УП')
+        while '' in student_marks:
+            student_marks.remove('')
+        int_students_marks = [int(student_mark) for student_mark in student_marks]
+        avg_mark = 0 if len(int_students_marks) == 0 else sum(int_students_marks) / len(int_students_marks)
+        all_marks_raiting_unit = {}
+        all_marks_raiting_unit['username'] = student.user.username
+        all_marks_raiting_unit[
+            'full_name'] = student.user.last_name + ' ' + student.user.first_name + ' ' + student.father_name
+        all_marks_raiting_unit['group_id'] = student.group.id
+        all_marks_raiting_unit['avg_mark'] = avg_mark
+        all_marks_raiting.append(all_marks_raiting_unit)
+    for abstract_student in all_abstract_students:
+        student_marks = [lesson_student_info.mark for lesson_student_info in
+                         LessonStudentInfo.objects.filter(abstract_student=abstract_student)]
+        while 'Н' in student_marks:
+            student_marks.remove('Н')
+        while 'УП' in student_marks:
+            student_marks.remove('УП')
+        while '' in student_marks:
+            student_marks.remove('')
+        int_students_marks = [int(student_mark) for student_mark in student_marks]
+        avg_mark = 0 if len(int_students_marks) == 0 else sum(int_students_marks) / len(int_students_marks)
+        all_marks_raiting_unit = {}
+        all_marks_raiting_unit['username'] = 'Незарегистрирован'
+        all_marks_raiting_unit[
+            'full_name'] = abstract_student.surname + ' ' + abstract_student.name + ' ' + abstract_student.father_name
+        all_marks_raiting_unit['group_id'] = abstract_student.group.id
+        all_marks_raiting_unit['avg_mark'] = avg_mark
+        all_marks_raiting.append(all_marks_raiting_unit)
+    print(all_marks_raiting)
+    is_student = False
+    group = None
+    if len(all_students.filter(user=request.user)) != 0:
+        is_student = True
+        group = all_students.get(user=request.user).group
+
+    context = {'my_profile': profile}
     return render(request, 'main/raiting.html', context=context)
