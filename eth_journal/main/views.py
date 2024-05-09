@@ -276,12 +276,13 @@ def raiting(request: HttpRequest) -> HttpResponse:
         profiles_raiting_unit['slug'] = all_profile.slug
         profiles_raiting_unit['votes'] = len(ProfileRaiting.objects.filter(profile=all_profile))
         if profiles_raiting_unit['votes'] == 0:
-            profiles_raiting_unit['percent'] = '100%'
+            profiles_raiting_unit['percent'] = 0
         else:
             likes = len(ProfileRaiting.objects.filter(profile=all_profile, like=True))
-            profiles_raiting_unit['percent'] = str(int(likes / profiles_raiting_unit['votes'] * 100)) + '%'
+            profiles_raiting_unit['percent'] = int(likes / profiles_raiting_unit['votes'] * 100)
         profiles_raiting.append(profiles_raiting_unit)
     all_marks_raiting = []
+    profiles_raiting.sort(reverse=True, key=(lambda x: x['percent']))
     all_students = Kid.objects.all()
     all_abstract_students = AbstractKid.objects.all()
     for student in all_students:
@@ -320,12 +321,15 @@ def raiting(request: HttpRequest) -> HttpResponse:
         all_marks_raiting_unit['group_id'] = abstract_student.group.id
         all_marks_raiting_unit['avg_mark'] = avg_mark
         all_marks_raiting.append(all_marks_raiting_unit)
+    all_marks_raiting.sort(reverse=True,key=(lambda x:x['avg_mark']))
     print(all_marks_raiting)
+
     is_student = False
-    group = None
+    group_id = None
     if len(all_students.filter(user=request.user)) != 0:
         is_student = True
-        group = all_students.get(user=request.user).group
+        group_id = all_students.get(user=request.user).group.id
 
-    context = {'my_profile': profile}
+    context = {'my_profile': profile, 'is_student': is_student, 'group_id': group_id,
+               'all_marks_raiting': all_marks_raiting, 'profiles_raiting': profiles_raiting}
     return render(request, 'main/raiting.html', context=context)
