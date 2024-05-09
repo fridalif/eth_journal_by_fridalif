@@ -1,11 +1,14 @@
+from io import StringIO
+
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse, Http404, FileResponse
 from main.models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
 from datetime import date
 from main.forms import ImageForm
 import os
+import xlsxwriter
 
 
 def register(request: HttpRequest) -> HttpResponse:
@@ -20,25 +23,25 @@ def register(request: HttpRequest) -> HttpResponse:
     while '>' in login:
         login = login.replace('>', '')
     password = request.POST.get('password', '').strip()
-    retype_password = request.POST.get('retype_password','').strip()
-    surname = request.POST.get('surname','').strip()
+    retype_password = request.POST.get('retype_password', '').strip()
+    surname = request.POST.get('surname', '').strip()
     while '<' in surname:
         surname = surname.replace('<', '')
     while '>' in surname:
         surname = surname.replace('>', '')
-    name = request.POST.get('name','').strip()
+    name = request.POST.get('name', '').strip()
     while '<' in name:
         name = name.replace('<', '')
     while '>' in name:
         name = name.replace('>', '')
 
-    father_name = request.POST.get('fathname','').strip()
+    father_name = request.POST.get('fathname', '').strip()
     while '<' in father_name:
         father_name = father_name.replace('<', '')
     while '>' in father_name:
         father_name = father_name.replace('>', '')
 
-    role = request.POST.get('role','').strip()
+    role = request.POST.get('role', '').strip()
     while '<' in role:
         role = role.replace('<', '')
     while '>' in role:
@@ -179,6 +182,13 @@ def admin_requests_view(request: HttpRequest):
 def hours_plan_view(request: HttpRequest):
     if not request.user.is_superuser:
         raise Http404
+    if request.GET.get('get_current_table',None) is not None:
+        with open("Hours_Plan.xlsx", "rb") as excel:
+            data = excel.read()
+            response = HttpResponse(data, content_type='application/ms-excel')
+            response['Content-Disposition'] = 'attachment; filename="hours_plan.xlsx"'
+            return response
+
     subject_name = request.GET.get('subject', None)
     group_year_of_study = request.GET.get('group_year_of_study', None)
     group_letter = request.GET.get('group_letter', None)
@@ -206,7 +216,7 @@ def hours_plan_view(request: HttpRequest):
     result_array = []
     for hour_plan in hours_plans:
         lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, date__lt=date.today())
-        remainder_hours = hour_plan.hours - 2*len(lessons_count)
+        remainder_hours = hour_plan.hours - 2 * len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
                              'remainder': remainder_hours, 'planned': hour_plan.hours})
@@ -219,6 +229,27 @@ def hours_plan_view(request: HttpRequest):
     all_groups_years = [group.year_of_study for group in all_groups]
     all_groups_letters = [group.group_letter for group in all_groups]
     all_subjects_names = [subject.subject_name for subject in all_subjects]
+
+    workbook = xlsxwriter.Workbook('Hours_Plan.xlsx')
+    worksheet = workbook.add_worksheet()
+    row = 0
+    col = 0
+
+    # Заголовок таблицы
+    worksheet.write(row, col, 'Предмет')
+    worksheet.write(row, col + 1, 'Группа')
+    worksheet.write(row, col + 2, 'Запланированно часов')
+    worksheet.write(row, col + 3, 'Осталось часов')
+
+    row += 1
+    for result in result_array:
+        worksheet.write(row, col, result['subject'])
+        worksheet.write(row, col + 1, result['group'])
+        worksheet.write(row, col + 2, result['planned'])
+        worksheet.write(row, col + 3, result['remainder'])
+        row += 1
+    workbook.close()
+
     context = {'result_array': result_array, 'my_profile': profile,
                'all_subjects_names': all_subjects_names, 'all_groups_letters': all_groups_letters,
                'all_groups_years': all_groups_years}
