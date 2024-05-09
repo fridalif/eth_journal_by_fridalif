@@ -14,13 +14,35 @@ def register(request: HttpRequest) -> HttpResponse:
         return render(request, 'main/register_form.html', context=context)
     if request.user.is_authenticated:
         redirect('main:index')
-    login = request.POST['login'].strip().replace('<', '').replace('>', '')
-    password = request.POST['password'].strip()
-    retype_password = request.POST['retype_password'].strip()
-    surname = request.POST['surname'].strip().replace('<', '').replace('>', '')
-    name = request.POST['name'].strip().replace('<', '').replace('>', '')
-    father_name = request.POST['fathname'].strip().replace('<', '').replace('>', '')
-    role = request.POST['role'].strip().replace('<', '').replace('>', '')
+    login = request.POST.get('login', '').strip()
+    while '<' in login:
+        login = login.replace('<', '')
+    while '>' in login:
+        login = login.replace('>', '')
+    password = request.POST.get('password', '').strip()
+    retype_password = request.POST.get('retype_password','').strip()
+    surname = request.POST.get('surname','').strip()
+    while '<' in surname:
+        surname = surname.replace('<', '')
+    while '>' in surname:
+        surname = surname.replace('>', '')
+    name = request.POST.get('name','').strip()
+    while '<' in name:
+        name = name.replace('<', '')
+    while '>' in name:
+        name = name.replace('>', '')
+
+    father_name = request.POST.get('fathname','').strip()
+    while '<' in father_name:
+        father_name = father_name.replace('<', '')
+    while '>' in father_name:
+        father_name = father_name.replace('>', '')
+
+    role = request.POST.get('role','').strip()
+    while '<' in role:
+        role = role.replace('<', '')
+    while '>' in role:
+        role = role.replace('>', '')
 
     # Валидация
     if login == '' or password == '' or retype_password == '' or surname == '' or name == '' or role == '':
@@ -184,7 +206,7 @@ def hours_plan_view(request: HttpRequest):
     result_array = []
     for hour_plan in hours_plans:
         lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, date__lt=date.today())
-        remainder_hours = hour_plan.hours - len(lessons_count)
+        remainder_hours = hour_plan.hours - 2*len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
                              'remainder': remainder_hours, 'planned': hour_plan.hours})
