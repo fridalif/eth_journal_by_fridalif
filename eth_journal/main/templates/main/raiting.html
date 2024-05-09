@@ -1,5 +1,35 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
+    <div class="body_main_block">
+        <div class="table_header_register_chosen_button" id="table_header_register_chosen_button" onclick="get_register_requests_with_table();">
+            Общая статистика
+        </div>
+        <div class="table_header_change_pass_button" id="table_header_change_pass_button" onclick="get_change_password_requests();">
+            Статистика по группе
+        </div>
 
+        <div class="admin_table_block" id="admin_table_block">
+            <div class="admin_table_row_header">
+                <div class="stat_table_number">
+                    №
+                </div>
+                <div class="stat_table_register_username_cell">
+                    Логин
+                </div>
+                <div class="stat_table_register_name_cell">
+                    ФИО
+                </div>
+                <div class="stat_table_register_role_cell">
+                    Ссылка на профиль
+                </div>
+                <div class="stat_table_choose_role">
+                    Голосов
+                </div>
+                <div class="stat_table_choose_group">
+                    % положительных голосов
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

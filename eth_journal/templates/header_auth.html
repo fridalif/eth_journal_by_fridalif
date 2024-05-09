@@ -38,11 +38,13 @@
 				</div>
 			</div>
 			</a>
+			<a href="{% url 'main:raiting' %}">
 			<div class="raiting_header_button">
 				<div class="raiting_header_font">
 					Рейтинг
 				</div>
 			</div>
+			</a>
 			<div class="avatar_header_block">
 				{% if my_profile.avatar.url %}
 					<img src="{{ my_profile.avatar.url}}" width="100%" height="100%" class="image_round" alt="Нет аватара">

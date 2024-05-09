@@ -1943,3 +1943,85 @@
     text-align:center;
     color:white;
 }
+
+
+.stat_table_number{
+    position:absolute;
+    width:5%;
+    height:100%;
+    left:0;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.stat_table_register_username_cell{
+    position:absolute;
+    width:20%;
+    height:100%;
+    left:5%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+
+.stat_table_register_name_cell{
+    position:absolute;
+    width:20%;
+    height:100%;
+    left:25%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+
+.stat_table_register_role_cell{
+    position:absolute;
+    width:20%;
+    height:100%;
+    left:45%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.stat_table_choose_role{
+    position:absolute;
+    width:20%;
+    height:100%;
+    left:65%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}
+.stat_table_choose_group{
+    position:absolute;
+    width:15%;
+    height:100%;
+    left:85%;
+    top:0;
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	font-size:100%;
+    font-family:Inter;
+    text-align:center;
+    color:white;
+}

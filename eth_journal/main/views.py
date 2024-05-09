@@ -257,5 +257,11 @@ def hours_plan_view(request: HttpRequest):
 
 
 def raiting(request: HttpRequest) -> HttpResponse:
-    context = {}
+    if not request.user.is_superuser:
+        raise Http404
+    profile = Profile.objects.filter(user=request.user)
+    if len(profile) == 0:
+        raise Http404
+    profile = profile[0]
+    context = {'my_profile':profile}
     return render(request, 'main/raiting.html', context=context)
