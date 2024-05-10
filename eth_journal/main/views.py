@@ -231,7 +231,7 @@ def hours_plan_view(request: HttpRequest):
         else:
             lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject,
                                                   date__lt=date.today())
-        remainder_hours = hour_plan.hours - 2 * len(lessons_count)
+        remainder_hours = hour_plan.hours - len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
                              'remainder': remainder_hours, 'planned': hour_plan.hours})
