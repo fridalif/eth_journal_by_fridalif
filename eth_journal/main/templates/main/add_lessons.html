@@ -1,5 +1,39 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
-
+    <div class="marks_side_bar_block" id="marks_side_bar_block">
+	    <div class="marks_side_bar_content_block" id="marks_side_bar_content_block">
+            <div id="subject_creating" class="marks_side_bar_lesson_block_choosen">
+                <div class="side_bar_add_lessons_font">Добавить предмет</div>
+            </div>
+            <div id="lesson_creating" class="marks_side_bar_lesson_block">
+                <div class="side_bar_add_lessons_font">Добавить урок</div>
+            </div>
+	    </div>
+    </div>
+    <div class="add_subject_subject_label">Название предмета:</div>
+    <input id="subject_name" name="subject_name" type="text" class="add_subject_subject_input">
+    <div class="add_subject_subject_submit">
+        <div class="add_subject_subject_submit_font">Добавить</div>
+    </div>
+    <div class="add_subject_table_block_header">Существующие предметы:</div>
+    <div class="add_subject_table_block">
+        {% for subject in subjects %}
+            <div class="add_subject_row">{{subject.subject_name}}</div>
+        {% endfor %}
+    </div>
+    <script>
+        subjects = [];
+        counter = 0;
+        {% for subject in subjects %}
+            subjects[counter] = {"{{subject.id}}":"{{subject.subject_name}}"};
+            counter++;
+        {% endfor %}
+        counter = 0;
+        groups = [];
+        {% for group in groups %}
+            groups[counter] = {"{{group.id}}":"{{group.year_of_study}}{{group.group_letter}}"};
+            counter++;
+        {% endfor %}
+    </script>
 {% endblock %}
