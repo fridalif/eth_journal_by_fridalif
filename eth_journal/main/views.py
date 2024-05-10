@@ -350,6 +350,7 @@ def raiting(request: HttpRequest) -> HttpResponse:
                'all_marks_raiting': all_marks_raiting, 'profiles_raiting': profiles_raiting, 'is_teacher': is_teacher}
     return render(request, 'main/raiting.html', context=context)
 
+
 def password_recovery(request):
     if request.user.is_authenticated:
         raise Http404
@@ -360,9 +361,18 @@ def add_lessons_teacher_view(request):
     if not request.user.is_authenticated:
         raise Http404
     is_teacher = True
-    if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+
+    if len(Teacher.objects.filter(user=request.user)) == 0:
         raise Http404
+    teacher = Teacher.objects.filter(user=request.user)[0]
     profile = Profile.objects.filter(user=request.user)
+
     if len(profile) == 0:
         raise Http404
     profile = profile[0]
+    my_lessons = Lesson.objects.filter(teacher=teacher)
+    subjects = Subject.objects.all()
+    groups = Group.objects.all()
+
+    context = {'my_profile': profile, 'is_teacher': is_teacher, 'my_lessons': my_lessons,'groups':groups,'subjects':subjects }
+    return render(request, 'main/add_lessons.html',context=context)
