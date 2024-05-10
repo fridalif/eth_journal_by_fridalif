@@ -1130,13 +1130,37 @@
 	bottom: 0;
 	background: rgb(255, 255, 255);
 }
+.add_lesson_room_input{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 30%;
+	right: 0;
+	top: 30%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+
+.add_lesson_type_input{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 42%;
+	right: 0;
+	top: 30%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+
 .add_lesson_submit{
     position:absolute;
     width: 10%;
 	height: 5%;
 	left: 78%;
 	right: 0;
-	top: 23%;
+	top: 26%;
 	font-size:120%;
 	bottom: 0;
 	color:white;
@@ -1192,42 +1216,59 @@
 .add_lesson_subject_cell{
     border: 1px solid rgb(0, 0, 0);
 	height:100%;
-	width:20%;
+	width:15%;
 	box-sizing: border-box;
 	position:absolute;
 }
 .add_lesson_group_cell{
-    left:20%;
+    left:15%;
     border: 1px solid rgb(0, 0, 0);
 	height:100%;
-	width:20%;
+	width:15%;
 	box-sizing: border-box;
 	position:absolute;
 }
 .add_lesson_date_cell{
-    left:40%;
+    left:30%;
     border: 1px solid rgb(0, 0, 0);
 	height:100%;
-	width:20%;
+	width:15%;
 	box-sizing: border-box;
 	position:absolute;
 }
 .add_lesson_start_time_cell{
-    left:60%;
+    left:45%;
     border: 1px solid rgb(0, 0, 0);
 	height:100%;
-	width:20%;
+	width:15%;
 	box-sizing: border-box;
 	position:absolute;
 }
 .add_lesson_end_time_cell{
-    left:80%;
+    left:60%;
     border: 1px solid rgb(0, 0, 0);
 	height:100%;
-	width:20%;
+	width:15%;
 	box-sizing: border-box;
 	position:absolute;
 }
+.add_lesson_room_cell{
+    left:75%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:10%;
+	box-sizing: border-box;
+	position:absolute;
+}
+.add_lesson_type_cell{
+    left:85%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:15%;
+	box-sizing: border-box;
+	position:absolute;
+}
+
 .add_subject_subject_submit:hover{
     background: rgb(0,0,0);
 }

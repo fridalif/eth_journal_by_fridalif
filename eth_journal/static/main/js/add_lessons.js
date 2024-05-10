@@ -69,19 +69,47 @@ function add_lesson_init(){
     }
     select_time_area += '</select>';
     main_block.innerHTML+=select_time_area;
+    main_block.innerHTML+='<input type="text" id="room_input" class="add_lesson_room_input" placeholder="Кабинет">';
+    main_block.innerHTML+='<input type="text" id="type_input" class="add_lesson_type_input" placeholder="Тип занятия">';
     main_block.innerHTML+='<div class="add_lesson_submit onclick="create_new_lesson();">Добавить</div>';
+
+
     add_lesson_table = '<div class="add_subject_table_block" id="add_lesson_table_block">';
     add_lesson_table += '<div class="add_subject_header_row">';
     add_lesson_table += '<div class="add_lesson_subject_cell">Предмет</div>';
     add_lesson_table += '<div class="add_lesson_group_cell">Группа</div>';
     add_lesson_table += '<div class="add_lesson_date_cell">Дата</div>';
-    add_lesson_table += '<div class="add_lesson_start_time_cell">Время начала</div>';
-    add_lesson_table += '<div class="add_lesson_end_time_cell">Время оконочания</div>';
+    add_lesson_table += '<div class="add_lesson_start_time_cell">Начало</div>';
+    add_lesson_table += '<div class="add_lesson_end_time_cell">Оконочание</div>';
+    add_lesson_table += '<div class="add_lesson_room_cell">Кабинет</div>';
+    add_lesson_table += '<div class="add_lesson_type_cell">Тип занятия</div>';
     add_lesson_table += '</div>'
     for (let i=0;i<my_lessons.length;i++){
         row = '<div class="add_subject_row">';
         row += '<div class="add_lesson_subject_cell">'+my_lessons[i]['subject_name']+'</div>';
-        alert(my_lessons[i]['subject_name']);
+        row += '<div class="add_lesson_group_cell">'+my_lessons[i]['group_name']+'</div>';
+        let date = new Date(my_lessons[i]['date'])
+        row += '<div class="add_lesson_date_cell">'+String(date.getDate())+'.'+String(date.getMonth()+1)+'.'+String(date.getFullYear())+'</div>';
+        let start_time = my_lessons[i]['start_time']
+        let day_period = start_time.split(' ')[1]
+        let time = start_time.split(' ')[0]
+        let hours = parseInt(time.split(':')[0])
+        if(day_period=='p.m.'){
+            hours+=12;
+        }
+        let minutes = time.split(':')[1]
+        row += '<div class="add_lesson_start_time_cell">'+hours+':'+minutes+'</div>';
+        let end_end_time = my_lessons[i]['end_time']
+        let end_day_period = end_end_time.split(' ')[1]
+        let end_time = end_end_time.split(' ')[0]
+        let end_hours = parseInt(end_time.split(':')[0])
+        if(end_day_period=='p.m.'){
+            end_hours+=12;
+        }
+        let end_minutes = end_time.split(':')[1]
+        row += '<div class="add_lesson_end_time_cell">'+end_hours+':'+end_minutes+'</div>';
+        row += '<div class="add_lesson_room_cell">'+my_lessons[i]['room']+'</div>';
+        row += '<div class="add_lesson_type_cell">'+my_lessons[i]['type']+'</div>';
         row+='</div>';
         add_lesson_table+=row;
     }
