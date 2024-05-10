@@ -51,6 +51,7 @@
         groups = [];
         {% for group in groups %}
             groups[counter] = {'year_of_study': "{{group.year_of_study}}",'group_letter':"{{group.group_letter}}",'id':{{group.id}}};
+            counter+=1;
         {% endfor %}
         get_register_requests();
     </script>
