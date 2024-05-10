@@ -356,3 +356,13 @@ def password_recovery(request):
     return render(request, 'main/password_recovery.html')
 
 
+def add_lessons_teacher_view(request):
+    if not request.user.is_authenticated:
+        raise Http404
+    is_teacher = True
+    if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+        raise Http404
+    profile = Profile.objects.filter(user=request.user)
+    if len(profile) == 0:
+        raise Http404
+    profile = profile[0]
