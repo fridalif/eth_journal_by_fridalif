@@ -26,13 +26,24 @@
         subjects = [];
         counter = 0;
         {% for subject in subjects %}
-            subjects[counter] = {"{{subject.id}}":"{{subject.subject_name}}"};
+            subjects[counter] = {"subject_id":"{{subject.id}}","subject_name":"{{subject.subject_name}}"};
             counter++;
         {% endfor %}
         counter = 0;
         groups = [];
         {% for group in groups %}
-            groups[counter] = {"{{group.id}}":"{{group.year_of_study}}{{group.group_letter}}"};
+            groups[counter] = {"group_id":"{{group.id}}","group_name":"{{group.year_of_study}}{{group.group_letter}}"};
+            counter++;
+        {% endfor %}
+        counter=0;
+        my_lessons = []
+        {% for lesson in my_lessons %}
+            my_lessons[counter] = {"lesson_id":"{{lesson.id}}","group_id":"{{lesson.group.id}}","subject_id":"{{lesson.subject.id}}",
+                                   "subject_name":"{{lesson.subject.name}}",
+                                   "group_name":"{{lesson.group.year_of_study}}{{lesson.group.group_letter}}",
+                                   "date":"{{lesson.date}}","start_time":"{{lesson.start_time}}",
+                                   "end_time":"{{lesson.end_time}}","room":"{{lesson.room}}","type":"{{lesson.type}}"
+                                   "teacher_id":"{{lesson.teacher.id}}"};
             counter++;
         {% endfor %}
     </script>
