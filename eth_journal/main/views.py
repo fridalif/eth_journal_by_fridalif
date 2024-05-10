@@ -350,8 +350,9 @@ def raiting(request: HttpRequest) -> HttpResponse:
                'all_marks_raiting': all_marks_raiting, 'profiles_raiting': profiles_raiting, 'is_teacher': is_teacher}
     return render(request, 'main/raiting.html', context=context)
 
-
 def password_recovery(request):
     if request.user.is_authenticated:
         raise Http404
     return render(request, 'main/password_recovery.html')
+
+

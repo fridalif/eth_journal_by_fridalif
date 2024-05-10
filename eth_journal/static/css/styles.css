@@ -369,6 +369,22 @@
 	bottom: 0;
 	background: rgb(254, 253, 253);
 }
+.forgot_password_block{
+	position: absolute;
+	width: 50%;
+	height: 8%;
+	left: 30%;
+	right: 0;
+	top: 38%;
+	bottom: 0;
+	background: rgb(254, 253, 253);
+	font-size:118%;
+	text-decoration:none;
+	color:rgb(138, 211, 234);
+}
+.forgot_password_block:hover{
+    color:black;
+}
 .enter_retype_password_block{
 	position: absolute;
 	width: 97%;
@@ -1368,7 +1384,9 @@
 .image_round{
      border-radius: 50%;
 }
-
+.image_round:before{
+    display: block;
+}
 .profile_surname_block{
     width:40%;
     height:10%;
