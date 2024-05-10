@@ -20,3 +20,72 @@ function create_new_subject(){
         subjects_counter++;
     }
 }
+
+function add_subject_init(){
+    side_bar_subject = document.getElementById('subject_creating');
+    side_bar_lesson = document.getElementById('lesson_creating');
+    side_bar_subject.className='marks_side_bar_lesson_block_choosen';
+    side_bar_lesson.className = 'marks_side_bar_lesson_block';
+    main_block = document.getElementById('main_add');
+    main_block.innerHTML = '';
+    main_block.innerHTML = '<div class="add_subject_subject_label">Название предмета:</div><input id="subject_name" name="subject_name" type="text" class="add_subject_subject_input"><div class="add_subject_subject_submit" onclick="create_new_subject();"><div class="add_subject_subject_submit_font">Добавить</div></div><div class="add_subject_table_block_header">Существующие предметы:</div>';
+    subject_table = '<div class="add_subject_table_block" id="add_subject_table_block">';
+    for(let i=0;i<subjects.length;i++){
+        row = '<div class="add_subject_row">'+subjects[i]['subject_name']+"</div>";
+        subject_table+=row;
+    }
+    subject_table+='</div>';
+    main_block.innerHTML+=subject_table;
+}
+
+function add_lesson_init(){
+    side_bar_subject = document.getElementById('subject_creating');
+    side_bar_lesson = document.getElementById('lesson_creating');
+    side_bar_subject.className='marks_side_bar_lesson_block';
+    side_bar_lesson.className = 'marks_side_bar_lesson_block_choosen';
+    main_block = document.getElementById('main_add');
+    main_block.innerHTML = '';
+    main_block.innerHTML = '<div class="add_subject_table_block_header">Существующие уроки:</div>';
+    select_subject = '<select id="subject_input" class="add_lesson_subject_select">';
+    select_subject += '<option value="-1" selected>Предмет</option>';
+    for(let i=0;i<subjects.length;i++){
+        select_subject += '<option value="'+subjects[i]['subject_id']+'">'+subjects[i]['subject_name']+"</option>";
+    }
+    select_subject +='</select>';
+    main_block.innerHTML+=select_subject;
+    select_group ='<select id="group_input" class="add_lesson_group_select">';
+    select_group += '<option value="-1" selected>Группа</option>';
+    for(let i=0;i<groups.length;i++){
+        select_group += '<option value="'+groups[i]['group_id']+'">'+groups[i]['group_name']+'</option>';
+    }
+    select_group+='</select>';
+    main_block.innerHTML+=select_group;
+    input_date = '<input type="date" id="date_input" class="add_lesson_date_input">';
+    main_block.innerHTML+=input_date;
+    select_time_area = '<select id="time_input" class="add_lesson_time_select">';
+    select_time_area += '<option value="-1" selected>Временной промежуток</option>';
+    for(let i=0; i<time_areas.length;i++){
+        select_time_area += '<option value="'+String(i)+'">'+time_areas[i][0]+'-'+time_areas[i][1]+'</option>';
+    }
+    select_time_area += '</select>';
+    main_block.innerHTML+=select_time_area;
+    main_block.innerHTML+='<div class="add_lesson_submit onclick="create_new_lesson();">Добавить</div>';
+    add_lesson_table = '<div class="add_subject_table_block" id="add_lesson_table_block">';
+    add_lesson_table += '<div class="add_subject_header_row">';
+    add_lesson_table += '<div class="add_lesson_subject_cell">Предмет</div>';
+    add_lesson_table += '<div class="add_lesson_group_cell">Группа</div>';
+    add_lesson_table += '<div class="add_lesson_date_cell">Дата</div>';
+    add_lesson_table += '<div class="add_lesson_start_time_cell">Время начала</div>';
+    add_lesson_table += '<div class="add_lesson_end_time_cell">Время оконочания</div>';
+    add_lesson_table += '</div>'
+    for (let i=0;i<my_lessons.length;i++){
+        row = '<div class="add_subject_row">';
+        row += '<div class="add_lesson_subject_cell">'+my_lessons[i]['subject_name']+'</div>';
+        alert(my_lessons[i]['subject_name']);
+        row+='</div>';
+        add_lesson_table+=row;
+    }
+    add_lesson_table +='</div>';
+    main_block.innerHTML+=add_lesson_table;
+    return;
+}

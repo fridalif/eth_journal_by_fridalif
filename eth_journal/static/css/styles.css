@@ -1086,6 +1086,68 @@
 	bottom: 0;
 	background: rgb(255, 255, 255);
 }
+.add_lesson_subject_select{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 30%;
+	right: 0;
+	top: 23%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.add_lesson_group_select{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 42%;
+	right: 0;
+	top: 23%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.add_lesson_time_select{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 66%;
+	right: 0;
+	top: 23%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.add_lesson_date_input{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 54%;
+	right: 0;
+	top: 23%;
+	font-size:100%;
+	bottom: 0;
+	background: rgb(255, 255, 255);
+}
+.add_lesson_submit{
+    position:absolute;
+    width: 10%;
+	height: 5%;
+	left: 78%;
+	right: 0;
+	top: 23%;
+	font-size:120%;
+	bottom: 0;
+	color:white;
+	text-align:center;
+	font-family:Inter;
+	font-size:125%;
+	background: rgb(89, 137, 152);
+}
+.add_lesson_submit:hover{
+    background:black;
+}
 .add_subject_subject_submit{
     position:absolute;
     width: 10%;
@@ -1113,7 +1175,58 @@
 	width:100%;
 	text-align:center;
 	font-family:Inter;
-	font-size:125%;
+	font-size:100%;
+}
+.add_subject_header_row{
+    box-sizing: border-box;
+	border: 1px solid rgb(0, 0, 0);
+	height:10%;
+	width:100%;
+	background:rgb(89, 137, 152);
+	text-align:center;
+	font-family:Inter;
+	font-size:100%;
+	color:white;
+	position:relative;
+}
+.add_lesson_subject_cell{
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:20%;
+	box-sizing: border-box;
+	position:absolute;
+}
+.add_lesson_group_cell{
+    left:20%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:20%;
+	box-sizing: border-box;
+	position:absolute;
+}
+.add_lesson_date_cell{
+    left:40%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:20%;
+	box-sizing: border-box;
+	position:absolute;
+}
+.add_lesson_start_time_cell{
+    left:60%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:20%;
+	box-sizing: border-box;
+	position:absolute;
+}
+.add_lesson_end_time_cell{
+    left:80%;
+    border: 1px solid rgb(0, 0, 0);
+	height:100%;
+	width:20%;
+	box-sizing: border-box;
+	position:absolute;
 }
 .add_subject_subject_submit:hover{
     background: rgb(0,0,0);
@@ -1840,6 +1953,7 @@
 	bottom: 0;
 	background: rgb(255, 255, 255);
 }
+
 .input_group_year_of_study{
     position: absolute;
 	width: 20%;
