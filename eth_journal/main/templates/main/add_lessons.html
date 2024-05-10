@@ -1,6 +1,7 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
+    {% csrf_token %}
     <div class="marks_side_bar_block" id="marks_side_bar_block">
 	    <div class="marks_side_bar_content_block" id="marks_side_bar_content_block">
             <div id="subject_creating" class="marks_side_bar_lesson_block_choosen">
@@ -14,37 +15,39 @@
     <div class="add_subject_subject_label">Название предмета:</div>
     <input id="subject_name" name="subject_name" type="text" class="add_subject_subject_input">
     <div class="add_subject_subject_submit">
-        <div class="add_subject_subject_submit_font">Добавить</div>
+        <div class="add_subject_subject_submit_font" onclick="create_new_subject();">Добавить</div>
     </div>
     <div class="add_subject_table_block_header">Существующие предметы:</div>
-    <div class="add_subject_table_block">
+    <div class="add_subject_table_block" id="add_subject_table_block">
         {% for subject in subjects %}
             <div class="add_subject_row">{{subject.subject_name}}</div>
         {% endfor %}
     </div>
+    {% load static %}
+	<script src="{% static 'main/js/add_lessons.js' %}"></script>
     <script>
         subjects = [];
-        counter = 0;
+        subjects_counter = 0;
         {% for subject in subjects %}
-            subjects[counter] = {"subject_id":"{{subject.id}}","subject_name":"{{subject.subject_name}}"};
-            counter++;
+            subjects[subjects_counter] = {"subject_id":"{{subject.id}}","subject_name":"{{subject.subject_name}}"};
+            subjects_counter++;
         {% endfor %}
-        counter = 0;
+        groups_counter = 0;
         groups = [];
         {% for group in groups %}
-            groups[counter] = {"group_id":"{{group.id}}","group_name":"{{group.year_of_study}}{{group.group_letter}}"};
-            counter++;
+            groups[groups_counter] = {"group_id":"{{group.id}}","group_name":"{{group.year_of_study}}{{group.group_letter}}"};
+            groups_counter++;
         {% endfor %}
-        counter=0;
+        lessons_counter=0;
         my_lessons = []
         {% for lesson in my_lessons %}
-            my_lessons[counter] = {"lesson_id":"{{lesson.id}}","group_id":"{{lesson.group.id}}","subject_id":"{{lesson.subject.id}}",
+            my_lessons[lessons_counter] = {"lesson_id":"{{lesson.id}}","group_id":"{{lesson.group.id}}","subject_id":"{{lesson.subject.id}}",
                                    "subject_name":"{{lesson.subject.name}}",
                                    "group_name":"{{lesson.group.year_of_study}}{{lesson.group.group_letter}}",
                                    "date":"{{lesson.date}}","start_time":"{{lesson.start_time}}",
-                                   "end_time":"{{lesson.end_time}}","room":"{{lesson.room}}","type":"{{lesson.type}}"
+                                   "end_time":"{{lesson.end_time}}","room":"{{lesson.room}}","type":"{{lesson.type}}",
                                    "teacher_id":"{{lesson.teacher.id}}"};
-            counter++;
+            lessons_counter++;
         {% endfor %}
     </script>
 {% endblock %}

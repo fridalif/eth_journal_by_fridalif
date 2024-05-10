@@ -396,12 +396,16 @@ class SubjectAPIView(APIView):
         return Response(SubjectSerializer(main_models.Subject.objects.filter(id=subject_id), many=True))
 
     def post(self, request):
-        if not request.user.is_superuser:
+        if not request.user.is_superuser and len(main_models.Teacher.objects.filter(user=request.user))==0:
             raise Http404
+        if len(main_models.Subject.objects.filter(subject_name=request.data.get('subject_name','')))!=0:
+            return Response({"error":"Такой предмет уже существует!"})
+        if request.data.get('subject_name','')!='':
+            request.data['subject_name'] = request.data['subject_name'].replace('<','').replace('>','')
         subject = SubjectSerializer(data=request.data)
         if subject.is_valid():
             subject.save()
-            return Response(subject.validated_data)
+            return Response(subject.data)
         return Response({"error": "subject not valid"})
 
     def put(self, request, subject_id):
