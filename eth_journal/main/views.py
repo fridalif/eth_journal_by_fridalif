@@ -58,14 +58,18 @@ def register(request: HttpRequest) -> HttpResponse:
 
 
 def index(request: HttpRequest) -> HttpResponse:
+    is_teacher = False
     if request.user.is_authenticated:
         my_profile = Profile.objects.filter(user=request.user)
         if len(my_profile) == 0:
             raise Http404
         my_profile = my_profile[0]
+        if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+            is_teacher = True
     else:
         my_profile = None
-    context = {'user': request.user, 'my_profile': my_profile}
+
+    context = {'user': request.user, 'my_profile': my_profile,'is_teacher':is_teacher}
     return render(request, 'main/index.html', context=context)
 
 
@@ -91,6 +95,9 @@ def lessons_plan(request: HttpRequest) -> HttpResponse:
 def profile(request: HttpRequest, profile_slug) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect('main:login')
+    is_teacher=False
+    if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+        is_teacher = True
     my_profile = Profile.objects.filter(user=request.user)
     profile = Profile.objects.filter(slug=profile_slug)
     if len(my_profile) == 0 or len(profile) == 0:
@@ -106,7 +113,7 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         lessons_info = LessonStudentInfo.objects.filter(student=student)
         marks = [lesson_info.mark for lesson_info in lessons_info]
         lessons_misses_without_cause = marks.count('Н')
-        lessons_misses = marks.count('УП') + lessons_misses_without_cause+1
+        lessons_misses = marks.count('УП') + lessons_misses_without_cause + 1
         while '' in marks:
             marks.remove('')
         while 'УП' in marks:
@@ -126,13 +133,16 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
             (len(ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
     context = {"user": request.user, "my_profile": my_profile, "profile": profile, "avg_mark": avg_mark,
                "carma_count": len(carma), "carma_percentage": carma_percentage, "lessons_misses": lessons_misses,
-               "misses_without_cause": lessons_misses_without_cause}
+               "misses_without_cause": lessons_misses_without_cause,'is_teacher':is_teacher}
     return render(request, 'main/profile.html', context=context)
 
 
 def settings(request):
     if not request.user.is_authenticated:
         return redirect('main:login')
+    is_teacher=False
+    if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+        is_teacher = True
     profile = Profile.objects.filter(user=request.user)
     if len(profile) == 0:
         raise Http404
@@ -151,13 +161,14 @@ def settings(request):
                         file.write(str(e) + '\n')
             loaded = True
     form = ImageForm()
-    context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded}
+    context = {"user": request.user, "profile": profile, "my_profile": profile, 'image_form': form, 'loaded': loaded,'is_teacher':is_teacher}
     return render(request, 'main/settings.html', context=context)
 
 
 def admin_requests_view(request: HttpRequest):
     if not request.user.is_superuser:
         raise Http404
+    is_teacher=True
     profile = Profile.objects.filter(user=request.user)
     if len(profile) == 0:
         raise Http404
@@ -167,15 +178,19 @@ def admin_requests_view(request: HttpRequest):
     abstract_students = AbstractKid.objects.all()
 
     context = {'user': request.user, 'my_profile': profile, 'groups': groups, 'abstract_teachers': abstract_teachers,
-               'abstract_students': abstract_students}
+               'abstract_students': abstract_students,'is_teacher':is_teacher}
     return render(request, 'main/admin_requests.html', context=context)
 
 
 def hours_plan_view(request: HttpRequest):
-    if not request.user.is_superuser:
+    if not request.user.is_authenticated:
         raise Http404
+    teacher = Teacher.objects.filter(user=request.user)
+    if not request.user.is_superuser and len(teacher) == 0:
+        raise Http404
+    is_teacher=True
     if request.GET.get('get_current_table', None) is not None:
-        with open("Hours_Plan.xlsx", "rb") as excel:
+        with open(request.user.username + "_Hours_Plan.xlsx", "rb") as excel:
             data = excel.read()
             response = HttpResponse(data, content_type='application/ms-excel')
             response['Content-Disposition'] = 'attachment; filename="hours_plan.xlsx"'
@@ -207,7 +222,14 @@ def hours_plan_view(request: HttpRequest):
         hours_plans = hours_plans.filter(subject=subject)
     result_array = []
     for hour_plan in hours_plans:
-        lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, date__lt=date.today())
+        if len(teacher) != 0:
+            lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject,
+                                                  date__lt=date.today(), teacher=teacher[0])
+            if len(Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject, teacher=teacher[0])) == 0:
+                continue
+        else:
+            lessons_count = Lesson.objects.filter(group=hour_plan.group, subject=hour_plan.subject,
+                                                  date__lt=date.today())
         remainder_hours = hour_plan.hours - 2 * len(lessons_count)
         result_array.append({'subject': hour_plan.subject.subject_name,
                              'group': str(hour_plan.group.year_of_study) + hour_plan.group.group_letter,
@@ -222,7 +244,7 @@ def hours_plan_view(request: HttpRequest):
     all_groups_letters = [group.group_letter for group in all_groups]
     all_subjects_names = [subject.subject_name for subject in all_subjects]
 
-    workbook = xlsxwriter.Workbook('Hours_Plan.xlsx')
+    workbook = xlsxwriter.Workbook(request.user.username + '_Hours_Plan.xlsx')
     worksheet = workbook.add_worksheet()
     row = 0
     col = 0
@@ -244,13 +266,16 @@ def hours_plan_view(request: HttpRequest):
 
     context = {'result_array': result_array, 'my_profile': profile,
                'all_subjects_names': all_subjects_names, 'all_groups_letters': all_groups_letters,
-               'all_groups_years': all_groups_years}
+               'all_groups_years': all_groups_years,'is_teacher':is_teacher}
     return render(request, 'main/hours_plan.html', context=context)
 
 
 def raiting(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
         raise Http404
+    is_teacher = False
+    if len(Teacher.objects.filter(user=request.user)) != 0 or request.user.is_superuser:
+        is_teacher = True
     profile = Profile.objects.filter(user=request.user)
     if len(profile) == 0:
         raise Http404
@@ -321,5 +346,5 @@ def raiting(request: HttpRequest) -> HttpResponse:
         group_id = all_students.get(user=request.user).group.id
 
     context = {'my_profile': profile, 'is_student': is_student, 'group_id': group_id,
-               'all_marks_raiting': all_marks_raiting, 'profiles_raiting': profiles_raiting}
+               'all_marks_raiting': all_marks_raiting, 'profiles_raiting': profiles_raiting,'is_teacher':is_teacher}
     return render(request, 'main/raiting.html', context=context)

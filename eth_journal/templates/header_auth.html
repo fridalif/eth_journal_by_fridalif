@@ -22,7 +22,7 @@
 			</div>
 			</a>
 			{% endif %}
-			{% if user.is_superuser %}
+			{% if is_teacher %}
 			<a href="{% url 'main:hours_plan' %}">
 			<div class="marks_header_button">
 				<div class="marks_header_font">
