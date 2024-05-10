@@ -14,6 +14,14 @@
     <div class="profile_avg_mark_block">
         Средняя оценка: {{avg_mark}}
     </div>
+    <div class="profile_misses_count_block">
+        Пропусков:
+        {% if lessons_misses %}
+        {{lessons_misses|add:-1}}(Из них без уважительной причины:{{misses_without_cause}})
+        {% else %}
+        Не студент
+        {% endif %}
+    </div>
     <div class="profile_carma_count_block" id="carma_counter">
         Голосов: {{carma_count}}
     </div>

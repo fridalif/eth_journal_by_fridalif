@@ -1,7 +1,5 @@
-from io import StringIO
-
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse, Http404, FileResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from main.models import *
 from eth_journal.settings import KEY
 from cryptography.fernet import Fernet
@@ -18,34 +16,25 @@ def register(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         redirect('main:index')
     login = request.POST.get('login', '').strip()
-    while '<' in login:
-        login = login.replace('<', '')
-    while '>' in login:
-        login = login.replace('>', '')
+    login = login.replace('<', '')
+    login = login.replace('>', '')
     password = request.POST.get('password', '').strip()
     retype_password = request.POST.get('retype_password', '').strip()
     surname = request.POST.get('surname', '').strip()
-    while '<' in surname:
-        surname = surname.replace('<', '')
-    while '>' in surname:
-        surname = surname.replace('>', '')
+    surname = surname.replace('<', '')
+    surname = surname.replace('>', '')
+
     name = request.POST.get('name', '').strip()
-    while '<' in name:
-        name = name.replace('<', '')
-    while '>' in name:
-        name = name.replace('>', '')
+    name = name.replace('<', '')
+    name = name.replace('>', '')
 
     father_name = request.POST.get('fathname', '').strip()
-    while '<' in father_name:
-        father_name = father_name.replace('<', '')
-    while '>' in father_name:
-        father_name = father_name.replace('>', '')
+    father_name = father_name.replace('<', '')
+    father_name = father_name.replace('>', '')
 
     role = request.POST.get('role', '').strip()
-    while '<' in role:
-        role = role.replace('<', '')
-    while '>' in role:
-        role = role.replace('>', '')
+    role = role.replace('<', '')
+    role = role.replace('>', '')
 
     # Валидация
     if login == '' or password == '' or retype_password == '' or surname == '' or name == '' or role == '':
@@ -110,19 +99,21 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
     profile = profile[0]
     student = Kid.objects.filter(user=profile.user)
     avg_mark = 'Не студент'
+    lessons_misses = False
+    lessons_misses_without_cause = False
     if len(student) != 0:
         student = student[0]
         lessons_info = LessonStudentInfo.objects.filter(student=student)
         marks = [lesson_info.mark for lesson_info in lessons_info]
+        lessons_misses_without_cause = marks.count('Н')
+        lessons_misses = marks.count('УП') + lessons_misses_without_cause+1
         while '' in marks:
             marks.remove('')
         while 'УП' in marks:
             marks.remove('УП')
         while 'Н' in marks:
             marks.remove('Н')
-        for mark in marks:
-            print(mark)
-            print(type(mark))
+
         marks_int = [int(mark) for mark in marks]
         if len(marks_int) != 0:
             avg_mark = str(sum(marks_int) / len(marks_int))
@@ -134,7 +125,8 @@ def profile(request: HttpRequest, profile_slug) -> HttpResponse:
         carma_percentage = str(
             (len(ProfileRaiting.objects.filter(profile=profile, like=True)) / len(carma)) * 100) + '%'
     context = {"user": request.user, "my_profile": my_profile, "profile": profile, "avg_mark": avg_mark,
-               "carma_count": len(carma), "carma_percentage": carma_percentage}
+               "carma_count": len(carma), "carma_percentage": carma_percentage, "lessons_misses": lessons_misses,
+               "misses_without_cause": lessons_misses_without_cause}
     return render(request, 'main/profile.html', context=context)
 
 
@@ -321,9 +313,7 @@ def raiting(request: HttpRequest) -> HttpResponse:
         all_marks_raiting_unit['group_id'] = abstract_student.group.id
         all_marks_raiting_unit['avg_mark'] = avg_mark
         all_marks_raiting.append(all_marks_raiting_unit)
-    all_marks_raiting.sort(reverse=True,key=(lambda x:x['avg_mark']))
-    print(all_marks_raiting)
-
+    all_marks_raiting.sort(reverse=True, key=(lambda x: x['avg_mark']))
     is_student = False
     group_id = None
     if len(all_students.filter(user=request.user)) != 0:

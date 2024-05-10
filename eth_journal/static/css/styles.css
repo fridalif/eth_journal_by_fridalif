@@ -1347,8 +1347,7 @@
     position:absolute;
     font-size: 136%;
 }
-
-.profile_carma_count_block{
+.profile_misses_count_block{
     width:40%;
     height:10%;
     top:65%;
@@ -1356,10 +1355,18 @@
     position:absolute;
     font-size: 136%;
 }
-.profile_carma_percentage_block{
+.profile_carma_count_block{
     width:40%;
     height:10%;
     top:75%;
+    left:10%;
+    position:absolute;
+    font-size: 136%;
+}
+.profile_carma_percentage_block{
+    width:40%;
+    height:10%;
+    top:85%;
     left:10%;
     position:absolute;
     font-size: 136%;
@@ -1372,7 +1379,7 @@
 .profile_like_button{
     width:10%;
     height:10%;
-    top:75%;
+    top:85%;
     left:0%;
     position:absolute;
     font-size: 136%;
@@ -1385,7 +1392,7 @@
     border: 1px solid rgb(0, 0, 0);
     width:10%;
     height:10%;
-    top:75%;
+    top:85%;
     left:50%;
     color:white;
     position:absolute;
