@@ -71,7 +71,7 @@ function add_lesson_init(){
     main_block.innerHTML+=select_time_area;
     main_block.innerHTML+='<input type="text" id="room_input" class="add_lesson_room_input" placeholder="Кабинет">';
     main_block.innerHTML+='<input type="text" id="type_input" class="add_lesson_type_input" placeholder="Тип занятия">';
-    main_block.innerHTML+='<div class="add_lesson_submit onclick="create_new_lesson();">Добавить</div>';
+    main_block.innerHTML+='<div class="add_lesson_submit" onclick="create_new_lesson();">Добавить</div>';
 
 
     add_lesson_table = '<div class="add_subject_table_block" id="add_lesson_table_block">';
@@ -116,4 +116,35 @@ function add_lesson_init(){
     add_lesson_table +='</div>';
     main_block.innerHTML+=add_lesson_table;
     return;
+}
+
+
+function create_new_lesson(){
+    subject = document.getElementById('subject_input').value;
+    group = document.getElementById('group_input').value;
+    date = document.getElementById('date_input').value;
+    time = document.getElementById('time_input').value;
+    room = document.getElementById('room_input').value;
+    type = document.getElementById('type_input').value;
+    if(subject == '-1'||group == '-1'||date==''||time=='-1'||room==''||type==''){
+        alert('Заполните все поля!');
+    }
+    let xhr = new XMLHttpRequest();
+    let request_data = JSON.stringify({"subject":subject,"group":group,"date":date,"start_time":time_areas[time][0],
+                                       "start_time":time_areas[time][1],'room':room,'type':'type'});
+    xhr.open("POST","/api/lessons/");
+    xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.responseType = 'json';
+    xhr.send(request_data);
+
+    xhr.onload = function(){
+        result = xhr.response;
+        if(result["error"]){
+            alert(result["error"]);
+            return;
+        }
+        console.log(result);
+    }
+
 }
