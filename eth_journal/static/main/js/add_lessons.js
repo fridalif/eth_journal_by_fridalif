@@ -152,12 +152,52 @@ function create_new_lesson(){
     xhr.send(request_data);
 
     xhr.onload = function(){
+        add_lesson_table_block = document.getElementById('add_lesson_table_block');
         result = xhr.response;
         if(result["error"]){
             alert(result["error"]);
             return;
         }
-        console.log(result);
+        row = '<div class="add_subject_row">';
+        row += '<div class="add_lesson_subject_cell">'+result['subject_name']+'</div>';
+        row += '<div class="add_lesson_group_cell">'+String(result['group_year_of_study'])+result['group_letter']+'</div>';
+        let date = new Date(result['date'])
+        row += '<div class="add_lesson_date_cell">'+String(date.getDate())+'.'+String(date.getMonth()+1)+'.'+String(date.getFullYear())+'</div>';
+        let start_time = result['start_time']
+        let day_period = start_time.split(' ')[1]
+        let time = start_time.split(' ')[0]
+
+        let hours = parseInt(time.split(':')[0])
+        if(day_period=='p.m.'){
+            hours+=12;
+        }
+        if(hours == null){
+            hours = '00';
+        }
+        let minutes = time.split(':')[1]
+        if(minutes == null){
+            minutes = '00';
+        }
+        row += '<div class="add_lesson_start_time_cell">'+hours+':'+minutes+'</div>';
+        let end_end_time = result['end_time']
+        let end_day_period = end_end_time.split(' ')[1]
+        let end_time = end_end_time.split(' ')[0]
+        let end_hours = parseInt(end_time.split(':')[0])
+        if(end_day_period=='p.m.'){
+            end_hours+=12;
+        }
+        if(end_hours == null){
+            end_hours = '00';
+        }
+        let end_minutes = end_time.split(':')[1]
+        if(end_minutes == null){
+            end_minutes = '00';
+        }
+        row += '<div class="add_lesson_end_time_cell">'+end_hours+':'+end_minutes+'</div>';
+        row += '<div class="add_lesson_room_cell">'+result['room']+'</div>';
+        row += '<div class="add_lesson_type_cell">'+result['type']+'</div>';
+        row+='</div>';
+        add_lesson_table_block.innerHTML+=row;
     }
 
 }

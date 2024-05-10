@@ -51,6 +51,11 @@
                                    "teacher_id":"{{lesson.teacher.id}}"};
             lessons_counter++;
         {% endfor %}
-        time_areas = [['9:00','9:45'],['9:45','10:30'],['10:30','11:15'],['11:15','12:00']];
+        time_areas = [];
+        time_areas_counter = 0;
+        {% for time_area in time_areas %}
+            time_areas[time_areas_counter] = ["{{time_area.0}}","{{time_area.1}}"];
+            time_areas_counter+=1;
+        {% endfor %}
     </script>
 {% endblock %}

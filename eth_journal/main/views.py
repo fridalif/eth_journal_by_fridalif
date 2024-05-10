@@ -361,7 +361,7 @@ def add_lessons_teacher_view(request):
     if not request.user.is_authenticated:
         raise Http404
     is_teacher = True
-
+    time_areas = [['9:00', '9:45'], ['9:45', '10:30'], ['10:30', '11:15'], ['11:15', '12:00']]
     if len(Teacher.objects.filter(user=request.user)) == 0:
         raise Http404
     teacher = Teacher.objects.filter(user=request.user)[0]
@@ -374,5 +374,6 @@ def add_lessons_teacher_view(request):
     subjects = Subject.objects.all()
     groups = Group.objects.all()
 
-    context = {'my_profile': profile, 'is_teacher': is_teacher, 'my_lessons': my_lessons,'groups':groups,'subjects':subjects }
-    return render(request, 'main/add_lessons.html',context=context)
+    context = {'my_profile': profile, 'is_teacher': is_teacher, 'my_lessons': my_lessons, 'groups': groups,
+               'subjects': subjects, 'time_areas': time_areas}
+    return render(request, 'main/add_lessons.html', context=context)
