@@ -93,11 +93,18 @@ function add_lesson_init(){
         let start_time = my_lessons[i]['start_time']
         let day_period = start_time.split(' ')[1]
         let time = start_time.split(' ')[0]
+
         let hours = parseInt(time.split(':')[0])
         if(day_period=='p.m.'){
             hours+=12;
         }
+        if(hours == null){
+            hours = '00';
+        }
         let minutes = time.split(':')[1]
+        if(minutes == null){
+            minutes = '00';
+        }
         row += '<div class="add_lesson_start_time_cell">'+hours+':'+minutes+'</div>';
         let end_end_time = my_lessons[i]['end_time']
         let end_day_period = end_end_time.split(' ')[1]
@@ -106,7 +113,13 @@ function add_lesson_init(){
         if(end_day_period=='p.m.'){
             end_hours+=12;
         }
+        if(end_hours == null){
+            end_hours = '00';
+        }
         let end_minutes = end_time.split(':')[1]
+        if(end_minutes == null){
+            end_minutes = '00';
+        }
         row += '<div class="add_lesson_end_time_cell">'+end_hours+':'+end_minutes+'</div>';
         row += '<div class="add_lesson_room_cell">'+my_lessons[i]['room']+'</div>';
         row += '<div class="add_lesson_type_cell">'+my_lessons[i]['type']+'</div>';
@@ -131,7 +144,7 @@ function create_new_lesson(){
     }
     let xhr = new XMLHttpRequest();
     let request_data = JSON.stringify({"subject":subject,"group":group,"date":date,"start_time":time_areas[time][0],
-                                       "start_time":time_areas[time][1],'room':room,'type':'type'});
+                                       "end_time":time_areas[time][1],'room':room,'type':type});
     xhr.open("POST","/api/lessons/");
     xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
     xhr.setRequestHeader('Content-Type','application/json');
