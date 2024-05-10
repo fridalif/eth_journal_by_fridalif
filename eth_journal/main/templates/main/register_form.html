@@ -1,27 +1,8 @@
 {% extends "header_auth.html" %}
 
 {% block body_main_block %}
-	<script>
-		function send_register_request(){
-			reg_form = document.getElementById('register_form');
-			retype_password = document.getElementById('register_input_retype_password_block').value;
-			password = document.getElementById('register_input_password_block').value;
-			if(retype_password!=password){
-				alert('password and retype password must be equal');
-				return;
-			}
-			role = document.getElementById('register_input_role_block').value;
-			login = document.getElementById('register_input_login_block').value;
-			surname = document.getElementById('register_input_surname_block').value;
-			name = document.getElementById('register_input_name_block').value;
-			if (name == '' || surname == ''||login=='' || role==''||password==''){
-				alert('fill all fields');
-				return;
-			}
-			reg_form.submit();
-			return;
-		}
-	</script>
+	{% load static %}
+	<script src="{% static 'main/js/register.js' %}"></script>
 	{% if error %}
 		<script>alert('{{error}}');</script>
 	{% endif %}

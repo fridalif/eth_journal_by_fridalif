@@ -616,9 +616,13 @@ class ChangePasswordAPIView(APIView):
         new_password = data.get('new_password', None)
         other_data = data.get('other_data', None)
         user_id = data.get('user', None)
-        user_to_change_password = main_models.User.objects.filter(id=user_id)
+        username = data.get('username', None)
+        if user_id is not None:
+            user_to_change_password = main_models.User.objects.filter(id=user_id)
+        else:
+            user_to_change_password = main_models.User.objects.filter(username=username)
         if len(user_to_change_password) == 0:
-            raise Http404
+            return Response({"error": "Такого пользователя в системе нет"})
         user_to_change_password = user_to_change_password[0]
         if request.user.is_authenticated and request.user != user_to_change_password:
             raise Http404
@@ -640,7 +644,7 @@ class ChangePasswordAPIView(APIView):
         else:
             new_request.other_info = 'Вход в аккаунт был совершён: Нет.'
         if other_data is not None:
-            new_request.other_info += str(other_data)
+            new_request.other_info += str(other_data).replace('<','').replace('>','')
         new_request.save()
         return Response({'result': 'Запрос на смену пароля отправлен администратору!'})
 
@@ -685,5 +689,3 @@ class ChangeUsernameAPIView(APIView):
         user.username = new_username
         user.save()
         return Response({'result': 'Логин успешно изменён!'})
-
-
