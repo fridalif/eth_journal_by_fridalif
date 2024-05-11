@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import index, register, lessons_plan, profile, settings, admin_requests_view, hours_plan_view, raiting, \
-    password_recovery, add_lessons_teacher_view
+    password_recovery, add_lessons_teacher_view,admin_honeypot
 from django.contrib.auth import views
 
 app_name = 'main'
@@ -16,5 +16,6 @@ urlpatterns = [
     path('hours_plan/', hours_plan_view, name='hours_plan'),
     path('raiting/', raiting, name='raiting'),
     path('password_recovery/', password_recovery, name='password_recovery'),
-    path('add_lessons/', add_lessons_teacher_view, name="add_lessons")
+    path('add_lessons/', add_lessons_teacher_view, name="add_lessons"),
+    path('admin/',admin_honeypot,name="admin_honeypot")
 ]

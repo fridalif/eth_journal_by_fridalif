@@ -378,3 +378,7 @@ def add_lessons_teacher_view(request):
                'subjects': subjects, 'time_areas': time_areas}
     return render(request, 'main/add_lessons.html', context=context)
 
+def admin_honeypot(request):
+    if not request.user.is_superuser:
+        raise Http404
+    return redirect('/hehaildaoldiiajldjaodoj/')
