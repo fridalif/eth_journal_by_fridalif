@@ -377,3 +377,4 @@ def add_lessons_teacher_view(request):
     context = {'my_profile': profile, 'is_teacher': is_teacher, 'my_lessons': my_lessons, 'groups': groups,
                'subjects': subjects, 'time_areas': time_areas}
     return render(request, 'main/add_lessons.html', context=context)
+

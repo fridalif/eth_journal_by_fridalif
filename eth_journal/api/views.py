@@ -162,7 +162,7 @@ class LessonAPIView(APIView):
         if not request.user.is_authenticated:
             raise Http404
         teacher = main_models.Teacher.objects.filter(user=request.user)
-        if len(teacher)!=0:
+        if len(teacher) != 0:
             teacher = teacher[0]
         elif not request.user.is_superuser:
             raise Http404
@@ -390,12 +390,12 @@ class SubjectAPIView(APIView):
         return Response(SubjectSerializer(main_models.Subject.objects.filter(id=subject_id), many=True))
 
     def post(self, request):
-        if not request.user.is_superuser and len(main_models.Teacher.objects.filter(user=request.user))==0:
+        if not request.user.is_superuser and len(main_models.Teacher.objects.filter(user=request.user)) == 0:
             raise Http404
-        if len(main_models.Subject.objects.filter(subject_name=request.data.get('subject_name','')))!=0:
-            return Response({"error":"Такой предмет уже существует!"})
-        if request.data.get('subject_name','')!='':
-            request.data['subject_name'] = request.data['subject_name'].replace('<','').replace('>','')
+        if len(main_models.Subject.objects.filter(subject_name=request.data.get('subject_name', ''))) != 0:
+            return Response({"error": "Такой предмет уже существует!"})
+        if request.data.get('subject_name', '') != '':
+            request.data['subject_name'] = request.data['subject_name'].replace('<', '').replace('>', '')
         subject = SubjectSerializer(data=request.data)
         if subject.is_valid():
             subject.save()
@@ -433,11 +433,19 @@ class GroupAPIView(APIView):
     def post(self, request):
         if not request.user.is_superuser:
             raise Http404
-        group = GroupSerializer(data=request.data)
-        if group.is_valid():
+        groups = main_models.Group.objects.all()
+        removed_groups = []
+        for group in groups:
+            group_course = int(str(group.year_of_study)[0])
+            group_course += 1
+            if group_course > group.max_courses:
+                removed_groups.append(str(group.year_of_study) + str(group.group_letter))
+                group.delete()
+                continue
+            group.year_of_study = int(str(group_course) + str(group.year_of_study)[1::])
             group.save()
-            return Response(group.validated_data)
-        return Response({"error": "group not valid"})
+        return Response(
+            {'result': 'Удалены группы:' + ','.join(removed_groups) + '. Остальные переведены на следующий курс.'})
 
     def put(self, request, group_id):
         if not request.user.is_superuser:
@@ -642,7 +650,7 @@ class ChangePasswordAPIView(APIView):
         else:
             new_request.other_info = 'Вход в аккаунт был совершён: Нет.'
         if other_data is not None:
-            new_request.other_info += str(other_data).replace('<','').replace('>','')
+            new_request.other_info += str(other_data).replace('<', '').replace('>', '')
         new_request.save()
         return Response({'result': 'Запрос на смену пароля отправлен администратору!'})
 

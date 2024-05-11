@@ -4,8 +4,10 @@ from slugify import slugify
 
 
 class Group(models.Model):
-    year_of_study = models.IntegerField(verbose_name='Год набора')
+    year_of_study = models.IntegerField(verbose_name='Цифровой индекс группы')
     group_letter = models.CharField(max_length=2, verbose_name='Буквенный индекс группы')
+    max_courses = models.IntegerField(choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], default=5,
+                                      verbose_name='Количество курсов')
 
     def __str__(self):
         return f'{self.year_of_study}{self.group_letter}'
