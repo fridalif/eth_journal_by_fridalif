@@ -438,14 +438,13 @@ class GroupAPIView(APIView):
         for group in groups:
             group_course = int(str(group.year_of_study)[0])
             group_course += 1
-            if group_course > group.max_courses:
+            if group_course > int(group.max_courses):
                 students = main_models.Kid.objects.filter(group=group)
                 users_for_remove = []
                 for student in students:
                     users_for_remove.append(student.user)
                 removed_groups.append(str(group.year_of_study) + str(group.group_letter))
                 group.delete()
-                print(users_for_remove)
                 for user in users_for_remove:
                     user.delete()
                 continue
