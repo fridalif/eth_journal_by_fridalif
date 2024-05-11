@@ -5,6 +5,23 @@
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+	{% if user.is_superuser %}
+	{% csrf_token %}
+	<script>
+		function upcourse(){
+			xhr = let xhr = new XMLHttpRequest();
+    		xhr.open("POST","{% url 'api:groups' %}");
+    		xhr.setRequestHeader('X-CSRFToken',document.getElementsByName("csrfmiddlewaretoken")[0].value);
+    		xhr.setRequestHeader('Content-Type','application/json');
+    		xhr.responseType = 'json';
+    		xhr.send(request_data);
+    		xhr.onload = function(){
+        		result = xhr.response;
+    			alert(result["result");
+    		}
+		}
+	</script>
+	{% endif %}
 	<div class="main">
 {% if user.is_authenticated %}
 		<div class="header_block">
@@ -14,6 +31,11 @@
 			</div>
 			</a>
 			{% if user.is_superuser %}
+			<div class="admin_upcourse_header" onclick="upcourse();">
+				<div class="admin_header_font">
+					Перевести все группы на следующий курс
+				</div>
+			</div>
 			<a href="{% url 'main:admin_requests' %}">
 			<div class="admin_requests_header">
 				<div class="admin_header_font">
@@ -21,7 +43,7 @@
 				</div>
 			</div>
 			</a>
-			{% else %}
+			{% elif is_teacher %}
 			<a href="{% url 'main:add_lessons' %}">
 			<div class="admin_requests_header">
 				<div class="admin_header_font">

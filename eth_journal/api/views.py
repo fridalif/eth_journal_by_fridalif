@@ -439,11 +439,18 @@ class GroupAPIView(APIView):
             group_course = int(str(group.year_of_study)[0])
             group_course += 1
             if group_course > group.max_courses:
+                students = main_models.Kid.objects.filter(group=group)
+                users_for_remove = []
+                for student in students:
+                    users_for_remove.append(student.user)
                 removed_groups.append(str(group.year_of_study) + str(group.group_letter))
                 group.delete()
+                for user in users_for_remove:
+                    user.delete()
                 continue
             group.year_of_study = int(str(group_course) + str(group.year_of_study)[1::])
             group.save()
+
         return Response(
             {'result': 'Удалены группы:' + ','.join(removed_groups) + '. Остальные переведены на следующий курс.'})
 

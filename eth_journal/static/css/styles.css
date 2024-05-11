@@ -80,6 +80,22 @@
 	background:rgb(89, 137, 152);
 }
 
+.admin_upcourse_header{
+	position: absolute;
+	width: 10%;
+	height: 100%;
+	left: 30%;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.admin_upcourse_header:hover{
+	background:rgb(89, 137, 152);
+}
+
+
 .admin_requests_header{
 	position: absolute;
 	width: 10%;
