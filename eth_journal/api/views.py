@@ -445,6 +445,7 @@ class GroupAPIView(APIView):
                     users_for_remove.append(student.user)
                 removed_groups.append(str(group.year_of_study) + str(group.group_letter))
                 group.delete()
+                print(users_for_remove)
                 for user in users_for_remove:
                     user.delete()
                 continue
