@@ -15,15 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include,re_path
 from django.conf.urls.static import static
 import eth_journal.settings as settings
+from django.views.static import serve
+
 urlpatterns = [
     path('hehaildaoldiiajldjaodoj/', admin.site.urls),
-    path('',include('main.urls',namespace='main')),
-    path('api/',include('api.urls',namespace='api'))
+    path('', include('main.urls', namespace='main')),
+    path('api/', include('api.urls', namespace='api')),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT})
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
